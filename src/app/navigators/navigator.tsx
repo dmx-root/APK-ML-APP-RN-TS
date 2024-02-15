@@ -1,9 +1,10 @@
-import {Navigator}                                                                  from '../../interfaces/navigatorInterface'
-import {CURRENT_USER_1,CURRENT_USER_2,CURRENT_USER_3,CURRENT_USER_4,CURRENT_USER_5} from '../routes/rutes'
-import {AdminContextProvider}                                                       from '../../contexts/adminContext';
-import {ProcessesAdminContextProvider}                                              from '../../contexts/processesAdminContext';
-import {ProductionContextProvider }                                                 from '../../contexts/productionContext';
-import {BodegaContextProvider}                                                      from '../../contexts/bodegaContext';
+import {Navigator}                                    from '../../interfaces/navigatorInterface'
+import {CURRENT_USER_1,CURRENT_USER_2,CURRENT_USER_3} from '../routes/rutes'
+import {CURRENT_USER_4,CURRENT_USER_5}                from '../routes/rutes'
+import {AdminContextProvider}                         from '../../contexts/adminContext';
+import {ProcessesAdminContextProvider}                from '../../contexts/processesAdminContext';
+import {ProductionContextProvider }                   from '../../contexts/productionContext';
+import {BodegaContextProvider}                        from '../../contexts/bodegaContext';
 
 
 export const navigators:Navigator={

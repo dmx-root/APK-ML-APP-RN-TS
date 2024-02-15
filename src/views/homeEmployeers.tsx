@@ -1,22 +1,35 @@
-import {View,StyleSheet, Dimensions, TouchableOpacity,Text, TextInput} from 'react-native';
-import { MainOpComponent } from '../components/mainOpComponent';
-import { PlusIcon } from '../public/icons/plusIcon';
-import { MenuIcon } from '../public/icons/menuIcon';
-import { SearchIcon } from '../public/icons/searchIcon';
-import { ItemResize } from '../components/ItemResize';
-import { FilterIcon } from '../public/icons/filterIcon';
-import { ItemNavigation } from '../components/itemNavigation';
-import { OcrIcon } from '../public/icons/ocrIcon';
-import { OpIcon } from '../public/icons/opIcon';
-import { ModuloIcon } from '../public/icons/moduloIcon';
-import { UserIcon } from '../public/icons/userIcon';
-import { LayerIcon } from '../public/icons/layerIcon';
-import { EmployeerIcon } from '../public/icons/employeerIcon';
+import {View,StyleSheet, Dimensions, TouchableOpacity,Text} from 'react-native';
+import { MainOpComponent }                                  from '../components/mainOpComponent';
+import { PlusIcon }                                         from '../public/icons/plusIcon';
+import { MenuIcon }                                         from '../public/icons/menuIcon';
+import { SearchIcon }                                       from '../public/icons/searchIcon';
+import { ItemResize }                                       from '../components/ItemResize';
+import { FilterIcon }                                       from '../public/icons/filterIcon';
+import { ItemNavigation }                                   from '../components/itemNavigation';
+import { OcrIcon }                                          from '../public/icons/ocrIcon';
+import { OpIcon }                                           from '../public/icons/opIcon';
+import { ModuloIcon }                                       from '../public/icons/moduloIcon';
+import { UserIcon }                                         from '../public/icons/userIcon';
+import { EmployeerIcon }                                    from '../public/icons/employeerIcon';
+import { useState }                                         from 'react'
+import { MainModuloComponent }                              from '../components/mainModuloComponent';
+import { MainEmployeerComponent }                           from '../components/mainEmployeerComponent';
+
 
 const {height,width}=Dimensions.get('screen');
 
-export function Home(){
+export function HomeEmployeer(){
+
+    const filterItems=[
+        {id:1,label:'Todos'},
+        {id:2,label:'Operarios activos '},
+        {id:3,label:'Operarios inactivos'}
+    ]
+
+    const [itemState,setItemSelec]=useState<number|null>(1)
+
     return <View style={{height,width}}>
+
                 <View style={StyleMainWindow.backRoots}></View>
 
                 <View style={StyleMainWindow.Backcontainer}>
@@ -25,10 +38,8 @@ export function Home(){
                             <View style={StyleMainWindow.action}>
                                 <View  style={StyleMainWindow.menuIcon}>
                                     <MenuIcon color='#999' size={40} width={2}/>
-                                    {/* <FilterIcon color='#AAA' size={45} width={1}/> */}
                                 </View>
                                 <View style={StyleMainWindow.bar}>
-
                                 </View>
                                 <View style={StyleMainWindow.searchIcon}>
                                     <SearchIcon color='#999' size={40} width={2}/>
@@ -37,10 +48,12 @@ export function Home(){
                         </View>
                         <View style={StyleMainWindow.fieldItemsSelect}>
                             <View style={StyleMainWindow.labels}>
-                                <ItemResize state={true} handlerClick={()=>{}} label='Todas'/>
-                                <ItemResize state={false} handlerClick={()=>{}} label='OP Brasier'/>
-                                <ItemResize state={false} handlerClick={()=>{}} label='OP Panty'/>
-                                <ItemResize state={false} handlerClick={()=>{}} label={`Ordenes de Producción Finalizadas`}/>
+                                {filterItems.map(element=>
+                                <ItemResize
+                                    key={element.id} 
+                                    state={itemState===element.id?true:false} 
+                                    handlerClick={()=>{setItemSelec(element.id)}} 
+                                    label={element.label}/>)}
                             </View>
                             <View style={StyleMainWindow.labelsIcon}>
                                 <FilterIcon color='#AAA' size={30} width={2}/>
@@ -48,26 +61,18 @@ export function Home(){
                         </View>
                         <View style={StyleMainWindow.fieldContainer}>
                             <View style={{width:'13%',height:'100%'}}></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'18%',height:'100%'}}><Text style={StyleMainWindow.textField}>OP</Text></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'13%',height:'100%'}}><Text style={StyleMainWindow.textField}>PLANE...</Text></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>EJECUT...</Text></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>SIN EJEC...</Text></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'24%',height:'100%'}}><Text style={StyleMainWindow.textField}>REFERENCIA...</Text></View>
+                            <View style={{justifyContent:'center',alignItems:'center',width:'30%',height:'100%'}}><Text style={StyleMainWindow.textField}>NOMBRE DE OPERARIO</Text></View>
+                            <View style={{justifyContent:'center',alignItems:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>DOCUMENTO</Text></View>
+                            <View style={{justifyContent:'center',alignItems:'center',width:'20%',height:'100%'}}><Text style={StyleMainWindow.textField}>CÓDIGO</Text></View>
+                            <View style={{justifyContent:'center',alignItems:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>MODULO</Text></View>
                         </View> 
                     </View>
                     <View style={StyleMainWindow.root1}>
                         <View style={StyleMainWindow.frame1}>
-                            <MainOpComponent/>
-                            <MainOpComponent/>
-                            <MainOpComponent/>
-                            <MainOpComponent/>
-                            <MainOpComponent/>
-                            <MainOpComponent/>
-                            <MainOpComponent/>
-                            <MainOpComponent/>
-                            <MainOpComponent/>
-                            {/* <MainOpComponent/>
-                            <MainOpComponent/> */}
+                            <MainEmployeerComponent/>
+                            <MainEmployeerComponent/>
+                            <MainEmployeerComponent/>
+                            <MainEmployeerComponent/>
                         </View>
                         <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{}}>
                             <PlusIcon color="#777" size={70} width={1}/>
@@ -82,21 +87,20 @@ export function Home(){
                             <ItemNavigation state={false} handlerClick={()=>{}}>
                                 <ModuloIcon color='#777' size={35} width={2}/>
                             </ItemNavigation>
-                            <ItemNavigation state={true} handlerClick={()=>{}}>
+                            <ItemNavigation state={false} handlerClick={()=>{}}>
                                 {/* <OpFillIcon size={50} width={2}/> */}
                                 <OpIcon color='#777' size={35} width={2}/>
                             </ItemNavigation>
                             <ItemNavigation state={false} handlerClick={()=>{}}>
                                 <OcrIcon color='#777' size={35} width={2}/>
                             </ItemNavigation>
-                            <ItemNavigation handlerClick={()=>{}} state={false}>
+                            <ItemNavigation handlerClick={()=>{}} state={true}>
                                 {/* <LayerIcon color='#777' size={35} width={2}/> */}
                                 <EmployeerIcon color='#777' size={35} width={2}/>
                             </ItemNavigation>
                         </View>
                     </View>
                 </View>
-                
             </View>
 }
 
@@ -243,6 +247,6 @@ const StyleMainWindow=StyleSheet.create({
         height:'100%',
         // backgroundColor:'aquamarine',
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'flex-end'
     }
 });

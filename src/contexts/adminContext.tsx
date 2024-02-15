@@ -26,4 +26,3 @@ export const  AdminContextProvider:FC<ContextProps>=({children})=>{
         </AdminContext.Provider>
     )
 }
-
