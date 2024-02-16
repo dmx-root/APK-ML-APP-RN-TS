@@ -20,6 +20,10 @@ import { Input }                                            from '../components/
 import { ButtonFullWidth }                                  from '../components/buttonFullWidth';
 import { FieldInfo }                                        from '../components/fieldInfo';
 import { InfoIcon }                                         from '../public/icons/infoIcon';
+import { InfoLine } from '../components/infoLine';
+import { InfoLineDouble } from '../components/infoLineDouble';
+import { InfoLineButton } from '../components/InfoLineButton';
+import { ModalOcrInfo } from '../modals/modalOcrInfo';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -38,6 +42,7 @@ export function HomeOcr(){
     return<>
     <View style={{height,width}}>
         <View style={StyleMainWindow.backRoots}></View>
+
         <View style={StyleMainWindow.Backcontainer}>
             <View style={StyleMainWindow.header}>
                 <View style={StyleMainWindow.filterContainer}>
@@ -105,7 +110,9 @@ export function HomeOcr(){
         </View>
     </View>
     {asideState?<Aside handlerClick={()=>{setAsideState(false)}}/>:<></>}
-    <ModalRegisterOcr/>
+    {/* <ModalRegisterOcr/> */}
+    {/* <ModalOcrInfo/> */}
+
     </>
 }
 

@@ -20,7 +20,7 @@ const modalContainerStyle=StyleSheet.create({
         alignItems:'center',
         padding:25,
         borderRadius:5,
-        width:width*0.7,
+        width:width*0.8,
         marginBottom:25,
 
     },
