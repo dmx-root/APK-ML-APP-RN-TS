@@ -12,18 +12,11 @@ import { UserIcon }                                         from '../public/icon
 import { EmployeerIcon }                                    from '../public/icons/employeerIcon';
 import { MainOcrComponent }                                 from '../components/mainOcrComponent';
 import { Aside }                                            from '../components/aside';
-import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
 import { useState }                                         from 'react';
-import { Modal }                                            from '../components/modal';
-import { ModalContainer }                                   from '../components/modalContainer';
-import { Input }                                            from '../components/input';
-import { ButtonFullWidth }                                  from '../components/buttonFullWidth';
-import { FieldInfo }                                        from '../components/fieldInfo';
-import { InfoIcon }                                         from '../public/icons/infoIcon';
-import { InfoLine } from '../components/infoLine';
-import { InfoLineDouble } from '../components/infoLineDouble';
-import { InfoLineButton } from '../components/InfoLineButton';
-import { ModalOcrInfo } from '../modals/modalOcrInfo';
+import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
+import { ModalOcrInfo }                                     from '../modals/modalOcrInfo';
+import { ModalDetailOpList } from '../modals/modalDetailOpList';
+
 
 const {height,width}=Dimensions.get('screen');
 
@@ -80,6 +73,13 @@ export function HomeOcr(){
                     <MainOcrComponent/>
                     <MainOcrComponent/>
                     <MainOcrComponent/>
+                    <MainOcrComponent/>
+                    <MainOcrComponent/>
+                    <MainOcrComponent/>
+                    <MainOcrComponent/>
+                    <MainOcrComponent/>
+                    {/* <MainOcrComponent/> */}
+                    {/* <InformationOcrComponent handlerClick={()=>{}}/> */}
                 </View>
                 <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{}}>
                     <PlusIcon color="#777" size={70} width={1}/>
@@ -112,6 +112,8 @@ export function HomeOcr(){
     {asideState?<Aside handlerClick={()=>{setAsideState(false)}}/>:<></>}
     {/* <ModalRegisterOcr/> */}
     {/* <ModalOcrInfo/> */}
+    {/* <ModalInput handlerClick={()=>{}} label='DOCUMENTO' type='text'/> */}
+    <ModalDetailOpList/>
 
     </>
 }

@@ -9,6 +9,10 @@ import { HomeOP }                       from './src/views/homeOp';
 import { HomeModulos }                  from './src/views/homeModulo'
 import { HomeEmployeer }                from './src/views/homeEmployeers'
 import { Production } from './src/views/production';
+import { InformationDetailOp } from './src/views/informationDetailOp';
+import { InformationModulo } from './src/views/informationModulo';
+import { Profile } from './src/views/profile';
+import { InformationUser } from './src/views/informationUser';
 
 const Stack=createStackNavigator();
 
@@ -17,12 +21,16 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen name='homeOcr' component={HomeOcr} options={{headerShown:false}}/> */}
-        <Stack.Screen name='production' component={Production} options={{headerShown:false}}/>
-        {/* <Stack.Screen name='homeOp' component={HomeOP} options={{headerShown:false}}/> */}
-        {/* <Stack.Screen name='homeModulos' component={HomeModulos} options={{headerShown:false}}/> */}
-        {/* <Stack.Screen name='homeEmployeers' component={HomeEmployeer} options={{headerShown:false}}/> */}
-        {/* <Stack.Screen name='Login' component={Login} options={{headerShown:false}}/> */}
+        {/* <Stack.Screen name='homeOcr'        component={HomeOcr}             options={{headerShown:false}}/> */}
+        {/* <Stack.Screen name='homeOp'         component={HomeOP}              options={{headerShown:false}}/> */}
+        {/* <Stack.Screen name='homeModulos'    component={HomeModulos}         options={{headerShown:false}}/> */}
+        {/* <Stack.Screen name='homeEmployeers' component={HomeEmployeer}       options={{headerShown:false}}/> */}
+        {/* <Stack.Screen name='infoDetailOp'   component={InformationDetailOp} options={{headerShown:false}}/> */}
+        {/* <Stack.Screen name='infoModulo'     component={InformationModulo}   options={{headerShown:false}}/> */}
+        <Stack.Screen name='infoUser'           component={InformationUser}   options={{headerShown:false}}/>
+        {/* <Stack.Screen name='production'     component={Production}          options={{headerShown:false}}/> */}
+        {/* <Stack.Screen name='login'          component={Login}               options={{headerShown:false}}/> */}
+        {/* <Stack.Screen name='profile'        component={Profile}             options={{headerShown:false}}/> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

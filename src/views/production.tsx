@@ -67,7 +67,7 @@ export function Production(){
                     </TouchableOpacity>
                 </View>
             </View>
-            <ModalProductionRegister/>
+            {/* <ModalProductionRegister/> */}
     </>
     
 }

@@ -48,13 +48,14 @@ const ocrStyle=StyleSheet.create({
     ocrcontainer:{
         flexDirection:'row',
         height:100,
-        marginBottom:0,
+        // marginBottom:2,
         margin:'auto',
         maxWidth:'100%',
         borderColor:"#CCC",
         backgroundColor:'#FFF',
-        borderBottomWidth:0.5,
-        borderRadius:10
+        borderBottomWidth:2,
+        borderRadius:10,
+    
     },
     img:{
         height:'100%',

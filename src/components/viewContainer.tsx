@@ -22,7 +22,7 @@ const viewContainerStyle=StyleSheet.create({
     },
     frame:{
         width:'98%',
-        backgroundColor:'#C7E5FD',
+        backgroundColor:'#C7CCEC',
         borderRadius:5,
         padding:10
     }
