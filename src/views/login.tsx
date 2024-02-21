@@ -1,53 +1,125 @@
-import {View,StyleSheet, Dimensions, Text, Image, ImageBackground} from 'react-native';
-import * as Font                from 'expo-font';
-import { useEffect, useState }  from 'react';
-import { UserIcon }             from '../public/icons/userIcon';
-import { InputAuth }            from '../components/inputAuth';
-import { LockIcon }             from '../public/icons/lockIcon';
-import { AuthButton }           from '../components/authButton';
-import { AuthCheckRemenberPassword } from '../components/authCheckRemenberPassword';
+import {View,StyleSheet, Dimensions, Text}              from 'react-native';
+import { Image, ImageBackground, KeyboardTypeOptions}   from 'react-native';
+import * as Font                                        from 'expo-font';
+import {  useState }                                    from 'react';
+import { UserIcon }                                     from '../public/icons/userIcon';
+import { InputAuth }                                    from '../components/inputAuth';
+import { LockIcon }                                     from '../public/icons/lockIcon';
+import { AuthButton }                                   from '../components/authButton';
+import { AuthCheckRemenberPassword }                    from '../components/authCheckRemenberPassword';
+import { ModalInput }                                   from '../modals/modalInput';
+import { useGetAccount }                                from '../controllers/hooks/customHookGetAccount';
+import { useMainContext } from '../contexts/mainContext';
 
 const {height,width}=Dimensions.get('screen');
 
 const currentColorDefault='#44329C';
 
+interface form{
+    [key:string]:string
+}
+
+interface modal{
+    state:boolean,
+    label:string,
+    key:string
+    type:string,
+    value:string,
+    placeHolder:string,
+    keyboard:KeyboardTypeOptions,
+}
+
 export function Login(){
 
-    const [load,setLoad]=useState(false)
-    useEffect(()=>{
-        if(!load){
-            Font.loadAsync({
-                'Roboto-Thin':require('../../assets/Roboto-Thin.ttf')
-            })
-        }
-    });
+    const [dataForm, setDataForm] = useState<form|null>(null);
+    const [modal, setModal] = useState<modal>({state:false,label:'',type:'',value:'',key:'none',keyboard:'default',placeHolder:''});
+    const { setSesion, account } = useGetAccount();
+    
+   
 
-    return <View style={loginStyle.backGround}>
-            <ImageBackground
-            source={require('../public/img/fb-ml.png')}
-            style={loginStyle.backgroundImage}
-            imageStyle={loginStyle.imageStyle}
-            blurRadius={3}>
-                <View style={loginStyle.logoContainer}>
-                    <Image source={require('../public/img/transparentLogo.png')} style={loginStyle.logo}/>
-                </View>
-                <View style={loginStyle.titleContainer}>
-                    <Text style={loginStyle.title}>Iniciar Sesión</Text>
-                    {/* <UserIcon color='#FFF' size={45}/> */}
-                </View>
-                <View style={loginStyle.form}>
-                    <InputAuth label='Documento' type='Password'>
-                        <UserIcon color='#FFF' size={45} width={1}/>
-                    </InputAuth>
-                    <InputAuth label='Contraseña' type='Password'>
-                        <LockIcon color='#FFF' size={45} width={1}/>
-                    </InputAuth>
-                    <AuthCheckRemenberPassword label='Recordar contraseña'/>
-                    <AuthButton label='Acceder' handlerClick={()=>{console.log('click')}}/>
-                </View>
-            </ImageBackground>    
-        </View>
+ 
+    return<>
+            <View style={loginStyle.backGround}>
+                    <ImageBackground
+                        source={require('../public/img/fb-ml.png')}
+                        style={loginStyle.backgroundImage}
+                        imageStyle={loginStyle.imageStyle}
+                        blurRadius={3}>
+                    <View style={loginStyle.logoContainer}>
+                        <Image source={require('../public/img/transparentLogo.png')} style={loginStyle.logo}/>
+                    </View>
+                    <View style={loginStyle.titleContainer}>
+                        {/* <Text style={loginStyle.title}>Iniciar Sesión</Text> */}
+                    </View>
+                    <View style={loginStyle.form}>
+                        <InputAuth 
+                            label='Documento' 
+                            handlerClick={()=>{
+                                setModal({
+                                    label:'DOCUMENTO',
+                                    key:'Document',
+                                    type:'text',
+                                    state:true,
+                                    value:'',
+                                    placeHolder:'Ingrese el documento',
+                                    keyboard:'numeric'
+                                })
+                            }}>
+                            <UserIcon color='#FFF' size={45} width={1}/>
+                        </InputAuth>
+                        <InputAuth 
+                            label='Contraseña' 
+                            handlerClick={()=>{
+                                setModal({
+                                    label:'CONTRASEÑA',
+                                    key:'Password',
+                                    type:'password',
+                                    state:true,
+                                    value:'',
+                                    placeHolder:'Ingrese el documento',
+                                    keyboard:'default'
+                                })
+                            }}>
+                            <LockIcon color='#FFF' size={45} width={1}/>
+                        </InputAuth>
+                        <AuthCheckRemenberPassword label='Recordar contraseña'/>
+                        <AuthButton label='Acceder' handlerClick={()=>{console.log('click')}} />
+                    </View>
+                </ImageBackground>    
+            </View>
+    {
+        modal.state?
+        <ModalInput 
+            label={modal.label} 
+            type={modal.type} 
+            value={modal.value}
+            placeHolder={modal.placeHolder}
+            keyboard={modal.keyboard}
+            handlerValue={(text:string)=>{
+                setModal({...modal,value:text})
+            }}
+            handlerClose={()=>{
+                setModal({...modal,state:false})
+            }} 
+            handlerSend={()=>{
+
+                setSesion(1)
+                setDataForm({...dataForm,[modal.key]:modal.value})
+                setModal({...modal,state:false})
+
+            }}/>:
+        <></>
+    }
+    </>
 }
+
+// useEffect(()=>{
+//     if(!load){
+//         Font.loadAsync({
+//             'Roboto-Thin':require('../../assets/Roboto-Thin.ttf')
+//         })
+//     }
+// });
 
 const loginStyle=StyleSheet.create({
     backGround:{
@@ -62,9 +134,9 @@ const loginStyle=StyleSheet.create({
         alignItems: 'center',
     },
     imageStyle: {
-        width: '100%', // Ajusta según tus necesidades
-        height: '100%', // Ajusta según tus necesidades
-        opacity: 0.35, // Puedes ajustar la opacidad si lo deseas
+        width: '100%',
+        height: '100%',
+        opacity: 0.35, 
     },
     logoContainer:{
         width:'100%',

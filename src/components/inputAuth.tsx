@@ -1,12 +1,12 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 
-export function InputAuth({children,label,type}:{
+export function InputAuth({children,label,handlerClick}:{
     children:React.ReactElement,
     label:string,
-    type:string
+    handlerClick:()=>void
 }){
-    return <View style={inputAuthStyle.inputAuthContainer}>
+    return <TouchableOpacity style={inputAuthStyle.inputAuthContainer} onPress={handlerClick}>
                 <View style={inputAuthStyle.inputAuthLabel}>
                     <Text style={{color:'#FFF',fontSize:20,fontWeight:'500'}}>{label}</Text>
                 </View>
@@ -18,7 +18,7 @@ export function InputAuth({children,label,type}:{
                         {children}
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
 }
 
 const inputAuthStyle=StyleSheet.create({
