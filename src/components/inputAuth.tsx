@@ -1,9 +1,10 @@
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 
-export function InputAuth({children,label,handlerClick}:{
+export function InputAuth({children,label,handlerClick,value}:{
     children:React.ReactElement,
     label:string,
+    value:string|number
     handlerClick:()=>void
 }){
     return <TouchableOpacity style={inputAuthStyle.inputAuthContainer} onPress={handlerClick}>
@@ -12,7 +13,7 @@ export function InputAuth({children,label,handlerClick}:{
                 </View>
                 <View style={inputAuthStyle.inputAuthField}>
                     <View style={inputAuthStyle.inputAuthText}>
-
+                        <Text style={{color:'#FFF',fontSize:25,fontWeight:'700'}}>{value}</Text>
                     </View>
                     <View style={inputAuthStyle.inputAuthIcon}>
                         {children}
@@ -41,7 +42,9 @@ const inputAuthStyle=StyleSheet.create({
     },
     inputAuthText:{
         width:'90%',
-        height:'100%'
+        height:'100%',
+        justifyContent:'center',
+        alignItems:'center'
     },
     inputAuthIcon:{
         width:'10%',

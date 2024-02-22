@@ -113,7 +113,7 @@ export function HomeOcr(){
     {/* <ModalRegisterOcr/> */}
     {/* <ModalOcrInfo/> */}
     {/* <ModalInput handlerClick={()=>{}} label='DOCUMENTO' type='text'/> */}
-    <ModalDetailOpList/>
+    {/* <ModalDetailOpList/> */}
 
     </>
 }

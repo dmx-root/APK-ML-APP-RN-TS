@@ -1,15 +1,16 @@
-import {View,StyleSheet, Dimensions, Text}              from 'react-native';
+import {View,StyleSheet, Dimensions, Text, Alert}       from 'react-native';
 import { Image, ImageBackground, KeyboardTypeOptions}   from 'react-native';
-import * as Font                                        from 'expo-font';
-import {  useState }                                    from 'react';
 import { UserIcon }                                     from '../public/icons/userIcon';
 import { InputAuth }                                    from '../components/inputAuth';
 import { LockIcon }                                     from '../public/icons/lockIcon';
 import { AuthButton }                                   from '../components/authButton';
 import { AuthCheckRemenberPassword }                    from '../components/authCheckRemenberPassword';
 import { ModalInput }                                   from '../modals/modalInput';
-import { useGetAccount }                                from '../controllers/hooks/customHookGetAccount';
-import { useMainContext } from '../contexts/mainContext';
+import { useApiGetAuth }                                from '../controllers/hooks/customHookGetAuth';
+import { ModalLoading }                                 from '../modals/modalLoading';
+import { ModalAlert }                                   from '../modals/modalAlert';
+import {  useState }                                    from 'react';
+import * as Font                                        from 'expo-font';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -31,13 +32,11 @@ interface modal{
 
 export function Login(){
 
-    const [dataForm, setDataForm] = useState<form|null>(null);
-    const [modal, setModal] = useState<modal>({state:false,label:'',type:'',value:'',key:'none',keyboard:'default',placeHolder:''});
-    const { setSesion, account } = useGetAccount();
-    
-   
+    const { state, fetchDataAuth } = useApiGetAuth();
+    const [ dataForm, setDataForm] = useState<form|null>(null);
+    const [ modal, setModal ] = useState<modal>({state:false,label:'',type:'',value:'',key:'none',keyboard:'default',placeHolder:''});
+    const [ alert, setAlert ] = useState<boolean>(false);
 
- 
     return<>
             <View style={loginStyle.backGround}>
                     <ImageBackground
@@ -53,7 +52,8 @@ export function Login(){
                     </View>
                     <View style={loginStyle.form}>
                         <InputAuth 
-                            label='Documento' 
+                            label='Documento'
+                            value={dataForm?.['Document']?dataForm?.['Document']:''} 
                             handlerClick={()=>{
                                 setModal({
                                     label:'DOCUMENTO',
@@ -69,6 +69,7 @@ export function Login(){
                         </InputAuth>
                         <InputAuth 
                             label='Contraseña' 
+                            value={dataForm?.['Password']?'* * * * * * * * * * * *':''} 
                             handlerClick={()=>{
                                 setModal({
                                     label:'CONTRASEÑA',
@@ -83,10 +84,18 @@ export function Login(){
                             <LockIcon color='#FFF' size={45} width={1}/>
                         </InputAuth>
                         <AuthCheckRemenberPassword label='Recordar contraseña'/>
-                        <AuthButton label='Acceder' handlerClick={()=>{console.log('click')}} />
+                        <AuthButton 
+                            label='Acceder' 
+                            handlerClick={()=>{
+                                dataForm?.['Password']&&dataForm?.['Document']?
+                                fetchDataAuth(dataForm?.['Document'],dataForm?.['Password']):
+                                Alert.alert('Campos vacios','Asegúrese de llenar todos los campos') 
+                                setAlert(true)
+                            }}/>
                     </View>
                 </ImageBackground>    
             </View>
+
     {
         modal.state?
         <ModalInput 
@@ -102,12 +111,24 @@ export function Login(){
                 setModal({...modal,state:false})
             }} 
             handlerSend={()=>{
-
-                setSesion(1)
                 setDataForm({...dataForm,[modal.key]:modal.value})
                 setModal({...modal,state:false})
-
             }}/>:
+        <></>
+    }
+    {
+        state.loading?
+        <ModalLoading
+        label='Iniciando Sesión...' 
+        handlerClick={()=>{console.log('se detuvo la carga')}}/>:
+        <></>
+    }
+    {
+        state.error&&alert?
+        <ModalAlert 
+        label='Datos Erroneos' 
+        content={state.error.statusMessageApi} 
+        handlerClick={()=>{setAlert(false)}}/>:
         <></>
     }
     </>

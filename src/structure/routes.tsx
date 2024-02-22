@@ -7,9 +7,8 @@ export const ADMIN_ROUTES = {
     INFO_MODULO:'infoModulo',
     INFO_USERS:'infoUser',
     PRODUCTION:'production',
+    PROFILE:'profile',
     // REVISE:'revise',
-    // LOGIN:'login',
-    PROFILE:'profile'
 };
 
 export const PROCESSES_ROUTES = {
@@ -20,9 +19,8 @@ export const PROCESSES_ROUTES = {
     INFO_DETAILS_OP:'infoDetailOp',
     INFO_MODULO:'infoModulo',
     PRODUCTION:'production',
-    // REVISE:'revise',
-    // LOGIN:'login',
     PROFILE:'profile'
+    // REVISE:'revise',
 };
   
 export const PLANTA_ROUTES = {
@@ -33,7 +31,6 @@ export const PLANTA_ROUTES = {
     INFO_DETAILS_OP:'infoDetailOp',
     INFO_MODULO:'infoModulo',
     PRODUCTION:'production',
-    // LOGIN:'login',
     PROFILE:'profile'
 };
 
@@ -44,9 +41,8 @@ export const FACTURACION_ROUTES = {
     HOME_MODULO_LIST:'homeModulos',
     INFO_DETAILS_OP:'infoDetailOp',
     INFO_MODULO:'infoModulo',
+    PROFILE:'profile',
     // REVISE:'revise',
-    // LOGIN:'login',
-    PROFILE:'profile'
 };
 
 export const GUEST_ROUTES={

@@ -2,10 +2,8 @@ import { createStackNavigator }         from '@react-navigation/stack';
 import { NavigationContainer }          from '@react-navigation/native';
 import { accountNavigators }            from './src/structure/accountNavigators';
 import { SCREENS }                      from './src/structure/screens';
-import React, { useEffect, useState }                            from 'react'
-import { useGetAccount }                from './src/controllers/hooks/customHookGetAccount';
-import { Login }                        from './src/views/login';
 import { useMainContext }               from './src/contexts/mainContext';
+import React, { useEffect, useState }   from 'react'
 
 interface account{
     id:number,
@@ -18,20 +16,20 @@ const Stack=createStackNavigator();
 
 export function Root() {
 
-    // const { initialRoute, routes, context } = accountNavigators['admin']
-    // const ContextProvider = context ? context : React.Fragment;
     const [account, setAccount] = useState<account>(accountNavigators['auth']);
     const storage = useMainContext();
 
     useEffect(()=>{
-        storage?.account?setAccount(storage?.account):setAccount(accountNavigators['auth']);
+
+        storage?.account?
+        setAccount(storage?.account):
+        setAccount(accountNavigators['auth']);
 
     }, [storage?.account]);
 
     const ContextProvider = account.context ? account.context : React.Fragment;
-    const initialRoute = account.initialRoute
-    const routes = account.routes
-    // const ContextProvider = React.Fragment;
+    const initialRoute = account.initialRoute;
+    const routes = account.routes;
 
     return  <ContextProvider>
                 <NavigationContainer>
@@ -44,7 +42,6 @@ export function Root() {
                                 options={{headerShown:false}}
                             />
                         ))}
-                        {/* <Stack.Screen name='login' component={Login} options={{headerShown:false}}/> */}
                     </Stack.Navigator>
                 </NavigationContainer>
             </ContextProvider>
