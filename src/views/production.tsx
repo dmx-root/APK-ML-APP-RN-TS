@@ -11,10 +11,11 @@ import { InfoLineButton }                                       from '../compone
 import { OcrIcon }                                              from '../public/icons/ocrIcon';
 import { UserIcon }                                             from '../public/icons/userIcon';
 import { ModalProductionRegister } from '../modals/modalProductionRegister';
+import { ProductionScreenProps } from '../interfaces/screens/screensInterfaces';
 
 const {height,width}=Dimensions.get('screen');
 
-export function Production(){
+export function Production({navigation}:any){
     return<>
             <View style={productionStyle.productionContainer}>
                 <View style={productionStyle.body}>

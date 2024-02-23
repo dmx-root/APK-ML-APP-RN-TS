@@ -1,23 +1,17 @@
 import {View,StyleSheet, Dimensions, TouchableOpacity,Text} from 'react-native';
-import { MainOpComponent }                                  from '../components/mainOpComponent';
 import { PlusIcon }                                         from '../public/icons/plusIcon';
 import { MenuIcon }                                         from '../public/icons/menuIcon';
 import { SearchIcon }                                       from '../public/icons/searchIcon';
 import { ItemResize }                                       from '../components/ItemResize';
 import { FilterIcon }                                       from '../public/icons/filterIcon';
 import { ItemNavigation }                                   from '../components/itemNavigation';
-import { OcrIcon }                                          from '../public/icons/ocrIcon';
-import { OpIcon }                                           from '../public/icons/opIcon';
-import { ModuloIcon }                                       from '../public/icons/moduloIcon';
-import { UserIcon }                                         from '../public/icons/userIcon';
-import { EmployeerIcon }                                    from '../public/icons/employeerIcon';
-import { useState } from 'react'
-import { MainModuloComponent } from '../components/mainModuloComponent';
-import { MainEmployeerComponent } from '../components/mainEmployeerComponent';
+import { MainModuloComponent }                              from '../components/mainModuloComponent';
+import { useState }                                         from 'react'
+import { useMainContext }                                   from '../contexts/mainContext';
 
 const {height,width}=Dimensions.get('screen');
 
-export function HomeModulos(){
+export function HomeModulos({navigation}:any){
 
     const filterItems=[
         {id:1,label:'Todos'},
@@ -26,6 +20,7 @@ export function HomeModulos(){
     ]
 
     const [itemState,setItemSelec]=useState<number|null>(1)
+    const contextStorage = useMainContext();
 
     return <View style={{height,width}}>
 
@@ -80,23 +75,17 @@ export function HomeModulos(){
                     </View>
                     <View style={StyleMainWindow.root2}>
                         <View style={StyleMainWindow.navigationContainer}>
-                            <ItemNavigation handlerClick={()=>{}} state={false}>
-                                <UserIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation state={true} handlerClick={()=>{}}>
-                                <ModuloIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation state={false} handlerClick={()=>{}}>
-                                {/* <OpFillIcon size={50} width={2}/> */}
-                                <OpIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation state={false} handlerClick={()=>{}}>
-                                <OcrIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation handlerClick={()=>{}} state={false}>
-                                {/* <LayerIcon color='#777' size={35} width={2}/> */}
-                                <EmployeerIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
+                        {
+                            contextStorage?.account?.home?.map(element=>
+                                <ItemNavigation 
+                                    handlerClick={()=>{element.NAVIGATE(element.item,navigation)}} 
+                                    state={element.id===3} 
+                                    key={element.id}>
+
+                                    {element.icon}
+                                </ItemNavigation>    
+                            )
+                        }
                         </View>
                     </View>
                 </View>

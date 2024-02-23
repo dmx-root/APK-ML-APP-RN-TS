@@ -1,6 +1,6 @@
 import {createContext,useContext}   from 'react'
 import {FC, ReactNode}              from 'react'
-import {AdminContextInterface}      from '../interfaces/adminContextInterface'
+import {AdminContextInterface}      from '../interfaces/context/adminContextInterface'
 
 const AdminContext=createContext<AdminContextInterface|undefined>(undefined);
 

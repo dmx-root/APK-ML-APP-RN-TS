@@ -1,5 +1,5 @@
 import {createContext, useContext, FC, ReactNode} from 'react'
-import {BodegaContextInterface} from '../interfaces/bodegaContextInterface';
+import {BodegaContextInterface} from '../interfaces/context/bodegaContextInterface';
 
 const BodegaContext=createContext<BodegaContextInterface|undefined>(undefined);
 

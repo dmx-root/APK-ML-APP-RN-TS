@@ -1,12 +1,7 @@
-import {createContext, useContext, FC, ReactNode, useState} from 'react'
-import {MainContextInterface} from '../interfaces/mainContextInterface';
+import { createContext, useContext, FC, ReactNode, useState} from 'react'
+import { MainContextInterface } from '../interfaces/context/mainContextInterface';
+import { account } from '../interfaces/app/account' 
 
-interface account{
-    id:number,
-    initialRoute:string,
-    routes:any, 
-    context:any
-}
 
 const MainContext=createContext<MainContextInterface|undefined>(undefined);
 

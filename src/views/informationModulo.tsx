@@ -7,10 +7,11 @@ import { InformationOcrComponent }                          from '../components/
 import { RowLeftIcon }                                      from '../public/icons/rowLeftIcon';
 import { useState }                                         from 'react';
 import { InformationHeaderViewComponentModulo }             from '../components/InformationHeaderViewComponentModulo';
+import { InformationModuloScreenProps } from '../interfaces/screens/screensInterfaces';
 
 const {height,width}=Dimensions.get('screen');
 
-export function InformationModulo(){
+export function InformationModulo({navigation}:any){
 
     const filterItems=[
         {id:1,label:'Todas'},

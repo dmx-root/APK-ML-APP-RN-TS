@@ -43,9 +43,6 @@ export const useGetSesion = (): { sesionState: findState; getSesion: (accountId:
     });
 
     const storage= useMainContext();
-    // const [account,setAccount] = useState<account>(accountNavigators['auth']);
-    
-
 
     function getSesion(accountId:number):void{
         try {
@@ -55,7 +52,6 @@ export const useGetSesion = (): { sesionState: findState; getSesion: (accountId:
             Object.keys(accountNavigators).forEach(element=>{
                 if(accountNavigators[element].id===accountId){
 
-                    // setAccount(accountNavigators[element]);
                     storage?.setAccount(accountNavigators[element]);
                     dispatch({ type: actionTypes.FIND_SUCCESS, payload:1});
 

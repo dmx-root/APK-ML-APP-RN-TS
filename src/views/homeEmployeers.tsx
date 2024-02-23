@@ -14,11 +14,13 @@ import { EmployeerIcon }                                    from '../public/icon
 import { useState }                                         from 'react'
 import { MainModuloComponent }                              from '../components/mainModuloComponent';
 import { MainEmployeerComponent }                           from '../components/mainEmployeerComponent';
+import { HomeEmployeerScreenProps } from '../interfaces/screens/screensInterfaces';
+import { useMainContext } from '../contexts/mainContext';
 
 
 const {height,width}=Dimensions.get('screen');
 
-export function HomeEmployeer(){
+export function HomeEmployeer({navigation}:any){
 
     const filterItems=[
         {id:1,label:'Todos'},
@@ -27,6 +29,7 @@ export function HomeEmployeer(){
     ]
 
     const [itemState,setItemSelec]=useState<number|null>(1)
+    const contextStorage= useMainContext();
 
     return <View style={{height,width}}>
 
@@ -81,23 +84,16 @@ export function HomeEmployeer(){
                     </View>
                     <View style={StyleMainWindow.root2}>
                         <View style={StyleMainWindow.navigationContainer}>
-                            <ItemNavigation handlerClick={()=>{}} state={false}>
-                                <UserIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation state={false} handlerClick={()=>{}}>
-                                <ModuloIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation state={false} handlerClick={()=>{}}>
-                                {/* <OpFillIcon size={50} width={2}/> */}
-                                <OpIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation state={false} handlerClick={()=>{}}>
-                                <OcrIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation handlerClick={()=>{}} state={true}>
-                                {/* <LayerIcon color='#777' size={35} width={2}/> */}
-                                <EmployeerIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
+                        {
+                            contextStorage?.account?.home?.map(element=>
+                                <ItemNavigation 
+                                    handlerClick={()=>{element.NAVIGATE(element.item,navigation)}} 
+                                    state={element.id===4}
+                                    key={element.id}>
+                                    {element.icon}
+                                </ItemNavigation>    
+                            )
+                        }
                         </View>
                     </View>
                 </View>

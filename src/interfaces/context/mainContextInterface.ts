@@ -1,9 +1,4 @@
-interface account{
-    id:number,
-    initialRoute:string,
-    routes:any, 
-    context:any
-}
+import { account } from '../app/account';
 
 export interface MainContextInterface{
     account:account|null,

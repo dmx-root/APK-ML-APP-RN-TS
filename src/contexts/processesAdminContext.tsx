@@ -1,5 +1,5 @@
 import {createContext, useContext, FC,ReactNode} from 'react';
-import {ProcessesAdminContextInterface} from '../interfaces/processesAdminContext';
+import {ProcessesAdminContextInterface} from '../interfaces/context/processesAdminContext';
 
 const ProcessesAdminContext=createContext<ProcessesAdminContextInterface|undefined>(undefined);
 

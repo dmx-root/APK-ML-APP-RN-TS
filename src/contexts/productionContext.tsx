@@ -1,5 +1,5 @@
 import {createContext,useContext, FC, ReactNode} from 'react'
-import {ProductionContextInterface} from '../interfaces/productionContextInterface';
+import {ProductionContextInterface} from '../interfaces/context/productionContextInterface';
 
 const ProductionContext=createContext<ProductionContextInterface|undefined>(undefined);
 

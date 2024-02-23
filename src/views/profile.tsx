@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View, Alert, Image}              from 'react-native';
 import { Dimensions, TouchableOpacity,ActivityIndicator }   from 'react-native';
 import { RowLeftIcon } from '../public/icons/rowLeftIcon';
+import { ProfileScreenProps } from '../interfaces/screens/screensInterfaces';
 // import { RoowLeft }                                         from '../iconosSvg';
 
 const {height,width}=Dimensions.get('screen');
 
-export function Profile(){
+export function Profile({navigation}:any){
     return <View style={profileStyle.mainLayer}>
                 <View style={profileStyle.header}>
                     <Image source={require('../public/img/transparentLogo.png')} style={profileStyle.img}/>

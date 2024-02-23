@@ -1,59 +1,57 @@
 export const ADMIN_ROUTES = {  
-    HOME_OCR_LIST:'homeOcr',
-    HOME_OP_LIST:'homeOp',
-    HOME_MODULO_LIST:'homeModulos',
-    HOME_EMPLOYEER_LIST:'homeEmployeers',
-    INFO_DETAILS_OP:'infoDetailOp',
-    INFO_MODULO:'infoModulo',
-    INFO_USERS:'infoUser',
-    PRODUCTION:'production',
-    PROFILE:'profile',
-    // REVISE:'revise',
+    HOME_OCR_LIST:'HomeOcr',
+    HOME_OP_LIST:'HomeOp',
+    HOME_MODULO_LIST:'HomeModulos',
+    HOME_EMPLOYEER_LIST:'HomeEmployeers',
+    INFO_DETAILS_OP:'InfoDetailOp',
+    INFO_MODULO:'InfoModulo',
+    INFO_USERS:'InfoUser',
+    PRODUCTION:'Production',
+    PROFILE:'Profile',
 };
 
 export const PROCESSES_ROUTES = {
-    HOME_OCR_LIST:'homeOcr',
-    HOME_OP_LIST:'homeOp',
-    HOME_MODULO_LIST:'homeModulos',
-    HOME_EMPLOYEER_LIST:'homeEmployeers',
-    INFO_DETAILS_OP:'infoDetailOp',
-    INFO_MODULO:'infoModulo',
-    PRODUCTION:'production',
-    PROFILE:'profile'
-    // REVISE:'revise',
+    HOME_OCR_LIST:'HomeOcr',
+    HOME_OP_LIST:'HomeOp',
+    HOME_MODULO_LIST:'HomeModulos',
+    HOME_EMPLOYEER_LIST:'HomeEmployeers',
+    INFO_DETAILS_OP:'InfoDetailOp',
+    INFO_MODULO:'InfoModulo',
+    PRODUCTION:'Production',
+    PROFILE:'Profile'
 };
   
 export const PLANTA_ROUTES = {
-    HOME_OCR_LIST:'homeOcr',
-    HOME_OP_LIST:'homeOp',
-    HOME_MODULO_LIST:'homeModulos',
-    HOME_EMPLOYEER_LIST:'homeEmployeers',
-    INFO_DETAILS_OP:'infoDetailOp',
-    INFO_MODULO:'infoModulo',
-    PRODUCTION:'production',
-    PROFILE:'profile'
+    HOME_OCR_LIST:'HomeOcr',
+    HOME_OP_LIST:'HomeOp',
+    HOME_MODULO_LIST:'HomeModulos',
+    HOME_EMPLOYEER_LIST:'HomeEmployeers',
+    INFO_DETAILS_OP:'InfoDetailOp',
+    INFO_MODULO:'InfoModulo',
+    PRODUCTION:'Production',
+    PROFILE:'Profile'
 };
 
 export const FACTURACION_ROUTES = {
 
-    HOME_OCR_LIST:'homeOcr',
-    HOME_OP_LIST:'homeOp',
-    HOME_MODULO_LIST:'homeModulos',
-    INFO_DETAILS_OP:'infoDetailOp',
-    INFO_MODULO:'infoModulo',
-    PROFILE:'profile',
+    HOME_OCR_LIST:'HomeOcr',
+    HOME_OP_LIST:'HomeOp',
+    HOME_MODULO_LIST:'HomeModulos',
+    INFO_DETAILS_OP:'InfoDetailOp',
+    INFO_MODULO:'InfoModulo',
+    PROFILE:'Profile',
     // REVISE:'revise',
 };
 
 export const GUEST_ROUTES={
-    HOME_OCR_LIST:'homeOcr',
-    HOME_OP_LIST:'homeOp',
-    HOME_MODULO_LIST:'homeModulos',
-    INFO_DETAILS_OP:'infoDetailOp',
-    INFO_MODULO:'infoModulo',
-    PROFILE:'profile'
+    HOME_OCR_LIST:'HomeOcr',
+    HOME_OP_LIST:'HomeOp',
+    HOME_MODULO_LIST:'HomeModulos',
+    INFO_DETAILS_OP:'InfoDetailOp',
+    INFO_MODULO:'InfoModulo',
+    PROFILE:'Profile'
 }
 
 export const AUTH_ROUTES={
-    LOGIN:'login'
+    LOGIN:'Login'
 }

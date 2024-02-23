@@ -2,6 +2,11 @@ import { statusApi }                            from '../../../interfaces/servic
 import { authInterface, authResponseInterface } from '../../../interfaces/services/ml_api/authInterfaces';
 import {ConectionObjectRequest}                 from '../conection/conectionObjectRequest';
 
+//  Doc 
+//  Este componente tiene la finalidad de establecer la conexión entre nuestro front y un servicio(RES_API_ML)
+//  Por lo tanto el componente establece una interfaz intermedia que permite definir los parámetros entre la interacción del front y el servicio al cual solo se le solicitará información 
+//  para este componente se hizo uso de la programación orientada a objetos (OOP)
+
 export class AuthObjectRequest extends ConectionObjectRequest{
 
     async authGet(uri:string,params:{documentId:string,password:string}):Promise<any>{

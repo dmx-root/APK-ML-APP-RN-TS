@@ -7,10 +7,11 @@ import { InformationHeaderViewComponentOp }                 from '../components/
 import { InformationOcrComponent }                          from '../components/informationOcrComponent';
 import { RowLeftIcon }                                      from '../public/icons/rowLeftIcon';
 import { useState }                                         from 'react'
+import { InformationDetailOpScreenProps }                   from '../interfaces/screens/screensInterfaces';
 
 const {height,width}=Dimensions.get('screen');
 
-export function InformationDetailOp(){
+export function InformationDetailOp({navigation}:any){
 
     const filterItems=[
         {id:1,label:'Todas'},

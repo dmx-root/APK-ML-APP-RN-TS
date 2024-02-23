@@ -11,6 +11,7 @@ import { ModalLoading }                                 from '../modals/modalLoa
 import { ModalAlert }                                   from '../modals/modalAlert';
 import {  useState }                                    from 'react';
 import * as Font                                        from 'expo-font';
+import { LoginScreenProps } from '../interfaces/screens/screensInterfaces';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -30,7 +31,7 @@ interface modal{
     keyboard:KeyboardTypeOptions,
 }
 
-export function Login(){
+export function Login({navigation}:any){
 
     const { state, fetchDataAuth } = useApiGetAuth();
     const [ dataForm, setDataForm] = useState<form|null>(null);
@@ -90,7 +91,7 @@ export function Login(){
                                 dataForm?.['Password']&&dataForm?.['Document']?
                                 fetchDataAuth(dataForm?.['Document'],dataForm?.['Password']):
                                 Alert.alert('Campos vacios','Asegúrese de llenar todos los campos') 
-                                setAlert(true)
+                                setAlert(true);
                             }}/>
                     </View>
                 </ImageBackground>    

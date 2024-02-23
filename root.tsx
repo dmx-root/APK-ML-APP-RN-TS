@@ -3,16 +3,11 @@ import { NavigationContainer }          from '@react-navigation/native';
 import { accountNavigators }            from './src/structure/accountNavigators';
 import { SCREENS }                      from './src/structure/screens';
 import { useMainContext }               from './src/contexts/mainContext';
-import React, { useEffect, useState }   from 'react'
+import { RootStackParamList }           from './src/interfaces/screens/screensInterfaces';
+import { account }                      from './src/interfaces/app/account';
+import React, { useEffect, useState }   from 'react';
 
-interface account{
-    id:number,
-    initialRoute:string,
-    routes:any, 
-    context:any
-}
-
-const Stack=createStackNavigator();
+const Stack=createStackNavigator<RootStackParamList>();
 
 export function Root() {
 
@@ -37,7 +32,7 @@ export function Root() {
                         {Object.keys(routes).map((route) => (
                             <Stack.Screen
                                 key={route}
-                                name={route}
+                                name={routes[route]}
                                 component={SCREENS[routes[route]]}
                                 options={{headerShown:false}}
                             />
