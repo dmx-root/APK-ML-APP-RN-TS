@@ -1,12 +1,16 @@
-import { View, TouchableOpacity, Image, Text, Dimensions, StyleSheet} from 'react-native';
+import { View, TouchableOpacity, Image, Text, Dimensions, StyleSheet, GestureResponderEvent} from 'react-native';
 import { CalendarIcon } from '../public/icons/calendarIcon';
 import { AnalitycsIcon } from '../public/icons/analitycsIcon';
+import { OpInterface } from '../interfaces/services/ml_api/opInterfaces';
 
 const {height}=Dimensions.get('window');
 
-export function MainOpComponent(){
+export function MainOpComponent({data,handlerClick}:{
+    data:OpInterface,
+    handlerClick:(event:GestureResponderEvent)=>void
+}){
     return <View>
-                <TouchableOpacity style={StyleOp.Opcontainer} onPress={()=>{}}>
+                <TouchableOpacity style={StyleOp.Opcontainer} onPress={handlerClick}>
                     <View style={StyleOp.OpIconContainer}>
                         <View style={StyleOp.OpIcon}>
                             {/* <CalendarIcon color='#AAA' width={2} size={40}/> */}
@@ -15,21 +19,21 @@ export function MainOpComponent(){
                     </View>
                     <View style={StyleOp.body}>
                         <View style={StyleOp.OpNumber}>
-                            <Text style={StyleOp.content}>{'MOP3548'}</Text>
+                            <Text style={StyleOp.content}>{data.op}</Text>
                         </View>
                         <View style={StyleOp.OpCantidad}>
-                            <Text style={StyleOp.content}>{'3500'}</Text>
+                            <Text style={StyleOp.content}>{data.opLotePlaneado}</Text>
                         </View>
                         <View style={StyleOp.OpPositiveActions}>
                             <AnalitycsIcon color='green' size={20} width={2}/>
-                            <Text style={StyleOp.content}>{'35%'}</Text>
+                            <Text style={StyleOp.content}>{`${((data.opLoteCompletado/data.opLotePlaneado)*100).toString().slice(0,5)}%`}</Text>
                         </View>
                         <View style={StyleOp.OpNegativeActions}>
                             <AnalitycsIcon color='red' size={20} width={2}/>
-                            <Text style={StyleOp.content}>{'77%'}</Text>
+                            <Text style={StyleOp.content}>{`${(((data.opLotePlaneado-data.opLoteCompletado)/data.opLotePlaneado)*100).toString().slice(0,5)}%`}</Text>
                         </View>
                         <View style={StyleOp.OpRefrenecia}>
-                            <Text style={[StyleOp.content,{color:'#BBB'}]}>{'MAR3524'}</Text>
+                            <Text style={[StyleOp.content,{color:'#BBB'}]}>{data.referencia}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>

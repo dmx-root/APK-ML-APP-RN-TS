@@ -6,16 +6,10 @@ import { SearchIcon }                                       from '../public/icon
 import { ItemResize }                                       from '../components/ItemResize';
 import { FilterIcon }                                       from '../public/icons/filterIcon';
 import { ItemNavigation }                                   from '../components/itemNavigation';
-import { OcrIcon }                                          from '../public/icons/ocrIcon';
-import { OpIcon }                                           from '../public/icons/opIcon';
-import { ModuloIcon }                                       from '../public/icons/moduloIcon';
-import { UserIcon }                                         from '../public/icons/userIcon';
-import { EmployeerIcon }                                    from '../public/icons/employeerIcon';
-import { useState }                                         from 'react'
-import { MainModuloComponent }                              from '../components/mainModuloComponent';
 import { MainEmployeerComponent }                           from '../components/mainEmployeerComponent';
-import { HomeEmployeerScreenProps } from '../interfaces/screens/screensInterfaces';
-import { useMainContext } from '../contexts/mainContext';
+import { useMainContext }                                   from '../contexts/mainContext';
+import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
+import { useState }                                         from 'react'
 
 
 const {height,width}=Dimensions.get('screen');
@@ -28,76 +22,85 @@ export function HomeEmployeer({navigation}:any){
         {id:3,label:'Operarios inactivos'}
     ]
 
-    const [itemState,setItemSelec]=useState<number|null>(1)
+    const [itemState,setItemSelec]=useState<number|null>(1);
+    const [newRegister,setNewRegister] = useState<boolean>(false);
+
     const contextStorage= useMainContext();
 
-    return <View style={{height,width}}>
+    return<>
+        <View style={{height,width}}>
 
-                <View style={StyleMainWindow.backRoots}></View>
+                    <View style={StyleMainWindow.backRoots}></View>
 
-                <View style={StyleMainWindow.Backcontainer}>
-                    <View style={StyleMainWindow.header}>
-                        <View style={StyleMainWindow.filterContainer}>
-                            <View style={StyleMainWindow.action}>
-                                <View  style={StyleMainWindow.menuIcon}>
-                                    <MenuIcon color='#999' size={40} width={2}/>
-                                </View>
-                                <View style={StyleMainWindow.bar}>
-                                </View>
-                                <View style={StyleMainWindow.searchIcon}>
-                                    <SearchIcon color='#999' size={40} width={2}/>
+                    <View style={StyleMainWindow.Backcontainer}>
+                        <View style={StyleMainWindow.header}>
+                            <View style={StyleMainWindow.filterContainer}>
+                                <View style={StyleMainWindow.action}>
+                                    <View  style={StyleMainWindow.menuIcon}>
+                                        <MenuIcon color='#999' size={40} width={2}/>
+                                    </View>
+                                    <View style={StyleMainWindow.bar}>
+                                    </View>
+                                    <View style={StyleMainWindow.searchIcon}>
+                                        <SearchIcon color='#999' size={40} width={2}/>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
-                        <View style={StyleMainWindow.fieldItemsSelect}>
-                            <View style={StyleMainWindow.labels}>
-                                {filterItems.map(element=>
-                                <ItemResize
-                                    key={element.id} 
-                                    state={itemState===element.id?true:false} 
-                                    handlerClick={()=>{setItemSelec(element.id)}} 
-                                    label={element.label}/>)}
+                            <View style={StyleMainWindow.fieldItemsSelect}>
+                                <View style={StyleMainWindow.labels}>
+                                    {filterItems.map(element=>
+                                    <ItemResize
+                                        key={element.id} 
+                                        state={itemState===element.id?true:false} 
+                                        handlerClick={()=>{setItemSelec(element.id)}} 
+                                        label={element.label}/>)}
+                                </View>
+                                <View style={StyleMainWindow.labelsIcon}>
+                                    <FilterIcon color='#AAA' size={30} width={2}/>
+                                </View>
                             </View>
-                            <View style={StyleMainWindow.labelsIcon}>
-                                <FilterIcon color='#AAA' size={30} width={2}/>
+                            <View style={StyleMainWindow.fieldContainer}>
+                                <View style={{width:'13%',height:'100%'}}></View>
+                                <View style={{justifyContent:'center',alignItems:'center',width:'30%',height:'100%'}}><Text style={StyleMainWindow.textField}>NOMBRE DE OPERARIO</Text></View>
+                                <View style={{justifyContent:'center',alignItems:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>DOCUMENTO</Text></View>
+                                <View style={{justifyContent:'center',alignItems:'center',width:'20%',height:'100%'}}><Text style={StyleMainWindow.textField}>CÓDIGO</Text></View>
+                                <View style={{justifyContent:'center',alignItems:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>MODULO</Text></View>
+                            </View> 
+                        </View>
+                        <View style={StyleMainWindow.root1}>
+                            <View style={StyleMainWindow.frame1}>
+                                <MainEmployeerComponent/>
+                                <MainEmployeerComponent/>
+                                <MainEmployeerComponent/>
+                                <MainEmployeerComponent/>
                             </View>
+                            <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{setNewRegister(true)}}>
+                                <PlusIcon color="#777" size={70} width={1}/>
+                                <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Nueva OCR</Text>
+                            </TouchableOpacity>
                         </View>
-                        <View style={StyleMainWindow.fieldContainer}>
-                            <View style={{width:'13%',height:'100%'}}></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'30%',height:'100%'}}><Text style={StyleMainWindow.textField}>NOMBRE DE OPERARIO</Text></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>DOCUMENTO</Text></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'20%',height:'100%'}}><Text style={StyleMainWindow.textField}>CÓDIGO</Text></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>MODULO</Text></View>
-                        </View> 
-                    </View>
-                    <View style={StyleMainWindow.root1}>
-                        <View style={StyleMainWindow.frame1}>
-                            <MainEmployeerComponent/>
-                            <MainEmployeerComponent/>
-                            <MainEmployeerComponent/>
-                            <MainEmployeerComponent/>
-                        </View>
-                        <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{}}>
-                            <PlusIcon color="#777" size={70} width={1}/>
-                            <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Nueva OCR</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={StyleMainWindow.root2}>
-                        <View style={StyleMainWindow.navigationContainer}>
-                        {
-                            contextStorage?.account?.home?.map(element=>
-                                <ItemNavigation 
-                                    handlerClick={()=>{element.NAVIGATE(element.item,navigation)}} 
-                                    state={element.id===4}
-                                    key={element.id}>
-                                    {element.icon}
-                                </ItemNavigation>    
-                            )
-                        }
+                        <View style={StyleMainWindow.root2}>
+                            <View style={StyleMainWindow.navigationContainer}>
+                            {
+                                contextStorage?.account?.home?.map(element=>
+                                    <ItemNavigation 
+                                        handlerClick={()=>{element.NAVIGATE(element.item,navigation)}} 
+                                        state={element.id===4}
+                                        key={element.id}>
+                                        {element.icon}
+                                    </ItemNavigation>    
+                                )
+                            }
+                            </View>
                         </View>
                     </View>
                 </View>
-            </View>
+    {
+        newRegister?
+        <ModalRegisterOcr handlerClick={()=>setNewRegister(false)} navigation={navigation}/>:
+        <></>
+    }
+    </>
 }
 
 const currentColorMain='#44329C';   //azul oscuro

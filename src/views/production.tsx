@@ -10,8 +10,8 @@ import { ModuloIcon }                                           from '../public/
 import { InfoLineButton }                                       from '../components/InfoLineButton';
 import { OcrIcon }                                              from '../public/icons/ocrIcon';
 import { UserIcon }                                             from '../public/icons/userIcon';
-import { ModalProductionRegister } from '../modals/modalProductionRegister';
-import { ProductionScreenProps } from '../interfaces/screens/screensInterfaces';
+import { ModalProductionRegister }                              from '../modals/modalProductionRegister';
+import { ProductionScreenProps }                                from '../interfaces/screens/screensInterfaces';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -58,7 +58,7 @@ export function Production({navigation}:any){
                     </ViewContainer>
                 </View>
                 <View style={productionStyle.footer}>
-                    <TouchableOpacity style={[productionStyle.button]}>
+                    <TouchableOpacity style={[productionStyle.button]} onPress={()=>{navigation.navigate('HomeOcr')}}>
                         <RowLeftIcon color="#777" size={30} width={1.5}/>
                         <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Cancelar</Text>
                     </TouchableOpacity>

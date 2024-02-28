@@ -1,12 +1,16 @@
 
-import { View, TouchableOpacity, Image, Text, Dimensions, StyleSheet} from 'react-native';
+import { View, TouchableOpacity, Image, Text, Dimensions, StyleSheet, GestureResponderEvent} from 'react-native';
 import { CalendarIcon } from '../public/icons/calendarIcon';
 import { AnalitycsIcon } from '../public/icons/analitycsIcon';
 import { OcrIcon } from '../public/icons/ocrIcon';
+import { ModuloProcessInterface } from '../interfaces/services/ml_api/moduloInterfaces';
 
 const {height}=Dimensions.get('window');
 
-export function MainModuloComponent(){
+export function MainModuloComponent({data,handlerClick}:{
+    data:ModuloProcessInterface,
+    handlerClick:(event:GestureResponderEvent)=>void
+}){
     return <View>
                 <TouchableOpacity style={StyleModulo.modulocontainer} onPress={()=>{}}>
                     <View style={StyleModulo.moduloIconContainer}>
@@ -16,25 +20,25 @@ export function MainModuloComponent(){
                     </View>
                     <View style={StyleModulo.body}>
                         <View style={StyleModulo.moduloNumber}>
-                            <Text style={StyleModulo.content}>{'MODULO-1'}</Text>
+                            <Text style={StyleModulo.content}>{data.moduloEtiqueta}</Text>
                         </View>
                         <View style={StyleModulo.moduloCantidad}>
                             <OcrIcon color='#AAA' size={20} width={2}/>
-                            <Text style={StyleModulo.content}>{'350'}</Text>
+                            <Text style={StyleModulo.content}>{data.produccionDiaria||'No def'}</Text>
                         </View>
                         <View style={StyleModulo.moduloPositiveActions}>
                             <AnalitycsIcon color='green' size={20} width={2}/>
-                            <Text style={StyleModulo.content}>{'35%'}</Text>
+                            <Text style={StyleModulo.content}>{'No def'}</Text>
                         </View>
                         <View style={StyleModulo.moduloNegativeActions}>
                             <AnalitycsIcon color='red' size={20} width={2}/>
-                            <Text style={StyleModulo.content}>{'77%'}</Text>
+                            <Text style={StyleModulo.content}>{'No def'}</Text>
                         </View>
                         <View style={StyleModulo.moduloRefrenecia}>
-                            <Text style={[StyleModulo.content,{color:'#BBB'}]}>{'MOP3475'}</Text>
+                            <Text style={[StyleModulo.content,{color:'#BBB'}]}>{data.referenciaActual||'No def'}</Text>
                         </View>
                         <View style={StyleModulo.moduloRefrenecia}>
-                            <Text style={[StyleModulo.content,{color:'#BBB'}]}>{'Activo'}</Text>
+                            <Text style={[StyleModulo.content,{color:'#BBB'}]}>{data.moduloEstadoProceso?'En proceso':'En paro'}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>

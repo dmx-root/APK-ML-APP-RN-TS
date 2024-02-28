@@ -1,6 +1,5 @@
 import { useMainContext }               from '../../contexts/mainContext';
-import { account }                      from '../../interfaces/controller/navigator'
-import { accountNavigators }            from '../../structure/accountNavigators';
+import { accountNavigators }            from '../../app/navigators/accountNavigators';
 import { useReducer, useState}          from 'react';
 
 const actionTypes = {

@@ -1,13 +1,14 @@
-import { TouchableOpacity, View, Text, StyleSheet} from "react-native";
+import { TouchableOpacity, View, Text, StyleSheet,GestureResponderEvent} from "react-native";
 
 
-export function ButtonFullWidth({color,fontColor,label}:{
+export function ButtonFullWidth({color,fontColor,label,handlerClick}:{
     color:string,
     fontColor:string,
-    label:string
+    label:string,
+    handlerClick:(event:GestureResponderEvent)=>void
 }){
     return <View style={buttonFullWidthStyle.container}>
-                <TouchableOpacity style={[buttonFullWidthStyle.button,{backgroundColor:fontColor}]}>
+                <TouchableOpacity style={[buttonFullWidthStyle.button,{backgroundColor:fontColor}]} onPress={handlerClick}>
                     <Text style={[buttonFullWidthStyle.content,{color}]}>{label}</Text>
                 </TouchableOpacity>
             </View>

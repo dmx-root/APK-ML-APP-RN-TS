@@ -1,4 +1,4 @@
-import {View,StyleSheet, Dimensions, TouchableOpacity,Text} from 'react-native';
+import {View,StyleSheet, Dimensions, TouchableOpacity,Text, FlatList} from 'react-native';
 import { PlusIcon }                                         from '../public/icons/plusIcon';
 import { MenuIcon }                                         from '../public/icons/menuIcon';
 import { SearchIcon }                                       from '../public/icons/searchIcon';
@@ -8,6 +8,10 @@ import { ItemNavigation }                                   from '../components/
 import { MainModuloComponent }                              from '../components/mainModuloComponent';
 import { useState }                                         from 'react'
 import { useMainContext }                                   from '../contexts/mainContext';
+import { ModalRegisterOcr } from '../modals/ModalRegisterOcr';
+import { useApiGetModulos } from '../controllers/hooks/customHookGetModulos';
+import { LoadingComponent } from '../components/loadingComponent';
+import { EmptyComponent } from '../components/emptyComponent';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -19,10 +23,14 @@ export function HomeModulos({navigation}:any){
         {id:3,label:'Módulos inactivos'}
     ]
 
-    const [itemState,setItemSelec]=useState<number|null>(1)
+    const [itemState,setItemSelec]=useState<number|null>(1);
+    const [newRegister,setNewRegister] = useState<boolean>(false);
+    const { state } = useApiGetModulos();
+
     const contextStorage = useMainContext();
 
-    return <View style={{height,width}}>
+    return<>
+     <View style={{height,width}}>
 
                 <View style={StyleMainWindow.backRoots}></View>
 
@@ -63,12 +71,18 @@ export function HomeModulos({navigation}:any){
                     </View>
                     <View style={StyleMainWindow.root1}>
                         <View style={StyleMainWindow.frame1}>
-                            <MainModuloComponent/>
-                            <MainModuloComponent/>
-                            <MainModuloComponent/>
-                            <MainModuloComponent/>
+                        {
+                            state.loading?
+                            <LoadingComponent label='Cargando lista de registros...'/>:
+                            state.error?
+                            <EmptyComponent label='Hubo un error en la carga de datos'/>:
+                            state.data?.length===0?
+                            <EmptyComponent label='El usuario no cuenta con registros aún'/>:
+                            <FlatList 
+                            renderItem={(item)=><MainModuloComponent key={item.item.moduloId} data={item.item} handlerClick={()=>{}}/>} data={state?.data}/>
+                        }
                         </View>
-                        <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{}}>
+                        <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{setNewRegister(true)}}>
                             <PlusIcon color="#777" size={70} width={1}/>
                             <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Nueva OCR</Text>
                         </TouchableOpacity>
@@ -90,6 +104,12 @@ export function HomeModulos({navigation}:any){
                     </View>
                 </View>
             </View>
+    {
+        newRegister?
+        <ModalRegisterOcr handlerClick={()=>setNewRegister(false)} navigation={navigation}/>:
+        <></>
+    }
+    </>
 }
 
 const currentColorMain='#44329C';   //azul oscuro

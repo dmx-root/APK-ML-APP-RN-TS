@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { accountNavigators }            from '../../structure/accountNavigators';
-import {account} from '../../structure/accountNavigators'
+import { accountNavigators }            from '../../app/navigators/accountNavigators';
+import {account} from '../../app/navigators/accountNavigators'
 import { useMainContext } from '../../contexts/mainContext';
 
 export const useGetAccount = () => {

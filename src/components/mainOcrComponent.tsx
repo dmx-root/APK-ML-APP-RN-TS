@@ -1,6 +1,7 @@
-import {View, TouchableOpacity, Image, Text, StyleSheet} from 'react-native'
+import {View, TouchableOpacity, Image, Text, StyleSheet, GestureResponderEvent} from 'react-native'
 import { OpIcon } from '../public/icons/opIcon';
 import { ModuloIcon } from '../public/icons/moduloIcon';
+import { OcrProcessesInterface } from '../interfaces/services/ml_api/ocrInterfaces';
 
 // Doc 
 // Este elemento es la representación para el registro de unidades
@@ -9,9 +10,12 @@ import { ModuloIcon } from '../public/icons/moduloIcon';
 // handlerClick: nos permite pasar un manejador de eventos por medio de este parámeto, para el evento "click"
 // data: es la interfaz que define la información que será renderizada en el elemento
 
-export function MainOcrComponent(){
+export function MainOcrComponent({data,handlerClick}:{
+    data:OcrProcessesInterface,
+    handlerClick:(event:GestureResponderEvent)=>void
+}){
     return <View>
-    <TouchableOpacity style={ocrStyle.ocrcontainer} onPress={()=>{}}>
+    <TouchableOpacity style={ocrStyle.ocrcontainer} onPress={handlerClick}>
         <View style={ocrStyle.ocrIconContainer}>
             <View style={ocrStyle.ocrIcon}>
                 {/* <CalendarIcon color='#AAA' width={2} size={40}/> */}
@@ -20,24 +24,24 @@ export function MainOcrComponent(){
         </View>
         <View style={ocrStyle.body}>
             <View style={ocrStyle.ocrNumber}>
-                <Text style={ocrStyle.content}>{'PALO ROSA'}</Text>
+                <Text style={ocrStyle.content}>{data.colorEtiqueta}</Text>
             </View>
             <View style={ocrStyle.ocrCantidad}>
-                <Text style={ocrStyle.content}>{'35'}</Text>
+                <Text style={ocrStyle.content}>{data.cantidadUnidades}</Text>
             </View>
             <View style={ocrStyle.ocrPositiveActions}>
-                <Text style={ocrStyle.content}>{'XL'}</Text>
+                <Text style={ocrStyle.content}>{data.tallaId}</Text>
             </View>
             <View style={ocrStyle.modulo}>
                 <ModuloIcon color='#AAA' size={20} width={2}/>
-                <Text style={ocrStyle.content}>{'MOD-1'}</Text>
+                <Text style={ocrStyle.content}>{`MOD-${data.moduloId}`}</Text>
             </View>
             <View style={ocrStyle.ocrNegativeActions}>
                 <OpIcon color='#AAA' size={20} width={2}/>
-                <Text style={ocrStyle.content}>{'MOP3478'}</Text>
+                <Text style={ocrStyle.content}>{data.op}</Text>
             </View>
             <View style={ocrStyle.ocrRefrenecia}>
-                <Text style={[ocrStyle.content,{color:'#BBB'}]}>{'MAR342855'}</Text>
+                <Text style={[ocrStyle.content,{color:'#BBB'}]}>{data.referencia}</Text>
             </View>
         </View>
     </TouchableOpacity>

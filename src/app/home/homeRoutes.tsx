@@ -1,9 +1,9 @@
 import { useNavigation, NavigationProp }            from '@react-navigation/native';
-import { OcrIcon }                                  from '../public/icons/ocrIcon';
-import { OpIcon }                                   from '../public/icons/opIcon';
-import { ModuloIcon }                               from '../public/icons/moduloIcon';
-import { EmployeerIcon }                            from '../public/icons/employeerIcon';
-import { Item }                                     from '../interfaces/app/homeRoutes';
+import { OcrIcon }                                  from '../../public/icons/ocrIcon';
+import { OpIcon }                                   from '../../public/icons/opIcon';
+import { ModuloIcon }                               from '../../public/icons/moduloIcon';
+import { EmployeerIcon }                            from '../../public/icons/employeerIcon';
+import { Item }                                     from '../../interfaces/app/homeRoutes';
 
 
 export const ADMIN_HOME_ROUTES:Array<Item> = [

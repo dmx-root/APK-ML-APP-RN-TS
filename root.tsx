@@ -1,7 +1,7 @@
 import { createStackNavigator }         from '@react-navigation/stack';
 import { NavigationContainer }          from '@react-navigation/native';
-import { accountNavigators }            from './src/structure/accountNavigators';
-import { SCREENS }                      from './src/structure/screens';
+import { accountNavigators }            from './src/app/navigators/accountNavigators';
+import { SCREENS }                      from './src/app/screens/screens';
 import { useMainContext }               from './src/contexts/mainContext';
 import { RootStackParamList }           from './src/interfaces/screens/screensInterfaces';
 import { account }                      from './src/interfaces/app/account';

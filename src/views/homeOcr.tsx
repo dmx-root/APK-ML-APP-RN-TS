@@ -1,26 +1,18 @@
-import {View,StyleSheet, Dimensions, TouchableOpacity,Text} from 'react-native';
-// import { useRoute }          from '@react-navigation/native';
-import { PlusIcon }                                         from '../public/icons/plusIcon';
-import { MenuIcon }                                         from '../public/icons/menuIcon';
-import { SearchIcon }                                       from '../public/icons/searchIcon';
-import { ItemResize }                                       from '../components/ItemResize';
-import { FilterIcon }                                       from '../public/icons/filterIcon';
-import { ItemNavigation }                                   from '../components/itemNavigation';
-import { OcrIcon }                                          from '../public/icons/ocrIcon';
-import { OpIcon }                                           from '../public/icons/opIcon';
-import { ModuloIcon }                                       from '../public/icons/moduloIcon';
-import { UserIcon }                                         from '../public/icons/userIcon';
-import { EmployeerIcon }                                    from '../public/icons/employeerIcon';
-import { MainOcrComponent }                                 from '../components/mainOcrComponent';
-import { Aside }                                            from '../components/aside';
-import { useState }                                         from 'react';
-import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
-import { ModalOcrInfo }                                     from '../modals/modalOcrInfo';
-import { ModalDetailOpList } from '../modals/modalDetailOpList';
-import { SCREENS } from '../structure/screens';
-import { HomeOcrScreenProps } from '../interfaces/screens/screensInterfaces';
-import { useMainContext } from '../contexts/mainContext';
-
+import { PlusIcon }                                                     from '../public/icons/plusIcon';
+import { MenuIcon }                                                     from '../public/icons/menuIcon';
+import { SearchIcon }                                                   from '../public/icons/searchIcon';
+import { ItemResize }                                                   from '../components/ItemResize';
+import { FilterIcon }                                                   from '../public/icons/filterIcon';
+import { ItemNavigation }                                               from '../components/itemNavigation';
+import { Aside }                                                        from '../components/aside';
+import { ModalRegisterOcr }                                             from '../modals/ModalRegisterOcr';
+import { useMainContext }                                               from '../contexts/mainContext';
+import { LoadingComponent }                                             from '../components/loadingComponent';
+import { MainOcrComponent }                                             from '../components/mainOcrComponent';
+import { useApiGetOcrByUser }                                           from '../controllers/hooks/customHookGetOcrByUser';
+import { EmptyComponent }                                               from '../components/emptyComponent';
+import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList}   from 'react-native';
+import { useState }                                                     from 'react';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -33,14 +25,17 @@ export function HomeOcr({navigation}:any){
         {id:4,label:'Sin Revisar'},
         {id:5,label:'MOP'},
         {id:6,label:'MOB'}
-    ]
-    const [asideState,setAsideState]=useState<boolean>(false);
+    ];
+
     const contextStorage = useMainContext();
- 
+    const {state} = useApiGetOcrByUser('1146441925');
+
+    const [asideState,setAsideState] = useState<boolean>(false);
+    const [newRegister,setNewRegister] = useState<boolean>(false);
+
     return<>
     <View style={{height,width}}>
         <View style={StyleMainWindow.backRoots}></View>
-
         <View style={StyleMainWindow.Backcontainer}>
             <View style={StyleMainWindow.header}>
                 <View style={StyleMainWindow.filterContainer}>
@@ -75,41 +70,51 @@ export function HomeOcr({navigation}:any){
             </View>
             <View style={StyleMainWindow.root1}>
                 <View style={StyleMainWindow.frame1}>
-                    <MainOcrComponent/>
-                    <MainOcrComponent/>
-                    <MainOcrComponent/>
-                    <MainOcrComponent/>
-                    <MainOcrComponent/>
-                    <MainOcrComponent/>
-                    <MainOcrComponent/>
-                    <MainOcrComponent/>
-                    {/* <MainOcrComponent/> */}
-                    {/* <InformationOcrComponent handlerClick={()=>{}}/> */}
+                    {
+                        state.loading?
+                        <LoadingComponent label='Cargando lista de registros...'/>:
+                        state.error?
+                        <EmptyComponent label='Hubo un error en la carga de datos'/>:
+                        state.data?.length===0?
+                        <EmptyComponent label='El usuario no cuenta con registros aún'/>:
+                        <FlatList 
+                        renderItem={(item)=><MainOcrComponent key={item.item.ocrId} data={item.item} handlerClick={()=>{}}/>} data={state?.data}/>
+                    }
                 </View>
-                <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{}}>
+                <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{setNewRegister(true)}}>
                     <PlusIcon color="#777" size={70} width={1}/>
                     <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Nueva OCR</Text>
                 </TouchableOpacity>
             </View>
             <View style={StyleMainWindow.root2}>
                 <View style={StyleMainWindow.navigationContainer}>
-                {
-                    contextStorage?.account?.home?.map(element=>
-                        <ItemNavigation handlerClick={()=>{element.NAVIGATE(element.item,navigation)}} state={element.id===1} key={element.id}>
-                            {element.icon}
-                        </ItemNavigation>    
-                    )
-                }
+                    {
+                        contextStorage?.account?.home?.map(element=>
+                            <ItemNavigation 
+                                handlerClick={()=>{element.NAVIGATE(element.item,navigation)}} 
+                                state={element.id===1} 
+                                key={element.id}>
+                                    {element.icon}
+                            </ItemNavigation>    
+                        )
+                    }
                 </View>
             </View>
         </View>
     </View>
-    {asideState?<Aside handlerClick={()=>{setAsideState(false)}}/>:<></>}
-    {/* <ModalRegisterOcr/> */}
-    {/* <ModalOcrInfo/> */}
-    {/* <ModalInput handlerClick={()=>{}} label='DOCUMENTO' type='text'/> */}
-    {/* <ModalDetailOpList/> */}
+    {
+        asideState?
+        <Aside handlerClick={()=>{setAsideState(false)}}/>:
+        <></>
+    }
+    {
+        newRegister?
+        <ModalRegisterOcr handlerClick={()=>setNewRegister(false)} navigation={navigation}/>:
+        <></>
+    }
 
+    {/* <ModalOcrInfo/> */}
+    {/* <ModalDetailOpList/> */}
     </>
 }
 

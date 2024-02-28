@@ -1,12 +1,12 @@
-import { AdminContextProvider }                             from '../contexts/adminContext';
-import { BodegaContextProvider }                            from '../contexts/bodegaContext';
-import { ProcessesAdminContextProvider }                    from '../contexts/processesAdminContext';
-import { ProductionContextProvider }                        from '../contexts/productionContext';
+import { AdminContextProvider }                             from '../../contexts/adminContext';
+import { BodegaContextProvider }                            from '../../contexts/bodegaContext';
+import { ProcessesAdminContextProvider }                    from '../../contexts/processesAdminContext';
+import { ProductionContextProvider }                        from '../../contexts/productionContext';
 import { ADMIN_HOME_ROUTES, FACTURACION_HOME_ROUTES, GUEST_HOME_ROUTES, 
-    PLANTA_HOME_ROUTES, PROCESSES_HOME_ROUTES } from './homeRoutes';
-import { ADMIN_ROUTES, PROCESSES_ROUTES, AUTH_ROUTES}       from './routes';
-import { GUEST_ROUTES, PLANTA_ROUTES, FACTURACION_ROUTES}   from './routes';
-import { account } from '../interfaces/app/account'
+    PLANTA_HOME_ROUTES, PROCESSES_HOME_ROUTES } from '../home/homeRoutes';
+import { ADMIN_ROUTES, PROCESSES_ROUTES, AUTH_ROUTES}       from '../routes/routes';
+import { GUEST_ROUTES, PLANTA_ROUTES, FACTURACION_ROUTES}   from '../routes/routes';
+import { account } from '../../interfaces/app/account'
 
 
 

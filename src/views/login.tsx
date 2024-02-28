@@ -1,5 +1,5 @@
 import {View,StyleSheet, Dimensions, Text, Alert}       from 'react-native';
-import { Image, ImageBackground, KeyboardTypeOptions}   from 'react-native';
+import { Image, ImageBackground }   from 'react-native';
 import { UserIcon }                                     from '../public/icons/userIcon';
 import { InputAuth }                                    from '../components/inputAuth';
 import { LockIcon }                                     from '../public/icons/lockIcon';
@@ -9,29 +9,16 @@ import { ModalInput }                                   from '../modals/modalInp
 import { useApiGetAuth }                                from '../controllers/hooks/customHookGetAuth';
 import { ModalLoading }                                 from '../modals/modalLoading';
 import { ModalAlert }                                   from '../modals/modalAlert';
-import {  useState }                                    from 'react';
+import { modal, form }                                  from '../interfaces/view/login';
+import { LoginScreenProps }                             from '../interfaces/screens/screensInterfaces';
+import { useState }                                     from 'react';
 import * as Font                                        from 'expo-font';
-import { LoginScreenProps } from '../interfaces/screens/screensInterfaces';
 
 const {height,width}=Dimensions.get('screen');
 
 const currentColorDefault='#44329C';
 
-interface form{
-    [key:string]:string
-}
-
-interface modal{
-    state:boolean,
-    label:string,
-    key:string
-    type:string,
-    value:string,
-    placeHolder:string,
-    keyboard:KeyboardTypeOptions,
-}
-
-export function Login({navigation}:any){
+export function Login(){
 
     const { state, fetchDataAuth } = useApiGetAuth();
     const [ dataForm, setDataForm] = useState<form|null>(null);
