@@ -1,22 +1,25 @@
-import { InformationDetOpComponent } from "../components/informationDetOpComponente"
-import { InformationModuloComponent } from "../components/informationModuloComponent"
-import { InformationUserComponent } from "../components/informationUserComponent"
-import { Modal } from "../components/modal"
-import { ModalContainer } from "../components/modalContainer"
-import { ModalContainerList } from "../components/modalContainerList"
-import { InformationDetailOp } from "../views/informationDetailOp"
+import { InformationDetOpComponent }    from "../components/informationDetOpComponente"
+import { ModalContainerList }           from "../components/modalContainerList"
+import { Modal }                        from "../components/modal"
+import { GestureResponderEvent }        from "react-native"
+import { LoadingComponent }             from "../components/loadingComponent"
+import { ModalLoading } from "./modalLoading"
 
-
-export function ModalDetailOpList(){
-    return  <Modal handlerClick={()=>{}} >
-                <ModalContainerList>
-                    <InformationDetOpComponent handlerClick={()=>{}}/>
-                    <InformationDetOpComponent handlerClick={()=>{}}/>
-                    <InformationDetOpComponent handlerClick={()=>{}}/>
-                    <InformationModuloComponent handlerClick={()=>{}}/>
-                    <InformationUserComponent handlerClick={()=>{}}/>
-                    {/* <InformationDetOpComponent handlerClick={()=>{}}/> */}
-                    {/* <InformationDetOpComponent handlerClick={()=>{}}/> */}
-                </ModalContainerList>
-            </Modal> 
+export function ModalDetailOpList({opId,handlerClick}:{
+    opId:string | null,
+    handlerClick:(event:GestureResponderEvent)=>void
+}){
+    return <>
+        <ModalLoading handlerClick={()=>{}} label="Cargando OP's"/>
+        {/* <Modal handlerClick={handlerClick} >
+            <ModalContainerList>
+                <InformationDetOpComponent handlerClick={()=>{}}/>
+                <InformationDetOpComponent handlerClick={()=>{}}/>
+                <InformationDetOpComponent handlerClick={()=>{}}/>
+                <InformationDetOpComponent handlerClick={()=>{}}/>
+                <InformationDetOpComponent handlerClick={()=>{}}/>
+            </ModalContainerList>
+        </Modal>  */}
+    </>
+    
 }

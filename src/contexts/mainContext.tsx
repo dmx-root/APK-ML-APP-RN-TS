@@ -1,6 +1,8 @@
 import { createContext, useContext, FC, ReactNode, useState} from 'react'
 import { MainContextInterface } from '../interfaces/context/mainContextInterface';
 import { account } from '../interfaces/app/account' 
+import { OperationsInterfaces } from '../interfaces/services/ml_api/operations';
+import { OcrProcessesInterface } from '../interfaces/services/ml_api/ocrInterfaces';
 
 
 const MainContext=createContext<MainContextInterface|undefined>(undefined);
@@ -17,9 +19,17 @@ interface ContextProps {
 export const MainContextProvider:FC<ContextProps>=({children})=>{
 
     const [account, setAccount] = useState<account|null>(null);
+    const [operations, setOperations ] = useState<Array<OperationsInterfaces>|null>(null);
+
+    const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);
+
     const data:MainContextInterface ={
         account,
-        setAccount
+        setAccount,
+        operations, 
+        setOperations,
+        ocrProcessData, 
+        setOcrProcessData
     }
     return(
         <MainContext.Provider value={data}>

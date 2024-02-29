@@ -8,3 +8,4 @@ export const get_all_ocr_production = `${uri}/api/ml/ocr/getAll/byUser/`;
 export const get_all_op_production = `${uri}/api/ml/op/getAll/byUser/`;
 export const get_all_modulos = `${uri}/api/ml/modulo/getAll/`;
 export const get_employeers_by_modulo = `${uri}/api/ml/modulo/employee/get/`;
+export const get_auth_operations = `${uri}/api/ml/auth/movil/operations/`;

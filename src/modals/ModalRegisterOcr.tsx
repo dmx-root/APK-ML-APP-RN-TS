@@ -6,10 +6,10 @@ import { ModalContainer }                   from "../components/modalContainer";
 import { InfoIcon }                         from "../public/icons/infoIcon";
 import { form }                             from '../interfaces/view/login';
 import { useApiGetDetailsOp }               from "../controllers/hooks/customHookGetDetailsOp";
+import { get_auth_operations }              from "../endpoints/ml_api/restApiMujerLatina";
+import { AuthObjectRequest }                from "../services/ml_api/request/authObjectRequest";
 import { ModalLoading }                     from "./modalLoading";
 import { ModalAlert }                       from "./modalAlert";
-import { get_employeers_by_modulo, }        from "../endpoints/ml_api/restApiMujerLatina";
-import { ModuloObjectRequest }              from "../services/ml_api/request/moduloObjectRequest";
 import { Alert, GestureResponderEvent }     from 'react-native';
 import { useState }                         from "react";
 
@@ -18,14 +18,14 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
     navigation:any
 }){
 
-    const [ dataForm, setDataForm] = useState<form|null>(null);
-    const [ alertState, setAlertState] = useState<boolean>(false);
+    const [ dataForm, setDataForm ] = useState<form|null>(null);
+    const [ alertState, setAlertState ] = useState<boolean>(false);
     const { state, fetchDataDetailsOp } = useApiGetDetailsOp();
     
     async function loadData (){
-        const apiQuery = new ModuloObjectRequest();
+        const apiQuery = new AuthObjectRequest();
         try {
-            const response = await apiQuery.EmployeersByModuloGet(get_employeers_by_modulo,'2');
+            const response = await apiQuery.authGetOperations(get_auth_operations,'1');
             console.log(response)
         } catch (error) {
             console.log(error)

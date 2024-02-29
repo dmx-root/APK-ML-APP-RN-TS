@@ -1,5 +1,6 @@
 import { statusApi }                            from '../../../interfaces/services/ml_api/apiResponse';
 import { authInterface, authResponseInterface } from '../../../interfaces/services/ml_api/authInterfaces';
+import { OperationsInterfaces, OperationsResponseApi } from '../../../interfaces/services/ml_api/operations';
 import {ConectionObjectRequest}                 from '../conection/conectionObjectRequest';
 
 //  Doc 
@@ -46,5 +47,42 @@ export class AuthObjectRequest extends ConectionObjectRequest{
             return authInterface;
         }
         
+    }
+    async authGetOperations(uri:string, profileId:string):Promise<any>{
+        try {
+            const response = (await this.getData(null,(uri+profileId),null)).data;
+
+            if(response.statusCodeApi===1){
+                const dataClear:Array<OperationsInterfaces>=response.data.map((element:any)=>{
+                    return {
+                        entornoId:element.env_id,
+                        profileId:element.prf_id,
+                        operacionEtiqueta:element.operation_label,
+                        operacionId:element .ope_id
+                    }
+                });
+
+                const ocrProcessInterface:OperationsResponseApi={
+                    statusCodeApi:response.statusCodeApi,
+                    statusMessageApi:response.statusMessageApi,
+                    data:dataClear
+                }
+                return ocrProcessInterface;
+            }
+            
+            const ocrProcessInterface:statusApi={
+                statusCodeApi:response.statusCodeApi,
+                statusMessageApi:response.statusMessageApi,
+            }
+            return ocrProcessInterface;
+ 
+        } catch (error) {
+            console.log(error)
+            const ocrProcessInterface:statusApi={
+                statusCodeApi:-1,
+                statusMessageApi:'Error de consulta',
+            }
+            return ocrProcessInterface;
+        }
     }
 }

@@ -1,5 +1,3 @@
-import {View,StyleSheet, Dimensions, Text, Alert}       from 'react-native';
-import { Image, ImageBackground }   from 'react-native';
 import { UserIcon }                                     from '../public/icons/userIcon';
 import { InputAuth }                                    from '../components/inputAuth';
 import { LockIcon }                                     from '../public/icons/lockIcon';
@@ -11,6 +9,8 @@ import { ModalLoading }                                 from '../modals/modalLoa
 import { ModalAlert }                                   from '../modals/modalAlert';
 import { modal, form }                                  from '../interfaces/view/login';
 import { LoginScreenProps }                             from '../interfaces/screens/screensInterfaces';
+import {View,StyleSheet, Dimensions, Text, Alert}       from 'react-native';
+import { Image, ImageBackground }                       from 'react-native';
 import { useState }                                     from 'react';
 import * as Font                                        from 'expo-font';
 

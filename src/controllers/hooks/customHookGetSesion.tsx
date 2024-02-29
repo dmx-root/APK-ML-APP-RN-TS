@@ -1,6 +1,7 @@
 import { useMainContext }               from '../../contexts/mainContext';
 import { accountNavigators }            from '../../app/navigators/accountNavigators';
 import { useReducer, useState}          from 'react';
+import { useApiGetAuthOperations } from './customHookGetAuthOperations';
 
 const actionTypes = {
     FIND_INIT: 'FETCH_INIT',
@@ -33,7 +34,7 @@ const dataReducer = (state: findState, action: findAction): findState => {
     }
 };
   
-export const useGetSesion = (): { sesionState: findState; getSesion: (accountId:number) => void } => {
+export const useGetSesion = (): { sesionState: findState, getSesion: (accountId:number) => void } => {
   
     const [sesionState, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -42,8 +43,10 @@ export const useGetSesion = (): { sesionState: findState; getSesion: (accountId:
     });
 
     const storage= useMainContext();
-
+    const { fetchDataOperation } = useApiGetAuthOperations();
+    
     function getSesion(accountId:number):void{
+        
         try {
 
             dispatch({ type: actionTypes.FIND_INIT,payload:0 });
@@ -52,6 +55,7 @@ export const useGetSesion = (): { sesionState: findState; getSesion: (accountId:
                 if(accountNavigators[element].id===accountId){
 
                     storage?.setAccount(accountNavigators[element]);
+                    fetchDataOperation(accountId.toString());
                     dispatch({ type: actionTypes.FIND_SUCCESS, payload:1});
 
                 }

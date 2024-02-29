@@ -1,4 +1,4 @@
-import {View,StyleSheet, Dimensions, TouchableOpacity,Text, FlatList} from 'react-native';
+import { View,StyleSheet, Dimensions, TouchableOpacity,Text, FlatList} from 'react-native';
 import { MainOpComponent }                                  from '../components/mainOpComponent';
 import { PlusIcon }                                         from '../public/icons/plusIcon';
 import { MenuIcon }                                         from '../public/icons/menuIcon';
@@ -6,18 +6,14 @@ import { SearchIcon }                                       from '../public/icon
 import { ItemResize }                                       from '../components/ItemResize';
 import { FilterIcon }                                       from '../public/icons/filterIcon';
 import { ItemNavigation }                                   from '../components/itemNavigation';
-import { OcrIcon }                                          from '../public/icons/ocrIcon';
-import { OpIcon }                                           from '../public/icons/opIcon';
-import { ModuloIcon }                                       from '../public/icons/moduloIcon';
-import { UserIcon }                                         from '../public/icons/userIcon';
-import { EmployeerIcon }                                    from '../public/icons/employeerIcon';
-import { HomeOpScreenProps }                                from '../interfaces/screens/screensInterfaces';
 import { useMainContext }                                   from '../contexts/mainContext';
 import { useState }                                         from 'react'
-import { ModalRegisterOcr } from '../modals/ModalRegisterOcr';
-import { LoadingComponent } from '../components/loadingComponent';
-import { EmptyComponent } from '../components/emptyComponent';
-import { useApiGetOpByUser } from '../controllers/hooks/customHookGetOpByUser';
+import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
+import { LoadingComponent }                                 from '../components/loadingComponent';
+import { EmptyComponent }                                   from '../components/emptyComponent';
+import { useApiGetOpByUser }                                from '../controllers/hooks/customHookGetOpByUser';
+import { ModalDetailOpList } from '../modals/modalDetailOpList';
+import { DetailProcessResponseInterface, OpDetail } from '../interfaces/services/ml_api/detailOpInteface';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -33,6 +29,9 @@ export function HomeOp({navigation}:any){
     const [ itemState,setItemSelec]=useState<number|null>(1);
     const [ newRegister,setNewRegister] = useState<boolean>(false);
     const { state } = useApiGetOpByUser('1146441925');
+
+    const [ detailOpListState, setDetailOpListState] = useState<boolean>(false);
+    const [ opId,setopId] = useState<string|null>(null);
 
     const contextStorage = useMainContext();
 
@@ -87,7 +86,15 @@ export function HomeOp({navigation}:any){
                             state.data?.length===0?
                             <EmptyComponent label='El usuario no cuenta con registros aún'/>:
                             <FlatList 
-                            renderItem={(item)=><MainOpComponent key={item.item.op} data={item.item} handlerClick={()=>{}}/>} data={state?.data}/>
+                            renderItem={(item)=>
+                                <MainOpComponent 
+                                key={item.item.op} 
+                                data={item.item} 
+                                handlerClick={()=>{
+                                    setDetailOpListState(true);
+                                    setopId(item.item.op)
+                                }}/>} 
+                            data={state?.data}/>
                         }         
                         </View>
                         <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{setNewRegister(true)}}>
@@ -116,6 +123,12 @@ export function HomeOp({navigation}:any){
         <ModalRegisterOcr handlerClick={()=>setNewRegister(false)} navigation={navigation}/>:
         <></>
     }
+    {
+        detailOpListState?
+        <ModalDetailOpList/>:
+        <></>
+    }
+    
     </>
 }
 

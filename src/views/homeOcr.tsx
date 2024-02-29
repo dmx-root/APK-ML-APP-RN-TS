@@ -11,8 +11,11 @@ import { LoadingComponent }                                             from '..
 import { MainOcrComponent }                                             from '../components/mainOcrComponent';
 import { useApiGetOcrByUser }                                           from '../controllers/hooks/customHookGetOcrByUser';
 import { EmptyComponent }                                               from '../components/emptyComponent';
+import { useApiGetAuthOperations }                                      from '../controllers/hooks/customHookGetAuthOperations';
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList}   from 'react-native';
 import { useState }                                                     from 'react';
+import { ModalOcrInfo } from '../modals/modalOcrInfo';
+import { OcrProcessesInterface } from '../interfaces/services/ml_api/ocrInterfaces';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -28,11 +31,14 @@ export function HomeOcr({navigation}:any){
     ];
 
     const contextStorage = useMainContext();
-    const {state} = useApiGetOcrByUser('1146441925');
+    const {state} = useApiGetOcrByUser('1146441925');// Id del usuario 
 
     const [asideState,setAsideState] = useState<boolean>(false);
     const [newRegister,setNewRegister] = useState<boolean>(false);
 
+    const [modalInfoState,setModalInfoState] = useState<boolean>(false);
+    const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);
+    
     return<>
     <View style={{height,width}}>
         <View style={StyleMainWindow.backRoots}></View>
@@ -77,8 +83,15 @@ export function HomeOcr({navigation}:any){
                         <EmptyComponent label='Hubo un error en la carga de datos'/>:
                         state.data?.length===0?
                         <EmptyComponent label='El usuario no cuenta con registros aún'/>:
-                        <FlatList 
-                        renderItem={(item)=><MainOcrComponent key={item.item.ocrId} data={item.item} handlerClick={()=>{}}/>} data={state?.data}/>
+                        <FlatList renderItem={(item)=>
+                            <MainOcrComponent 
+                            key={item.item.ocrId} 
+                            data={item.item} 
+                            handlerClick={() => {
+                                setOcrProcessData(item.item);
+                                setModalInfoState(true);
+                            }}/>} 
+                        data={state?.data}/>
                     }
                 </View>
                 <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{setNewRegister(true)}}>
@@ -112,8 +125,16 @@ export function HomeOcr({navigation}:any){
         <ModalRegisterOcr handlerClick={()=>setNewRegister(false)} navigation={navigation}/>:
         <></>
     }
-
-    {/* <ModalOcrInfo/> */}
+    {
+        modalInfoState?
+        <ModalOcrInfo 
+        data={ocrProcessData} 
+        handlerClick={()=>{
+            setModalInfoState(false);
+            setOcrProcessData(null)
+        }}/>:
+        <></>
+    }
     {/* <ModalDetailOpList/> */}
     </>
 }
