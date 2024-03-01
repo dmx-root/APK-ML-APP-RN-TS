@@ -125,7 +125,7 @@ export function HomeOp({navigation}:any){
     }
     {
         detailOpListState?
-        <ModalDetailOpList/>:
+        <ModalDetailOpList handlerClick={()=>{setDetailOpListState(false)}} navigation={navigation} opId={opId}/>:
         <></>
     }
     

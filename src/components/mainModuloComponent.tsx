@@ -12,7 +12,7 @@ export function MainModuloComponent({data,handlerClick}:{
     handlerClick:(event:GestureResponderEvent)=>void
 }){
     return <View>
-                <TouchableOpacity style={StyleModulo.modulocontainer} onPress={()=>{}}>
+                <TouchableOpacity style={StyleModulo.modulocontainer} onPress={handlerClick}>
                     <View style={StyleModulo.moduloIconContainer}>
                         <View style={StyleModulo.moduloIcon}>
                             <Image  style={StyleModulo.img} source={require('../public/img/modulo-img.png')}/>

@@ -3,8 +3,7 @@ import { OcrIcon }                              from '../public/icons/ocrIcon';
 import { CheckBoxEmpty }                        from '../public/icons/checkBoxEmpty';
 import { UserIcon }                             from '../public/icons/userIcon';
 import { CalendarIcon }                         from '../public/icons/calendarIcon';
-import { ModuloIcon }                           from '../public/icons/moduloIcon';
-import { ClockIcon } from '../public/icons/clockIcon';
+import { OcrProcessesInterface } from '../interfaces/services/ml_api/ocrInterfaces';
 
 // Doc 
 // Este elemento tiene la finalidad de renderizar información más detallada de los registros
@@ -18,10 +17,11 @@ const currentColorMain='#888';   //azul oscuro
 const currentColorMain4='#e1e1e1';  //color de letra resaltado
 
 
-export function InformationOcrComponent({handlerClick}:{
-    handlerClick:(event:GestureResponderEvent)=>void
+export function InformationOcrComponent({handlerClick,data}:{
+    handlerClick:(event:GestureResponderEvent)=>void,
+    data:OcrProcessesInterface
 }){
-    return <View style={ocrStyle.container}>
+    return <TouchableOpacity style={ocrStyle.container} onPress={handlerClick}>
         <View style={ocrStyle.header1}>
             <View style={ocrStyle.iconContainer}>
                 <OcrIcon color='#AAA' size={50} width={1.2}/>
@@ -32,24 +32,22 @@ export function InformationOcrComponent({handlerClick}:{
             <View style={ocrStyle.rowField}>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={ocrStyle.labelTitle}>Inicio a las 12:45:32</Text>
-                        {/* <ClockIcon color='#777' size={20} width={2}/> */}
+                        <Text style={ocrStyle.labelTitle}>{`Inicio a las ${data.inicioOperacion}`}</Text>
                     </View>
                 </View>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>40 unidades registradas</Text>
-                        {/* <OcrIcon color='#999' size={20} width={2}/> */}
+                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{`${data.cantidadUnidades} unidades registradas`}</Text>
                     </View>
                 </View>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>MAR32457</Text>
+                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{data.referencia}</Text>
                     </View>
                 </View>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>Registrado el 20/08/2023</Text>
+                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{`Registrado el ${data.registroFecha.toLocaleString().slice(0,10)}`}</Text>
                         <CalendarIcon color='#999' size={20} width={1.5}/>
                     </View>
                 </View>
@@ -57,57 +55,39 @@ export function InformationOcrComponent({handlerClick}:{
             <View style={ocrStyle.rowField}>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={ocrStyle.labelTitle}>Finalización a las 12:45:32</Text>
+                        <Text style={ocrStyle.labelTitle}>{`Finalización a las ${data.finOperacion}`}</Text>
                         {/* <ClockIcon color='#777' size={20} width={2}/> */}
                     </View>
                 </View>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>MODULO 10</Text>
+                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{`MODULO-${data.moduloId}`}</Text>
                         {/* <ModuloIcon color='#999' size={20} width={2}/> */}
                     </View>
                 </View>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>Sin Eventos</Text>
+                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{data.anormalidadCodigo||`Sin Eventos`}</Text>
                     </View>
                 </View>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>Registrado por 1146441925</Text>
+                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{`Registrado por ${data.registradoPorId}`}</Text>
                         <UserIcon color='#999' size={20} width={2}/>
                     </View>
                 </View>
                 
             </View>
         </View>
-        {/* <View style={ocrStyle.extends}>
-            <View style={ocrStyle.icon2Container}>
-                <View style={{borderRadius:40, backgroundColor:'#EEE', width:40, height:40, justifyContent:'center', alignItems:'center'}}>
-                    <UserIcon color='#999' size={25} width={1.5}/>
-                </View>
-            </View>
-            <View style={ocrStyle.infoUser}>
-                <Text style={{fontSize:15, color:'#777', fontWeight:'500'}}>Registrado por 1146441925</Text>
-            </View>
-            <View style={[ocrStyle.icon2Container,{width:'10%'}]}>
-                <View style={{borderRadius:40, backgroundColor:'#EEE', width:40, height:40, justifyContent:'center', alignItems:'center'}}>
-                    <CalendarIcon color='#999' size={25} width={1.5}/>
-                </View>
-            </View>
-            <View style={[ocrStyle.infoUser,{width:'30%'}]}>
-                <Text style={{fontSize:15, color:'#777', fontWeight:'500'}}>Registrado el 12/22/2023</Text>
-            </View>
-        </View> */}
-    </View>
+    </TouchableOpacity>
 }
 
 const ocrStyle=StyleSheet.create({
     container:{
-        width:'98%',
+        width:'100%',
         height:height*0.11,
         backgroundColor:'#FFF',
-        borderRadius:10,
+        // borderRadius:10,
         marginBottom:1,
         borderBottomColor:'#CCC',
         borderBottomWidth:3

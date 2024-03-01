@@ -1,17 +1,16 @@
+import { useApiGetDetailsOp }               from "../controllers/hooks/customHookGetDetailsOp";
 import { ButtonFullWidth }                  from "../components/buttonFullWidth";
-import { FieldInfo }                        from "../components/fieldInfo";
-import { Input }                            from "../components/input";
-import { Modal }                            from "../components/modal";
 import { ModalContainer }                   from "../components/modalContainer";
 import { InfoIcon }                         from "../public/icons/infoIcon";
 import { form }                             from '../interfaces/view/login';
-import { useApiGetDetailsOp }               from "../controllers/hooks/customHookGetDetailsOp";
-import { get_auth_operations }              from "../endpoints/ml_api/restApiMujerLatina";
-import { AuthObjectRequest }                from "../services/ml_api/request/authObjectRequest";
+import { FieldInfo }                        from "../components/fieldInfo";
+import { Input }                            from "../components/input";
+import { Modal }                            from "../components/modal";
 import { ModalLoading }                     from "./modalLoading";
 import { ModalAlert }                       from "./modalAlert";
 import { Alert, GestureResponderEvent }     from 'react-native';
 import { useState }                         from "react";
+import { useLocalStorageLoadData } from "../controllers/hooks/customHookLoadDataLocalStorage";
 
 export function ModalRegisterOcr({handlerClick,navigation}:{
     handlerClick:(event:GestureResponderEvent)=>void,
@@ -21,17 +20,8 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
     const [ dataForm, setDataForm ] = useState<form|null>(null);
     const [ alertState, setAlertState ] = useState<boolean>(false);
     const { state, fetchDataDetailsOp } = useApiGetDetailsOp();
+    const { loadDataLocalStorage } = useLocalStorageLoadData();
     
-    async function loadData (){
-        const apiQuery = new AuthObjectRequest();
-        try {
-            const response = await apiQuery.authGetOperations(get_auth_operations,'1');
-            console.log(response)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     return<>
         {state.loading?
         <ModalLoading 
@@ -41,7 +31,7 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
         state.error?
         <ModalAlert 
         label="Error de consulta" 
-        content={state.data?.statusMessageApi||'LA consulta falló'} 
+        content={typeof(state.data)==='string'?state.data:false||'La consulta falló'} 
         handlerClick={handlerClick}/>:
 
         <Modal handlerClick={handlerClick}>
@@ -75,23 +65,24 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                     <InfoIcon color={alertState?'red':'#44329C'} size={24} width={2}/>
                 </FieldInfo>
                 
-            </ModalContainer> 
-            <ModalContainer color='#C7CCEC'>
-
                 <ButtonFullWidth 
                 fontColor='#44329C' 
                 color='#FFF' 
                 label='Enviar' 
                 handlerClick={(e)=>{
-                    // loadData();
                     if(dataForm?.['op']&&dataForm?.['opType']&&dataForm?.['modulo']){
+
                         fetchDataDetailsOp(`${dataForm?.['opType']}${dataForm?.['op']}`);
-                        navigation.navigate('Production');
-                        // handlerClick(e)
+                        loadDataLocalStorage('currentOcr',dataForm);
+                        // navigation.navigate('Production');
+                        handlerClick(e)
+
                     }
                     else {
+
                         setAlertState(true);
                         Alert.alert('Campos vacios','Asegúrese de llenar todos los campos');
+                        
                     }
                 }}/>
 

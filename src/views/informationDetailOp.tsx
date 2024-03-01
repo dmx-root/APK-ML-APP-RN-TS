@@ -1,4 +1,3 @@
-import {View,StyleSheet, Dimensions, TouchableOpacity,Text} from 'react-native';
 import { MenuIcon }                                         from '../public/icons/menuIcon';
 import { SearchIcon }                                       from '../public/icons/searchIcon';
 import { ItemResize }                                       from '../components/ItemResize';
@@ -6,12 +5,21 @@ import { FilterIcon }                                       from '../public/icon
 import { InformationHeaderViewComponentOp }                 from '../components/InformationHeaderViewComponentOp';
 import { InformationOcrComponent }                          from '../components/informationOcrComponent';
 import { RowLeftIcon }                                      from '../public/icons/rowLeftIcon';
-import { useState }                                         from 'react'
+import { OpDetail }                                         from '../interfaces/services/ml_api/detailOpInteface';
+import { useApiGetOcrByOP }                                 from '../controllers/hooks/customHookGetOcrByOp';
+import { LoadingComponent }                                 from '../components/loadingComponent';
+import { EmptyComponent }                                   from '../components/emptyComponent';
+import { ModalOcrInfo }                                     from '../modals/modalOcrInfo';
+import { OcrProcessesInterface }                            from '../interfaces/services/ml_api/ocrInterfaces';
+import { InformationOcrEventsComponent }                    from '../components/informationOcrEventsComponent';
+import { InformationOcrCheckComponent }                     from '../components/informationOcrCheckComponent';
 import { InformationDetailOpScreenProps }                   from '../interfaces/screens/screensInterfaces';
+import { View,StyleSheet, Dimensions, TouchableOpacity,Text, FlatList} from 'react-native';
+import { useState }                                         from 'react'
 
 const {height,width}=Dimensions.get('screen');
 
-export function InformationDetailOp({navigation}:any){
+export function InformationDetailOp({route,navigation}:any){
 
     const filterItems=[
         {id:1,label:'Todas'},
@@ -20,83 +28,131 @@ export function InformationDetailOp({navigation}:any){
         {id:4,label:'Revisados'},
         {id:5,label:'Sin Revisar'},
         {id:6,label:'Anormalidades'},
-    ]
+    ];
+    const opDetailsData:OpDetail=route.params;
 
-    const [itemState,setItemSelec]=useState<number|null>(1)
+    const { state } = useApiGetOcrByOP({
+        op:opDetailsData.op,
+        talla:opDetailsData.talla,
+        color:opDetailsData.colorCodigo
+    });
 
-    return <View style={{height,width}}>
-
-                <View style={StyleMainWindow.backRoots}></View>
-
-                <View style={StyleMainWindow.Backcontainer}>
-                    <View style={StyleMainWindow.header}>
-                        <View style={StyleMainWindow.filterContainer}>
-                            <View style={StyleMainWindow.action}>
-                                <View  style={StyleMainWindow.menuIcon}>
-                                    <MenuIcon color='#999' size={40} width={2}/>
-                                </View>
-                                <View style={StyleMainWindow.bar}>
-                                </View>
-                                <View style={StyleMainWindow.searchIcon}>
-                                    <SearchIcon color='#999' size={40} width={2}/>
-                                </View>
+    const [itemState,setItemSelec]=useState<number|null>(1);
+    const [modalInfoState,setModalInfoState] = useState<boolean>(false);
+    const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);
+  
+    return <>
+        <View style={{height,width}}>
+            <View style={StyleMainWindow.backRoots}></View>
+            <View style={StyleMainWindow.Backcontainer}>
+                <View style={StyleMainWindow.header}>
+                    <View style={StyleMainWindow.filterContainer}>
+                        <View style={StyleMainWindow.action}>
+                            <View  style={StyleMainWindow.menuIcon}>
+                                <MenuIcon color='#999' size={40} width={2}/>
                             </View>
-                        </View>
-                        <View style={StyleMainWindow.fieldItemsSelect}>
-                            <View style={StyleMainWindow.labels}>
-                                {filterItems.map(element=>
-                                <ItemResize
-                                    key={element.id} 
-                                    state={itemState===element.id?true:false} 
-                                    handlerClick={()=>{setItemSelec(element.id)}} 
-                                    label={element.label}/>)}
+                            <View style={StyleMainWindow.bar}>
                             </View>
-                            <View style={StyleMainWindow.labelsIcon}>
-                                <FilterIcon color='#AAA' size={30} width={2}/>
+                            <View style={StyleMainWindow.searchIcon}>
+                                <SearchIcon color='#999' size={40} width={2}/>
                             </View>
                         </View>
                     </View>
-                    <View style={StyleMainWindow.root1}>
-                        <View style={StyleMainWindow.frame1}>
-                            <InformationHeaderViewComponentOp/>
-                            <InformationOcrComponent handlerClick={()=>{}}/>
-                            <InformationOcrComponent handlerClick={()=>{}}/>
-                            <InformationOcrComponent handlerClick={()=>{}}/>
-                            <InformationOcrComponent handlerClick={()=>{}}/>
-                            <InformationOcrComponent handlerClick={()=>{}}/>
-                            <InformationOcrComponent handlerClick={()=>{}}/>
+                    <View style={StyleMainWindow.fieldItemsSelect}>
+                        <View style={StyleMainWindow.labels}>
+                            {filterItems.map(element=>
+                            <ItemResize
+                                key={element.id} 
+                                state={itemState===element.id?true:false} 
+                                handlerClick={()=>{setItemSelec(element.id)}} 
+                                label={element.label}/>)}
                         </View>
-                        <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{}}>
-                            <RowLeftIcon color="#777" size={40} width={1.5}/>
-                            <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Regresar</Text>
-                        </TouchableOpacity>
+                        <View style={StyleMainWindow.labelsIcon}>
+                            <FilterIcon color='#AAA' size={30} width={2}/>
+                        </View>
                     </View>
-                    {/* <View style={StyleMainWindow.root2}>
-                        <View style={StyleMainWindow.navigationContainer}>
-                            <ItemNavigation handlerClick={()=>{}} state={false}>
-                                <UserIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation state={false} handlerClick={()=>{}}>
-                                <ModuloIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation state={true} handlerClick={()=>{}}>
-                                <OpIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation state={false} handlerClick={()=>{}}>
-                                <OcrIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation handlerClick={()=>{}} state={false}>
-                                <EmployeerIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                        </View>
-                    </View> */}
                 </View>
+                <View style={StyleMainWindow.root1}>
+                    <View style={StyleMainWindow.frame1}>
+                        {
+                            state.loading?
+                            <LoadingComponent label='Cargando Información...'/>:
+                            state.error?
+                            <EmptyComponent label='Hubo un error al momento de cargar los datos, inténtelo más tarde'/>:
+                            state.data?.length===0?
+                            <EmptyComponent label='La OP no cuenta con registros aún...'/>:
+                            <>
+                                <InformationHeaderViewComponentOp data={opDetailsData}/>
+                                <FlatList 
+                                renderItem={(item)=>
+                                    item.item.revisadoFecha?
+                                    <InformationOcrCheckComponent
+                                    key={item.item.op} 
+                                    data={item.item} 
+                                    handlerClick={()=>{
+                                        setModalInfoState(true);
+                                        setOcrProcessData(item.item);
+                                    }}/>:
+                                    item.item.anormalidadCodigo?
+                                    <InformationOcrEventsComponent
+                                    key={item.item.op} 
+                                    data={item.item} 
+                                    handlerClick={()=>{
+                                        setModalInfoState(true);
+                                        setOcrProcessData(item.item);
+                                    }}/>:
+                                    <InformationOcrComponent
+                                    key={item.item.op} 
+                                    data={item.item} 
+                                    handlerClick={()=>{
+                                        setModalInfoState(true);
+                                        setOcrProcessData(item.item);
+                                    }}/>
+                                }
+                                data={state?.data}/>
+                            </>
+                        }
+                    </View>
+                    <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{navigation.navigate('HomeOp')}}>
+                        <RowLeftIcon color="#777" size={40} width={1.5}/>
+                        <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Regresar</Text>
+                    </TouchableOpacity>
+                </View>
+                {/* <View style={StyleMainWindow.root2}>
+                    <View style={StyleMainWindow.navigationContainer}>
+                        <ItemNavigation handlerClick={()=>{}} state={false}>
+                            <UserIcon color='#777' size={35} width={2}/>
+                        </ItemNavigation>
+                        <ItemNavigation state={false} handlerClick={()=>{}}>
+                            <ModuloIcon color='#777' size={35} width={2}/>
+                        </ItemNavigation>
+                        <ItemNavigation state={true} handlerClick={()=>{}}>
+                            <OpIcon color='#777' size={35} width={2}/>
+                        </ItemNavigation>
+                        <ItemNavigation state={false} handlerClick={()=>{}}>
+                            <OcrIcon color='#777' size={35} width={2}/>
+                        </ItemNavigation>
+                        <ItemNavigation handlerClick={()=>{}} state={false}>
+                            <EmployeerIcon color='#777' size={35} width={2}/>
+                        </ItemNavigation>
+                    </View>
+                </View> */}
             </View>
+        </View>
+        {
+            modalInfoState?
+            <ModalOcrInfo 
+            data={ocrProcessData} 
+            handlerClick={()=>{
+                setModalInfoState(false);
+                setOcrProcessData(null)
+            }}/>:
+            <></>
+        }
+    </>
 }
 
 const currentColorMain='#44329C';   //azul oscuro
-const currentColorMain1='#C7CCEC';  //Azul claro
-const currentColorMain2='#e8e8e8';  //gris muy claro
 
 const StyleMainWindow=StyleSheet.create({
     headerBack:{
@@ -145,13 +201,6 @@ const StyleMainWindow=StyleSheet.create({
         // alignSelf:'center',
         justifyContent:'center',
     },
-    root2:{
-        height:'12%',
-        width:'100%',
-        backgroundColor:'#EEE',
-        // borderRadius:height*0.01,
-        // justifyContent:'center'
-    },
     navigationContainer:{
         width:'100%',
         height:'60%',
@@ -180,9 +229,10 @@ const StyleMainWindow=StyleSheet.create({
     frame1:{
         height:'100%',
         width:'100%',
+        // backgroundColor:'aqua',
         borderRadius:height*0.01,
         alignSelf:'center',
-        alignItems:'center'
+        // alignItems:'center'
     },
     action:{
         height:'60%',

@@ -79,7 +79,14 @@ export function HomeModulos({navigation}:any){
                             state.data?.length===0?
                             <EmptyComponent label='El usuario no cuenta con registros aún'/>:
                             <FlatList 
-                            renderItem={(item)=><MainModuloComponent key={item.item.moduloId} data={item.item} handlerClick={()=>{}}/>} data={state?.data}/>
+                            renderItem={(item)=>
+                            <MainModuloComponent 
+                            key={item.item.moduloId} 
+                            data={item.item} 
+                            handlerClick={()=>{
+                                navigation.navigate('InfoModulo',item.item);
+                            }}/>} 
+                            data={state?.data}/>
                         }
                         </View>
                         <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{setNewRegister(true)}}>

@@ -1,17 +1,26 @@
-import {View,StyleSheet, Dimensions, TouchableOpacity,Text} from 'react-native';
+import {View,StyleSheet, Dimensions, TouchableOpacity,Text, FlatList} from 'react-native';
 import { MenuIcon }                                         from '../public/icons/menuIcon';
 import { SearchIcon }                                       from '../public/icons/searchIcon';
 import { ItemResize }                                       from '../components/ItemResize';
 import { FilterIcon }                                       from '../public/icons/filterIcon';
 import { InformationOcrComponent }                          from '../components/informationOcrComponent';
 import { RowLeftIcon }                                      from '../public/icons/rowLeftIcon';
-import { useState }                                         from 'react';
 import { InformationHeaderViewComponentModulo }             from '../components/InformationHeaderViewComponentModulo';
-import { InformationModuloScreenProps } from '../interfaces/screens/screensInterfaces';
+import { ModuloProcessInterface }                           from '../interfaces/services/ml_api/moduloInterfaces';
+import { useApiGetOcrByModulo }                             from '../controllers/hooks/customHookGetOcrByModulo';
+import { LoadingComponent }                                 from '../components/loadingComponent';
+import { EmptyComponent }                                   from '../components/emptyComponent';
+import { OcrProcessesInterface }                            from '../interfaces/services/ml_api/ocrInterfaces';
+import { ModalOcrInfo }                                     from '../modals/modalOcrInfo';
+import { InformationOcrEventsComponent }                    from '../components/informationOcrEventsComponent';
+import { InformationOcrCheckComponent }                     from '../components/informationOcrCheckComponent';
+import { InformationModuloScreenProps }                     from '../interfaces/screens/screensInterfaces';
+import { handlerOcrRenderList }                             from '../controllers/helpers/handlerOcrRenderList';
+import { useState }                                         from 'react';
 
 const {height,width}=Dimensions.get('screen');
 
-export function InformationModulo({navigation}:any){
+export function InformationModulo({route,navigation}:any){
 
     const filterItems=[
         {id:1,label:'Todas'},
@@ -22,57 +31,103 @@ export function InformationModulo({navigation}:any){
         {id:6,label:'Anormalidades'},
     ]
 
-    const [itemState,setItemSelec]=useState<number|null>(1)
+    const moduloData:ModuloProcessInterface=route.params;
+    const [itemState,setItemSelec]=useState<number|null>(1);
+    const { state } = useApiGetOcrByModulo(moduloData.moduloId.toString());
 
-    return <View style={{height,width}}>
+    const [modalInfoState,setModalInfoState] = useState<boolean>(false);
+    const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);
 
-                <View style={StyleMainWindow.backRoots}></View>
-
-                <View style={StyleMainWindow.Backcontainer}>
-                    <View style={StyleMainWindow.header}>
-                        <View style={StyleMainWindow.filterContainer}>
-                            <View style={StyleMainWindow.action}>
-                                <View  style={StyleMainWindow.menuIcon}>
-                                    <MenuIcon color='#999' size={40} width={2}/>
-                                </View>
-                                <View style={StyleMainWindow.bar}>
-                                </View>
-                                <View style={StyleMainWindow.searchIcon}>
-                                    <SearchIcon color='#999' size={40} width={2}/>
-                                </View>
-                            </View>
+    return<>
+    <View style={{height,width}}>
+        <View style={StyleMainWindow.backRoots}></View>
+        <View style={StyleMainWindow.Backcontainer}>
+            <View style={StyleMainWindow.header}>
+                <View style={StyleMainWindow.filterContainer}>
+                    <View style={StyleMainWindow.action}>
+                        <View  style={StyleMainWindow.menuIcon}>
+                            <MenuIcon color='#999' size={40} width={2}/>
                         </View>
-                        <View style={StyleMainWindow.fieldItemsSelect}>
-                            <View style={StyleMainWindow.labels}>
-                                {filterItems.map(element=>
-                                <ItemResize
-                                    key={element.id} 
-                                    state={itemState===element.id?true:false} 
-                                    handlerClick={()=>{setItemSelec(element.id)}} 
-                                    label={element.label}/>)}
-                            </View>
-                            <View style={StyleMainWindow.labelsIcon}>
-                                <FilterIcon color='#AAA' size={30} width={2}/>
-                            </View>
+                        <View style={StyleMainWindow.bar}>
+                        </View>
+                        <View style={StyleMainWindow.searchIcon}>
+                            <SearchIcon color='#999' size={40} width={2}/>
                         </View>
                     </View>
-                    <View style={StyleMainWindow.root1}>
-                        <View style={StyleMainWindow.frame1}>
-                            <InformationHeaderViewComponentModulo/>
-                            <InformationOcrComponent handlerClick={()=>{}}/>
-                            <InformationOcrComponent handlerClick={()=>{}}/>
-                            <InformationOcrComponent handlerClick={()=>{}}/>
-                            <InformationOcrComponent handlerClick={()=>{}}/>
-                            <InformationOcrComponent handlerClick={()=>{}}/>
-                            <InformationOcrComponent handlerClick={()=>{}}/>
-                        </View>
-                        <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{}}>
-                            <RowLeftIcon color="#777" size={40} width={1.5}/>
-                            <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Regresar</Text>
-                        </TouchableOpacity>
+                </View>
+                <View style={StyleMainWindow.fieldItemsSelect}>
+                    <View style={StyleMainWindow.labels}>
+                        {filterItems.map(element=>
+                        <ItemResize
+                            key={element.id} 
+                            state={itemState===element.id?true:false} 
+                            handlerClick={()=>{setItemSelec(element.id)}} 
+                            label={element.label}/>)}
+                    </View>
+                    <View style={StyleMainWindow.labelsIcon}>
+                        <FilterIcon color='#AAA' size={30} width={2}/>
                     </View>
                 </View>
             </View>
+            <View style={StyleMainWindow.root1}>
+                <View style={StyleMainWindow.frame1}>
+                    {
+                    state.loading?
+                    <LoadingComponent label='Cargando Información...'/>:
+                    state.error?
+                    <EmptyComponent label='Hubo un error al momento de cargar los datos, inténtelo más tarde'/>:
+                    state.data?.length===0?
+                    <EmptyComponent label='EL módulo no cuenta con registros aún...'/>:
+                    <>
+                        <InformationHeaderViewComponentModulo/>
+                        <FlatList 
+                        renderItem={(item)=>
+                            item.item.revisadoFecha?
+                            <InformationOcrCheckComponent
+                            key={item.item.ocrId} 
+                            data={item.item} 
+                            handlerClick={()=>{
+                                setModalInfoState(true);
+                                setOcrProcessData(item.item);
+                            }}/>:
+                            item.item.anormalidadCodigo?
+                            <InformationOcrEventsComponent
+                            key={item.item.ocrId} 
+                            data={item.item} 
+                            handlerClick={()=>{
+                                setModalInfoState(true);
+                                setOcrProcessData(item.item);
+                            }}/>:
+                            <InformationOcrComponent
+                            key={item.item.ocrId} 
+                            data={item.item} 
+                            handlerClick={()=>{
+                                setModalInfoState(true);
+                                setOcrProcessData(item.item);
+                            }}/>
+                        }
+                        data={state.data}/>
+                    </>
+                    }
+                </View>
+                <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{navigation.navigate('HomeModulos')}}>
+                    <RowLeftIcon color="#777" size={40} width={1.5}/>
+                    <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Regresar</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    </View>
+    {
+        modalInfoState?
+        <ModalOcrInfo 
+        data={ocrProcessData} 
+        handlerClick={()=>{
+            setModalInfoState(false);
+            setOcrProcessData(null);
+        }}/>:
+        <></>
+    }
+    </>
 }
 
 const currentColorMain='#44329C';   //azul oscuro
@@ -88,7 +143,7 @@ const StyleMainWindow=StyleSheet.create({
     backRoots:{
         height:'100%',
         width:'100%',
-        backgroundColor:'#DDD'
+        backgroundColor:'#FFF'
     },
     menuIcon:{
         width:'10%',
@@ -161,9 +216,9 @@ const StyleMainWindow=StyleSheet.create({
     frame1:{
         height:'100%',
         width:'100%',
+        // backgroundColor:'aqua',
         borderRadius:height*0.01,
         alignSelf:'center',
-        alignItems:'center'
     },
     action:{
         height:'60%',

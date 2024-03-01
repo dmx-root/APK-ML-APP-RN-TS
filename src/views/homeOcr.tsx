@@ -16,6 +16,7 @@ import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList}   from 're
 import { useState }                                                     from 'react';
 import { ModalOcrInfo } from '../modals/modalOcrInfo';
 import { OcrProcessesInterface } from '../interfaces/services/ml_api/ocrInterfaces';
+import { ModalRegisterOcrCurrentOp } from '../modals/modalRegisterOcrCurrentOp';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -35,6 +36,7 @@ export function HomeOcr({navigation}:any){
 
     const [asideState,setAsideState] = useState<boolean>(false);
     const [newRegister,setNewRegister] = useState<boolean>(false);
+    const [newCurrentRegister,setNewCurrentRegister] = useState<boolean>(false);
 
     const [modalInfoState,setModalInfoState] = useState<boolean>(false);
     const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);
@@ -94,7 +96,10 @@ export function HomeOcr({navigation}:any){
                         data={state?.data}/>
                     }
                 </View>
-                <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{setNewRegister(true)}}>
+                <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{
+                    // setNewRegister(true);
+                    setNewCurrentRegister(true);
+                    }}>
                     <PlusIcon color="#777" size={70} width={1}/>
                     <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Nueva OCR</Text>
                 </TouchableOpacity>
@@ -135,7 +140,13 @@ export function HomeOcr({navigation}:any){
         }}/>:
         <></>
     }
-    {/* <ModalDetailOpList/> */}
+    {
+        newCurrentRegister?
+        <ModalRegisterOcrCurrentOp handlerClick={()=>{
+            setNewCurrentRegister(false);
+        }}/>:
+        <></>
+    }
     </>
 }
 

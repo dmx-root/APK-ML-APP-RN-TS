@@ -1,7 +1,14 @@
 import { get_detail_op }                from '../../endpoints/ml_api/restApiMujerLatina';
-import { statusApi}                     from '../../interfaces/services/ml_api/apiResponse'
+import { OpDetail }                     from '../../interfaces/services/ml_api/detailOpInteface';
 import { OpObjectRequest }              from '../../services/ml_api/request/opObjectRequest';
 import { useReducer }                   from 'react';
+import { handlerSaveObjectLocalStorage } from '../helpers/handlerSaveObjectLocalStorage';
+
+//  Doc 
+//  Este reducer tiene la finalidad de solicitar la lista de detalles de la Op que le sea solicitada 
+//  El elemento devuelve el estado de la consulta y el callback, al cual se le deve pasar como parámetro de entrada el Id de la OP  de la cual se quiera solicitar sus detalles 
+//  Este elemento está siendo utilizado por los siguientes componentes:
+//  ModalRegisterOcr -  ModalDetailOpList - 
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -10,9 +17,9 @@ const actionTypes = {
 };
 
 interface ApiState {
-    data: any | null;
+    data: Array<OpDetail> | null;
     loading: boolean;
-    error: statusApi | null;
+    error: string | null;
 }
 
 interface ApiAction {
@@ -50,11 +57,14 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
             dispatch({ type: actionTypes.FETCH_INIT });
 
             const data=await apiQuery.DetailOpGet(get_detail_op,op);
-            if(data.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data });
-            else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data})
+            if(data.statusCodeApi===1){
+                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data });
+                handlerSaveObjectLocalStorage('currentOp',data.data)
+            }
+            else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data?.statusMessageApi})
            
         } catch (error) {
-
+            console.log(error)
             dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error'});
 
         }

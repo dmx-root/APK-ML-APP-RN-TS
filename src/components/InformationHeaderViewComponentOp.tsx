@@ -1,41 +1,39 @@
 import { Dimensions, StyleSheet, View,Text,Image }    from 'react-native';
 import { ItemList }                             from './itemList';
 import { AnalitycsIcon }                        from '../public/icons/analitycsIcon';
-import { OpIcon }                               from '../public/icons/opIcon';
-import { OcrIcon }                              from '../public/icons/ocrIcon';
-import { CalendarIcon }                         from '../public/icons/calendarIcon';
+import { OpDetail } from '../interfaces/services/ml_api/detailOpInteface';
 
 const {height} = Dimensions.get('window');
 
-export function InformationHeaderViewComponentOp(){
+export function InformationHeaderViewComponentOp({data}:{
+    data:OpDetail
+}){
     return  <View style={headComponentStyle.container}>
                 <View style={headComponentStyle.iconContainer}>
-                    {/* <OpIcon color='#999' size={50} width={1.5}/> */}
                     <Image  style={headComponentStyle.img} source={require('../public/img/base-de-datos-2.png')}/>
-
                 </View>
                 <View style={headComponentStyle.body}>
                     <View style={headComponentStyle.column}>
-                        <ItemList label='MOP3548' style={2}  position='start'>
+                        <ItemList label={data.op} style={2}  position='start'>
                             {/* <OpIcon color='#AAA' size={24} width={2}/> */}
                             <></>
                         </ItemList>
-                        <ItemList label='100 Unidades Ejec' style={1} position='start'>
+                        <ItemList label={`${data.opLoteCompletado} Unidades Ejec`} style={1} position='start'>
                             <AnalitycsIcon color='#AAA' size={24} width={3}/>
                         </ItemList>
-                        <ItemList label='100 Unidades sin Ejec' style={1} position='start'>
+                        <ItemList label={`${data.opLotePlaneado-data.opLoteCompletado} Unidades sin Ejec`} style={1} position='start'>
                             <AnalitycsIcon color='#AAA' size={24} width={3}/>
                         </ItemList>
                         
                     </View>
                     <View style={headComponentStyle.column}>
-                        <ItemList label='200 Unidades Planeadas' style={2} position='end'>
+                        <ItemList label={`${data.opLotePlaneado} Unidades Planeadas`} style={2} position='end'>
                             <></>
                         </ItemList>
-                        <ItemList label='PIEL' style={1} position='end'>
+                        <ItemList label={data.colorEtiqueta} style={1} position='end'>
                             <></>
                         </ItemList>
-                        <ItemList label='XL' style={1} position='end'>
+                        <ItemList label={data.talla} style={1} position='end'>
                             <></>
                         </ItemList>
                     </View>    
