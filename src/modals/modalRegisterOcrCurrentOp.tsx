@@ -1,20 +1,21 @@
-import { GestureResponderEvent, StyleSheet, View, Text }    from "react-native";
-import { Modal }                                            from "../components/modal";
-import { ModalContainer }                                   from "../components/modalContainer";
-import { InfoLine }                                         from "../components/infoLine";
+import { useLocalStorageGetData }                           from "../controllers/hooks/customHookGetDataLocalStorage";
+import { LoadingComponent }                                 from "../components/loadingComponent";
 import { ButtonFullWidth }                                  from "../components/buttonFullWidth";
-import { FieldInfo }                                        from "../components/fieldInfo";
+import { ModalContainer }                                   from "../components/modalContainer";
+import { EmptyComponent }                                   from "../components/emptyComponent";
 import { InfoIcon }                                         from "../public/icons/infoIcon";
-import { useLocalStorageGetData } from "../controllers/hooks/customHookGetDataLocalStorage";
-import { LoadingComponent } from "../components/loadingComponent";
-import { EmptyComponent } from "../components/emptyComponent";
+import { FieldInfo }                                        from "../components/fieldInfo";
+import { InfoLine }                                         from "../components/infoLine";
+import { Modal }                                            from "../components/modal";
+import { GestureResponderEvent, StyleSheet, View, Text }    from "react-native";
 
 
 export function ModalRegisterOcrCurrentOp({handlerClick}:{
     handlerClick:(event:GestureResponderEvent)=>void
 }){
     const { state } = useLocalStorageGetData('currentOcr');
-    // console.log(state)
+    const op = useLocalStorageGetData('currentOp');
+    // console.log(state,op)
     return <Modal handlerClick={handlerClick}>
                 <ModalContainer color='#C7CCEC'>
                     

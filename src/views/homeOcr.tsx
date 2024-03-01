@@ -39,6 +39,7 @@ export function HomeOcr({navigation}:any){
     const [newCurrentRegister,setNewCurrentRegister] = useState<boolean>(false);
 
     const [modalInfoState,setModalInfoState] = useState<boolean>(false);
+    
     const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);
     
     return<>
@@ -97,8 +98,9 @@ export function HomeOcr({navigation}:any){
                     }
                 </View>
                 <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{
-                    // setNewRegister(true);
-                    setNewCurrentRegister(true);
+                    setNewRegister(true);
+                    // setNewCurrentRegister(true);
+                    // navigation.navigate('Production');
                     }}>
                     <PlusIcon color="#777" size={70} width={1}/>
                     <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Nueva OCR</Text>

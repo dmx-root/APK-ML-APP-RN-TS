@@ -1,5 +1,7 @@
+import { useLocalStorageLoadData }          from "../controllers/hooks/customHookLoadDataLocalStorage";
 import { useApiGetDetailsOp }               from "../controllers/hooks/customHookGetDetailsOp";
 import { ButtonFullWidth }                  from "../components/buttonFullWidth";
+import { newOperation, OperationInterface } from "../interfaces/view/production";
 import { ModalContainer }                   from "../components/modalContainer";
 import { InfoIcon }                         from "../public/icons/infoIcon";
 import { form }                             from '../interfaces/view/login';
@@ -10,7 +12,6 @@ import { ModalLoading }                     from "./modalLoading";
 import { ModalAlert }                       from "./modalAlert";
 import { Alert, GestureResponderEvent }     from 'react-native';
 import { useState }                         from "react";
-import { useLocalStorageLoadData } from "../controllers/hooks/customHookLoadDataLocalStorage";
 
 export function ModalRegisterOcr({handlerClick,navigation}:{
     handlerClick:(event:GestureResponderEvent)=>void,
@@ -18,7 +19,9 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
 }){
 
     const [ dataForm, setDataForm ] = useState<form|null>(null);
+    // const [ operationData, setOperationData] = useState<OperationInterface>(newOperation)
     const [ alertState, setAlertState ] = useState<boolean>(false);
+
     const { state, fetchDataDetailsOp } = useApiGetDetailsOp();
     const { loadDataLocalStorage } = useLocalStorageLoadData();
     
@@ -40,7 +43,9 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                 <Input 
                 color='#44329C' 
                 label='OP' 
-                handlerInput={(text)=>setDataForm({...dataForm,op:text})} 
+                handlerInput={(text)=>{
+                    setDataForm({...dataForm,op:text});
+                }} 
                 textType='numeric' 
                 placeholder="X-X-X-X" 
                 value={dataForm?.['op']?dataForm?.['op']:''}/>
@@ -48,7 +53,9 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                 <Input 
                 color='#44329C' 
                 label='TIPO OP' 
-                handlerInput={(text)=>setDataForm({...dataForm,opType:text.toUpperCase()})} 
+                handlerInput={(text)=>{
+                    setDataForm({...dataForm,opType:text.toUpperCase()})
+                }} 
                 textType='default' 
                 placeholder="MOP/MOB" 
                 value={dataForm?.['opType']?dataForm?.['opType']:''}/>
@@ -56,7 +63,9 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                 <Input 
                 color='#44329C' 
                 label='MODULO' 
-                handlerInput={(text)=>setDataForm({...dataForm,modulo:text})} 
+                handlerInput={(text)=>{
+                    setDataForm({...dataForm,modulo:text})
+                }} 
                 textType="numeric" 
                 placeholder="##" 
                 value={dataForm?.['modulo']?dataForm?.['modulo']:''}/>
@@ -72,9 +81,18 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                 handlerClick={(e)=>{
                     if(dataForm?.['op']&&dataForm?.['opType']&&dataForm?.['modulo']){
 
+                        const operationData: OperationInterface={
+                            ...newOperation,
+                            op:dataForm?.['opType']+dataForm?.['op'],
+                            moduloId:dataForm?.['modulo'],
+                            inicioOperacion:new Date().toLocaleTimeString(),
+                            fechaRegistro:new Date().toLocaleDateString(),
+                            registradoPor:'1146441925'
+                        }
+
                         fetchDataDetailsOp(`${dataForm?.['opType']}${dataForm?.['op']}`);
-                        loadDataLocalStorage('currentOcr',dataForm);
-                        // navigation.navigate('Production');
+                        loadDataLocalStorage('currentOcr',operationData);
+                        navigation.navigate('Production');
                         handlerClick(e)
 
                     }

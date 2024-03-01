@@ -1,21 +1,33 @@
-import {View,StyleSheet, Dimensions, TouchableOpacity, Text}    from 'react-native';
-import { SendIcon }                                             from '../public/icons/sendIcon';
+import { useLocalStorageGetData }                               from '../controllers/hooks/customHookGetDataLocalStorage';
+import { ProductionScreenProps }                                from '../interfaces/screens/screensInterfaces';
+import { ModalProductionRegister }                              from '../modals/modalProductionRegister';
+import { OperationInterface }                                   from '../interfaces/view/production';
+import { InfoLineButton }                                       from '../components/InfoLineButton';
+import { InfoLineDouble }                                       from '../components/infoLineDouble';
 import { RowLeftIcon }                                          from '../public/icons/rowLeftIcon';
 import { ViewContainer }                                        from '../components/viewContainer';
+import { ModuloIcon }                                           from '../public/icons/moduloIcon';
+import { UserIcon }                                             from '../public/icons/userIcon';
+import { SendIcon }                                             from '../public/icons/sendIcon';
+import { OcrIcon }                                              from '../public/icons/ocrIcon';
 import { FieldInfo }                                            from '../components/fieldInfo';
 import { InfoLine }                                             from '../components/infoLine';
-import { InfoLineDouble }                                       from '../components/infoLineDouble';
 import { OpIcon }                                               from '../public/icons/opIcon';
-import { ModuloIcon }                                           from '../public/icons/moduloIcon';
-import { InfoLineButton }                                       from '../components/InfoLineButton';
-import { OcrIcon }                                              from '../public/icons/ocrIcon';
-import { UserIcon }                                             from '../public/icons/userIcon';
-import { ModalProductionRegister }                              from '../modals/modalProductionRegister';
-import { ProductionScreenProps }                                from '../interfaces/screens/screensInterfaces';
+import {View,StyleSheet, Dimensions, TouchableOpacity, Text}    from 'react-native';
+import { useState }                                             from 'react';
 
 const {height,width}=Dimensions.get('screen');
 
 export function Production({navigation}:any){
+
+    const op = useLocalStorageGetData('currentOp');
+    const operation = useLocalStorageGetData('currentOcr');
+
+    console.log(operation.state);
+
+    const [ operationData, setOperationData ] = useState<OperationInterface|null>(null);
+    const [ modalRegisterState,setModalRegisterState ] = useState(false);
+
     return<>
             <View style={productionStyle.productionContainer}>
                 <View style={productionStyle.body}>
@@ -54,7 +66,7 @@ export function Production({navigation}:any){
                         </FieldInfo> */}
                         <InfoLineButton colorBtn='#44329C' fontBtn='#FFF' labelBtn='Editar...' handlerClick={()=>{}} title='Cantidad Registrada' content='Editar'/>
                         <InfoLineButton colorBtn='#44329C' fontBtn='#FFF' labelBtn='Editar...' handlerClick={()=>{}} title='Parada Inmediata' content='Sin Eventos'/>
-                        <InfoLineButton colorBtn='#44329C' fontBtn='#FFF' labelBtn='Registrar...' handlerClick={()=>{}} title='Ingreso de unidades' content='Sin Registros'/>
+                        <InfoLineButton colorBtn='#44329C' fontBtn='#FFF' labelBtn='Registrar...' handlerClick={()=>{setModalRegisterState(true)}} title='Ingreso de unidades' content='Sin Registros'/>
                     </ViewContainer>
                 </View>
                 <View style={productionStyle.footer}>
@@ -68,7 +80,16 @@ export function Production({navigation}:any){
                     </TouchableOpacity>
                 </View>
             </View>
-            {/* <ModalProductionRegister/> */}
+            {
+                modalRegisterState?
+                <ModalProductionRegister 
+                operationData={operationData}
+                setOperationData={setOperationData}
+                handlerClick={()=>{setModalRegisterState(false)}}
+                
+                />:
+                <></>
+            }
     </>
     
 }
