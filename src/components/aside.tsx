@@ -8,7 +8,8 @@ import { OPERATIONS } from '../app/operations/operations';
 const {width,height}=Dimensions.get('window');
 const currentColorMain='#44329C';   //azul oscuro
 
-export function Aside({handlerClick}:{
+export function Aside({navigation,handlerClick}:{
+    navigation:any,
     handlerClick:(event:GestureResponderEvent)=>void
 }){
 
@@ -30,7 +31,7 @@ export function Aside({handlerClick}:{
                                 {<FlatList renderItem={(item)=>
                                     <AsideItem 
                                     label={item.item.operacionEtiqueta} 
-                                    handlerClick={OPERATIONS[item.item.operacionId].handlerClick} 
+                                    handlerClick={()=>OPERATIONS[item.item.operacionId].handlerClick(navigation)} 
                                     key={item.item.operacionId}>
                                         {OPERATIONS[item.item.operacionId].icon}
                                     </AsideItem>} 

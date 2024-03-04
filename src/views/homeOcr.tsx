@@ -17,19 +17,20 @@ import { useState }                                                     from 're
 import { ModalOcrInfo } from '../modals/modalOcrInfo';
 import { OcrProcessesInterface } from '../interfaces/services/ml_api/ocrInterfaces';
 import { ModalRegisterOcrCurrentOp } from '../modals/modalRegisterOcrCurrentOp';
+import { ButtonHome } from '../components/buttonHome';
 
 const {height,width}=Dimensions.get('screen');
 
 export function HomeOcr({navigation}:any){
 
-    const filterItems=[
-        {id:1,label:'Todos'},
-        {id:2,label:'Eventualidades'},
-        {id:3,label:'Revisados'},
-        {id:4,label:'Sin Revisar'},
-        {id:5,label:'MOP'},
-        {id:6,label:'MOB'}
-    ];
+    // const filterItems=[
+    //     {id:1,label:'Todos'},
+    //     {id:2,label:'Eventualidades'},
+    //     {id:3,label:'Revisados'},
+    //     {id:4,label:'Sin Revisar'},
+    //     {id:5,label:'MOP'},
+    //     {id:6,label:'MOB'}
+    // ];
 
     const contextStorage = useMainContext();
     const {state} = useApiGetOcrByUser('1146441925');// Id del usuario 
@@ -61,7 +62,10 @@ export function HomeOcr({navigation}:any){
                 </View>
                 <View style={StyleMainWindow.fieldItemsSelect}>
                     <View style={StyleMainWindow.labels}>
-                        {filterItems.map(element=><ItemResize key={element.id} state={false} handlerClick={()=>{}} label={element.label}/>)}
+                        {
+                        contextStorage?.account?.home?.filter(icon=>icon.id===1)[0].filterList.map(element=>
+                            <ItemResize key={element.id} state={false} handlerClick={()=>{}} label={element.label}/>)
+                        }
                     </View>
                     <View style={StyleMainWindow.labelsIcon}>
                         <FilterIcon color='#AAA' size={30} width={2}/>
@@ -97,14 +101,10 @@ export function HomeOcr({navigation}:any){
                         data={state?.data}/>
                     }
                 </View>
-                <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{
-                    setNewRegister(true);
-                    // setNewCurrentRegister(true);
-                    // navigation.navigate('Production');
-                    }}>
-                    <PlusIcon color="#777" size={70} width={1}/>
-                    <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Nueva OCR</Text>
-                </TouchableOpacity>
+                {contextStorage?.account?.home?.filter(icon=>icon.id===1)[0].actionObject(()=>{
+                        
+                    }
+                )||<></>}
             </View>
             <View style={StyleMainWindow.root2}>
                 <View style={StyleMainWindow.navigationContainer}>
@@ -124,7 +124,7 @@ export function HomeOcr({navigation}:any){
     </View>
     {
         asideState?
-        <Aside handlerClick={()=>{setAsideState(false)}}/>:
+        <Aside navigation={navigation} handlerClick={()=>{setAsideState(false)}}/>:
         <></>
     }
     {

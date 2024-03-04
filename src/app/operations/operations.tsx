@@ -66,7 +66,7 @@ export const OPERATIONS:operationInterface={
     31:{
         icon:<ModuloIcon color='#FFF' size={35} width={2}/>,
         operation_label: "Mostrar Módulos",
-        handlerClick:() => {}
+        handlerClick:(navigation:any) => {navigation.navigate('HomeModulos')}
     },
     28:{
         icon:<EmployeerIcon color='#FFF' size={35} width={2}/>,

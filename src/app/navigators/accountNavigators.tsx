@@ -20,7 +20,8 @@ export const accountNavigators:accountNavigators = {
         initialRoute:AUTH_ROUTES.LOGIN,
         routes:AUTH_ROUTES,
         context:null,
-        home:null
+        home:null,
+
     },
     admin:{
         id:1,

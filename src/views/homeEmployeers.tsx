@@ -16,12 +16,6 @@ const {height,width}=Dimensions.get('screen');
 
 export function HomeEmployeer({navigation}:any){
 
-    const filterItems=[
-        {id:1,label:'Todos'},
-        {id:2,label:'Operarios activos '},
-        {id:3,label:'Operarios inactivos'}
-    ]
-
     const [itemState,setItemSelec]=useState<number|null>(1);
     const [newRegister,setNewRegister] = useState<boolean>(false);
 
@@ -48,7 +42,7 @@ export function HomeEmployeer({navigation}:any){
                             </View>
                             <View style={StyleMainWindow.fieldItemsSelect}>
                                 <View style={StyleMainWindow.labels}>
-                                    {filterItems.map(element=>
+                                    {contextStorage?.account?.home?.filter(icon=>icon.id===3)[0].filterList.map(element=>
                                     <ItemResize
                                         key={element.id} 
                                         state={itemState===element.id?true:false} 
@@ -74,10 +68,9 @@ export function HomeEmployeer({navigation}:any){
                                 <MainEmployeerComponent/>
                                 <MainEmployeerComponent/>
                             </View>
-                            <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{setNewRegister(true)}}>
-                                <PlusIcon color="#777" size={70} width={1}/>
-                                <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Nueva OCR</Text>
-                            </TouchableOpacity>
+                            {contextStorage?.account?.home?.filter(icon=>icon.id===4)[0].actionObject(()=>{
+
+                            })||<></>}
                         </View>
                         <View style={StyleMainWindow.root2}>
                             <View style={StyleMainWindow.navigationContainer}>

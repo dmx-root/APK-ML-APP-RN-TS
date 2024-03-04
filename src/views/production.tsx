@@ -13,17 +13,16 @@ import { OcrIcon }                                              from '../public/
 import { FieldInfo }                                            from '../components/fieldInfo';
 import { InfoLine }                                             from '../components/infoLine';
 import { OpIcon }                                               from '../public/icons/opIcon';
-import {View,StyleSheet, Dimensions, TouchableOpacity, Text}    from 'react-native';
+import { View,StyleSheet, Dimensions, TouchableOpacity, Text }  from 'react-native';
 import { useState }                                             from 'react';
 
 const {height,width}=Dimensions.get('screen');
 
 export function Production({navigation}:any){
 
-    const op = useLocalStorageGetData('currentOp');
-    const operation = useLocalStorageGetData('currentOcr');
-
-    console.log(operation.state);
+    // const op = useLocalStorageGetData('currentOp');
+    // const operation = useLocalStorageGetData('currentOcr');
+    // console.log(op.state);
 
     const [ operationData, setOperationData ] = useState<OperationInterface|null>(null);
     const [ modalRegisterState,setModalRegisterState ] = useState(false);
@@ -56,9 +55,9 @@ export function Production({navigation}:any){
                             <OcrIcon color='#44329C' size={24} width={2}/>
                         </FieldInfo>
                         <InfoLineDouble title1='Color' content1='Piel' title2='COD-Color' content2='1204'/>
-                        {/* <InfoLineDouble title1='Talla' content1='XL' title2='' content2=''/> */}
                         <InfoLine title='TALLA' content='XL'/>
                         <InfoLine title='EAN' content='11454112441'/>
+                        {/* <InfoLineDouble title1='Talla' content1='XL' title2='' content2=''/> */}
                         {/* <InfoLine title='Cantidad Registrada' content='30'/> */}
                     
                         {/* <FieldInfo label='Registro Actual' color='#44329C'>
@@ -86,7 +85,6 @@ export function Production({navigation}:any){
                 operationData={operationData}
                 setOperationData={setOperationData}
                 handlerClick={()=>{setModalRegisterState(false)}}
-                
                 />:
                 <></>
             }
