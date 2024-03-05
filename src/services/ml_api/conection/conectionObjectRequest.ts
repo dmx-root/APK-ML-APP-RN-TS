@@ -5,13 +5,13 @@ interface Data {
 }
 
 export class ConectionObjectRequest{
-    async getData(id:string|null,path:string,params:Data|null){
+    async getData(path:string,params:Data|null,token?:string){
         const data:AxiosRequestConfig={
             method:"get",
             url:path,
-            params:params?params:null,
+            params:params||null,
             headers:{
-                "access-token-auth":"none"
+                "access-token-auth":token||"none"
             },
             withCredentials:true
         }

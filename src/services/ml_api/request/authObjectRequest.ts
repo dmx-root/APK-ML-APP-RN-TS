@@ -1,7 +1,7 @@
-import { statusApi }                            from '../../../interfaces/services/ml_api/apiResponse';
-import { authInterface, authResponseInterface } from '../../../interfaces/services/ml_api/authInterfaces';
-import { OperationsInterfaces, OperationsResponseApi } from '../../../interfaces/services/ml_api/operations';
-import {ConectionObjectRequest}                 from '../conection/conectionObjectRequest';
+import { statusApi }                                    from '../../../interfaces/services/ml_api/apiResponse';
+import { authInterface, authResponseInterface }         from '../../../interfaces/services/ml_api/authInterfaces';
+import { OperationsInterfaces, OperationsResponseApi }  from '../../../interfaces/services/ml_api/operations';
+import {ConectionObjectRequest}                         from '../conection/conectionObjectRequest';
 
 //  Doc 
 //  Este componente tiene la finalidad de establecer la conexión entre nuestro front y un servicio(RES_API_ML)
@@ -10,14 +10,15 @@ import {ConectionObjectRequest}                 from '../conection/conectionObje
 
 export class AuthObjectRequest extends ConectionObjectRequest{
 
-    async authGet(uri:string,params:{documentId:string,password:string}):Promise<any>{
+    async authGet(uri:string,params:{documentId:string,password:string}|null,token?:string):Promise<any>{
         try {
-            const response = (await this.getData(null,uri,params)).data;
+            const response = (await this.getData(uri,params||null,token)).data;
 
             if(response.statusCodeApi===1){
                 const authInterface:authResponseInterface={
                     statusCodeApi:response.statusCodeApi,
                     statusMessageApi:response.statusMessageApi,
+                    toke:response.token,
                     data:{
                         userName:response.data[0].user_name,
                         userDocumentId:response.data[0].user_document_id,
@@ -50,7 +51,7 @@ export class AuthObjectRequest extends ConectionObjectRequest{
     }
     async authGetOperations(uri:string, profileId:string):Promise<any>{
         try {
-            const response = (await this.getData(null,(uri+profileId),null)).data;
+            const response = (await this.getData((uri+profileId),null)).data;
 
             if(response.statusCodeApi===1){
                 const dataClear:Array<OperationsInterfaces>=response.data.map((element:any)=>{

@@ -1,3 +1,3 @@
 
 
-export type items = 'currentOp' | 'currentToken' | 'currentOcr' | 'currentModulo'
+export type items = 'currentOp' | 'currentToken' | 'currentOcr' | 'currentModulo' | 'token'

@@ -12,7 +12,8 @@ export interface authInterface{
 }
 
 export interface authResponseInterface extends statusApi{
-    data:authInterface
+    data:authInterface,
+    toke:string
 }
 
 

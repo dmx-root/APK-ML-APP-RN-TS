@@ -3,7 +3,10 @@ import { get_auth }                 from '../../endpoints/ml_api/restApiMujerLat
 import { AuthObjectRequest }        from '../../services/ml_api/request/authObjectRequest';
 import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
 import { useGetSesion }             from './customHookGetSesion';
-import { useReducer }               from 'react';
+import { useEffect, useReducer }               from 'react';
+import { CurrentUser } from '../../interfaces/app/account';
+import { authResponseInterface } from '../../interfaces/services/ml_api/authInterfaces';
+import { handlerGetValueLocalStorage } from '../helpers/handlerValueLocalStorage';
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -12,7 +15,7 @@ const actionTypes = {
 };
 
 interface ApiState {
-    data: any | null;
+    data: authResponseInterface | null;
     loading: boolean;
     error: statusApi | null;
 }
@@ -36,7 +39,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
   
-   export const useApiGetAuth = (): { state: ApiState; fetchDataAuth: (documentId:string,password:string) => void } => {
+   export const useApiGetAuth = (): { state: ApiState } => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -44,35 +47,42 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         error: null,
     });
 
-    // const storage= useMainContext();
-    const { sesionState,getSesion } = useGetSesion();
-  
-    const apiQuery=new AuthObjectRequest();
-
-    async function fetchDataAuth(documentId:string,password:string):Promise<void>{
+    async function fetchDataAuth(token:string):Promise<void>{
+        const apiQuery=new AuthObjectRequest();
         try {
+            
+            const data=await apiQuery.authGet(get_auth,null,token);
 
-            dispatch({ type: actionTypes.FETCH_INIT });
-
-            const data=await apiQuery.authGet(get_auth,{documentId,password});
             if(data?.statusCodeApi===1){
-
-                getSesion(data.data.userProfileId);
-                if(sesionState.data){
-                    dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data });
-                }
-
+                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data });   
             }
             else{
                 dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
             }     
             
         } catch (error) {
-
             dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error'});
-
         }
     };
+
+    async function loadData(){
+        try {
+            dispatch({ type: actionTypes.FETCH_INIT });
+            const response = await handlerGetValueLocalStorage('token');
+            if(typeof(response)==='string'){
+                await fetchDataAuth(response)
+            }
+            else{
+                dispatch({ type: actionTypes.FETCH_FAILURE, payload:response}); 
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(()=>{
+        loadData()
+    },[])
   
-    return { state, fetchDataAuth };
+    return { state };
 };

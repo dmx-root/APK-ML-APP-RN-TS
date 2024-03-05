@@ -1,7 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { items } from '../../interfaces/storage/items';
-import { Item } from '../../interfaces/app/homeRoutes';
-
 
 export const handlerSaveObjectLocalStorage = async (item:string, data:any ) =>{
 

@@ -4,7 +4,6 @@ import { LockIcon }                                     from '../public/icons/lo
 import { AuthButton }                                   from '../components/authButton';
 import { AuthCheckRemenberPassword }                    from '../components/authCheckRemenberPassword';
 import { ModalInput }                                   from '../modals/modalInput';
-import { useApiGetAuth }                                from '../controllers/hooks/customHookGetAuth';
 import { ModalLoading }                                 from '../modals/modalLoading';
 import { ModalAlert }                                   from '../modals/modalAlert';
 import { modal, form }                                  from '../interfaces/view/login';
@@ -13,6 +12,11 @@ import {View,StyleSheet, Dimensions, Text, Alert}       from 'react-native';
 import { Image, ImageBackground }                       from 'react-native';
 import { useState }                                     from 'react';
 import * as Font                                        from 'expo-font';
+import { useSetSesion } from '../controllers/hooks/customHookSetSesion';
+import { AuthStoredLogin } from '../components/authStoredLogin';
+import { LoadingComponent } from '../components/loadingComponent';
+import { useApiGetAuth } from '../controllers/hooks/customHookGetAuth';
+import { handlerRemoveValueLocalStorage } from '../controllers/helpers/handlerValueLocalStorage';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -20,11 +24,16 @@ const currentColorDefault='#44329C';
 
 export function Login(){
 
-    const { state, fetchDataAuth } = useApiGetAuth();
+    const { state,setDataAuth } = useSetSesion();
+    const currentSesionValidator = useApiGetAuth();
+    
     const [ dataForm, setDataForm] = useState<form|null>(null);
     const [ modal, setModal ] = useState<modal>({state:false,label:'',type:'',value:'',key:'none',keyboard:'default',placeHolder:''});
     const [ alert, setAlert ] = useState<boolean>(false);
+    const [ formState,setFormState] = useState(false)
+    const [ passworsSave,setPasswordSave] = useState<boolean>(false);
 
+    console.log(currentSesionValidator)
     return<>
             <View style={loginStyle.backGround}>
                     <ImageBackground
@@ -33,54 +42,79 @@ export function Login(){
                         imageStyle={loginStyle.imageStyle}
                         blurRadius={3}>
                     <View style={loginStyle.logoContainer}>
-                        <Image source={require('../public/img/transparentLogo.png')} style={loginStyle.logo}/>
+                        {/* <Image source={require('../public/img/transparentLogo.png')} style={loginStyle.logo}/> */}
                     </View>
-                    <View style={loginStyle.titleContainer}>
-                        {/* <Text style={loginStyle.title}>Iniciar Sesión</Text> */}
-                    </View>
-                    <View style={loginStyle.form}>
-                        <InputAuth 
-                            label='Documento'
-                            value={dataForm?.['Document']?dataForm?.['Document']:''} 
+                    {
+                    currentSesionValidator.state.loading?
+                    <ModalLoading label='Cargando App...' handlerClick={()=>{}}/>:
+                    currentSesionValidator.state.data&&!formState?
+                    <AuthStoredLogin 
+                    data={{
+                        nombre:currentSesionValidator.state.data.data.userName, 
+                        rol:currentSesionValidator.state.data.data.userProfileLAbel
+                    }} 
+                    handlerAcceder={()=>{
+                        console.log('Accedió');
+                    }} 
+                    handlerChange={()=>{
+                        setFormState(true);
+                        handlerRemoveValueLocalStorage('token');
+                    }}/>:
+                    <>
+                        <View style={loginStyle.titleContainer}>
+                            {/* <Text style={loginStyle.title}>Iniciar Sesión</Text> */}
+                        </View>
+                        <View style={loginStyle.form}>
+                            <InputAuth 
+                                label='Documento'
+                                value={dataForm?.['Document']?dataForm?.['Document']:''} 
+                                handlerClick={()=>{
+                                    setModal({
+                                        label:'DOCUMENTO',
+                                        key:'Document',
+                                        type:'text',
+                                        state:true,
+                                        value:'',
+                                        placeHolder:'Ingrese el documento',
+                                        keyboard:'numeric'
+                                    })
+                                }}>
+                                <UserIcon color='#FFF' size={45} width={1}/>
+                            </InputAuth>
+                            <InputAuth 
+                                label='Contraseña' 
+                                value={dataForm?.['Password']?'* * * * * * * * * * * *':''} 
+                                handlerClick={()=>{
+                                    setModal({
+                                        label:'CONTRASEÑA',
+                                        key:'Password',
+                                        type:'password',
+                                        state:true,
+                                        value:'',
+                                        placeHolder:'Ingrese el documento',
+                                        keyboard:'default'
+                                    })
+                                }}>
+                                <LockIcon color='#FFF' size={45} width={1}/>
+                            </InputAuth>
+                            <AuthCheckRemenberPassword 
+                            label='Recordar contraseña'
+                            state={passworsSave}
                             handlerClick={()=>{
-                                setModal({
-                                    label:'DOCUMENTO',
-                                    key:'Document',
-                                    type:'text',
-                                    state:true,
-                                    value:'',
-                                    placeHolder:'Ingrese el documento',
-                                    keyboard:'numeric'
-                                })
-                            }}>
-                            <UserIcon color='#FFF' size={45} width={1}/>
-                        </InputAuth>
-                        <InputAuth 
-                            label='Contraseña' 
-                            value={dataForm?.['Password']?'* * * * * * * * * * * *':''} 
-                            handlerClick={()=>{
-                                setModal({
-                                    label:'CONTRASEÑA',
-                                    key:'Password',
-                                    type:'password',
-                                    state:true,
-                                    value:'',
-                                    placeHolder:'Ingrese el documento',
-                                    keyboard:'default'
-                                })
-                            }}>
-                            <LockIcon color='#FFF' size={45} width={1}/>
-                        </InputAuth>
-                        <AuthCheckRemenberPassword label='Recordar contraseña'/>
-                        <AuthButton 
-                            label='Acceder' 
-                            handlerClick={()=>{
-                                dataForm?.['Password']&&dataForm?.['Document']?
-                                fetchDataAuth(dataForm?.['Document'],dataForm?.['Password']):
-                                Alert.alert('Campos vacios','Asegúrese de llenar todos los campos') 
-                                setAlert(true);
+                                setPasswordSave(!passworsSave);
                             }}/>
-                    </View>
+                            <AuthButton 
+                                label='Acceder' 
+                                handlerClick={()=>{
+                                    dataForm?.['Password']&&dataForm?.['Document']?
+                                    setDataAuth(dataForm?.['Document'],dataForm?.['Password'],passworsSave):
+                                    Alert.alert('Campos vacios','Asegúrese de llenar todos los campos') 
+                                    setAlert(true);
+                                }}/>
+                        </View>
+                    </>
+                    
+                    }
                 </ImageBackground>    
             </View>
 

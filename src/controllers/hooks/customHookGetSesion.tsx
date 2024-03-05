@@ -42,8 +42,8 @@ export const useGetSesion = (): { sesionState: findState, getSesion: (accountId:
         error: null,
     });
 
-    const storage= useMainContext();
-    const { fetchDataOperation } = useApiGetAuthOperations();
+    // const storage= useMainContext();
+    // const { fetchDataOperation } = useApiGetAuthOperations();
     
     function getSesion(accountId:number):void{
         
@@ -54,9 +54,9 @@ export const useGetSesion = (): { sesionState: findState, getSesion: (accountId:
             Object.keys(accountNavigators).forEach(element=>{
                 if(accountNavigators[element].id===accountId){
 
-                    storage?.setAccount(accountNavigators[element]);
-                    fetchDataOperation(accountId.toString());
-                    dispatch({ type: actionTypes.FIND_SUCCESS, payload:1});
+                    // storage?.setAccount(accountNavigators[element]);
+                    // fetchDataOperation(accountId.toString());
+                    dispatch({ type: actionTypes.FIND_SUCCESS, payload:accountNavigators[element]});
 
                 }
             });

@@ -10,7 +10,7 @@ import { Input }                            from "../components/input";
 import { Modal }                            from "../components/modal";
 import { ModalLoading }                     from "./modalLoading";
 import { ModalAlert }                       from "./modalAlert";
-import { Alert, GestureResponderEvent }     from 'react-native';
+import { Alert, GestureResponderEvent, StyleSheet }     from 'react-native';
 import { useState }                         from "react";
 
 export function ModalRegisterOcr({handlerClick,navigation}:{
@@ -94,7 +94,6 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                         loadDataLocalStorage('currentOcr',operationData);
                         navigation.navigate('Production');
                         handlerClick(e)
-
                     }
                     else {
 
@@ -109,3 +108,4 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
         }
     </>
 }
+

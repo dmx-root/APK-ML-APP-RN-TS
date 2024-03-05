@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, GestureResponderEvent } from "react-native";
 import { CheckBoxEmpty } from "../public/icons/checkBoxEmpty";
 import { CheckBoxFill } from "../public/icons/checkBoxFill";
 import { useState } from "react";
@@ -7,14 +7,15 @@ import { useState } from "react";
 //  este componente permite establer un input de tipo check
 //  recibe como parametro de entrada la etiqueta del check list
 
-export function AuthCheckRemenberPassword({label}:{
+export function AuthCheckRemenberPassword({label,handlerClick, state}:{
     label:String,
+    state:boolean,
+    handlerClick:(event:GestureResponderEvent)=>void 
 }){
 
-    const [state,setState] = useState<boolean>(false);
 
     return <View style={authCheckRemenberPasswordStyle.authCheckRemenber}>
-        <TouchableOpacity style={authCheckRemenberPasswordStyle.authCheckRemenberContainer} onPress={()=>setState(!state)}>
+        <TouchableOpacity style={authCheckRemenberPasswordStyle.authCheckRemenberContainer} onPress={handlerClick}>
             {
                 state?
                 <CheckBoxFill color="#FFF" size={45} width={1}/>:

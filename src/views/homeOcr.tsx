@@ -23,15 +23,6 @@ const {height,width}=Dimensions.get('screen');
 
 export function HomeOcr({navigation}:any){
 
-    // const filterItems=[
-    //     {id:1,label:'Todos'},
-    //     {id:2,label:'Eventualidades'},
-    //     {id:3,label:'Revisados'},
-    //     {id:4,label:'Sin Revisar'},
-    //     {id:5,label:'MOP'},
-    //     {id:6,label:'MOB'}
-    // ];
-
     const contextStorage = useMainContext();
     const {state} = useApiGetOcrByUser('1146441925');// Id del usuario 
 
@@ -102,9 +93,8 @@ export function HomeOcr({navigation}:any){
                     }
                 </View>
                 {contextStorage?.account?.home?.filter(icon=>icon.id===1)[0].actionObject(()=>{
-                        
-                    }
-                )||<></>}
+                    setNewRegister(true);
+                })||<></>}
             </View>
             <View style={StyleMainWindow.root2}>
                 <View style={StyleMainWindow.navigationContainer}>

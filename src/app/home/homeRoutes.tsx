@@ -63,7 +63,7 @@ export const ADMIN_HOME_ROUTES:Array<Item> = [
             </ButtonHome>
         },
         filterList:FILTER_ITEMS_EMPLOYEERS_HOME
-    },
+    }
 ]; 
 
 export const PROCESSES_HOME_ROUTES:Array<Item> = [

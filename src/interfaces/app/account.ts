@@ -7,3 +7,13 @@ export interface account{
     context:any,
     home:Array<Item>|null
 }
+
+export interface CurrentUser{
+    documentoid:string,
+    tipoDocumento:number
+    nombre:string,
+    rolId:number,
+    rolNombre:string,
+    descripcion:string,
+    creacionFecha:string | Date
+}
