@@ -20,7 +20,9 @@ export const OPERATIONS:operationInterface={
     1:{
         icon:<UserIcon color='#FFF' size={35} width={2}/>,
         operation_label: "Ver Perfil",
-        handlerClick:() => {}
+        handlerClick:(navigation:any) => {
+            navigation.navigate('Profile');
+        }
     },
     16:{
         icon:<CreateOcrIcon color='#FFF' size={35} width={2}/>,

@@ -7,26 +7,25 @@ import { ItemResize }                                       from '../components/
 import { FilterIcon }                                       from '../public/icons/filterIcon';
 import { ItemNavigation }                                   from '../components/itemNavigation';
 import { useMainContext }                                   from '../contexts/mainContext';
-import { useState }                                         from 'react'
 import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
 import { LoadingComponent }                                 from '../components/loadingComponent';
 import { EmptyComponent }                                   from '../components/emptyComponent';
 import { useApiGetOpByUser }                                from '../controllers/hooks/customHookGetOpByUser';
-import { ModalDetailOpList } from '../modals/modalDetailOpList';
-import { DetailProcessResponseInterface, OpDetail } from '../interfaces/services/ml_api/detailOpInteface';
+import { ModalDetailOpList }                                from '../modals/modalDetailOpList';
+import { useState }                                         from 'react'
 
 const {height,width}=Dimensions.get('screen');
 
 export function HomeOp({navigation}:any){
 
-    const [ itemState,setItemSelec]=useState<number|null>(1);
-    const [ newRegister,setNewRegister] = useState<boolean>(false);
-    const { state } = useApiGetOpByUser('1146441925');
+    const contextStorage = useMainContext();
+    const [ itemState, setItemSelec ] = useState<number|null>(1);
+    const [ newRegister, setNewRegister ] = useState<boolean>(false);
+    const { state } =contextStorage?.account?.home?.[1].mainFetch('1146441925')
 
-    const [ detailOpListState, setDetailOpListState] = useState<boolean>(false);
+    const [ detailOpListState, setDetailOpListState ] = useState<boolean>(false);
     const [ opId,setopId] = useState<string|null>(null);
 
-    const contextStorage = useMainContext();
 
     return<>
      <View style={{height,width}}>

@@ -12,7 +12,7 @@ export class OpObjectRequest extends ConectionObjectRequest{
 
     async OpGet(uri:string):Promise<any>{
         try {
-            const response = (await this.getData(null,uri,null)).data;
+            const response = (await this.getData(uri,null)).data;
 
             if(response.statusCodeApi===1){
                 const dataClear:Array<OpInterface>=response.data.map((element:any)=>{
@@ -56,7 +56,7 @@ export class OpObjectRequest extends ConectionObjectRequest{
     }
     async DetailOpGet(uri:string,op:string):Promise<any>{
         try {
-            const response = (await this.getData(null,(uri+op),null)).data;
+            const response = (await this.getData((uri+op),null)).data;
 
             if(response.statusCodeApi===1){
                 const dataClear:Array<OpDetail>=response.data.map((element:any)=>{
@@ -102,7 +102,7 @@ export class OpObjectRequest extends ConectionObjectRequest{
     }
     async OpProductionGet(uri:string,documentId:string):Promise<any>{
         try {
-            const response = (await this.getData(null,(uri+documentId),null)).data;
+            const response = (await this.getData((uri+documentId),null)).data;
             // console.log(response)
             if(response.statusCodeApi===1){
                 const dataClear:Array<OpInterface>=response.data.map((element:any)=>{

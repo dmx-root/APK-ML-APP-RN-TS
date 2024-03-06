@@ -1,9 +1,6 @@
-import { get_all_ocr_by_op }        from '../../endpoints/ml_api/restApiMujerLatina';
 import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
-import { OcrProcessesInterface }    from '../../interfaces/services/ml_api/ocrInterfaces';
-import { OcrObjectRequest }         from '../../services/ml_api/request/ocrObjectRequest';
 import { useEffect, useReducer }    from 'react';
-import { handlerGetSavedObjectLocalStorage } from '../helpers/handlerSaveObjectLocalStorage';
+import { handlerGetSavedObjectLocalStorage } from '../helpers/handlerObjectLocalStorage';
 import { items } from '../../interfaces/storage/items';
 
 const actionTypes = {

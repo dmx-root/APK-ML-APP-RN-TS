@@ -1,4 +1,4 @@
-import { useLocalStorageLoadData }          from "../controllers/hooks/customHookLoadDataLocalStorage";
+// import { useLocalStorageLoadData }          from "../controllers/hooks/customHookLoadDataLocalStorage";
 import { useApiGetDetailsOp }               from "../controllers/hooks/customHookGetDetailsOp";
 import { ButtonFullWidth }                  from "../components/buttonFullWidth";
 import { newOperation, OperationInterface } from "../interfaces/view/production";
@@ -10,8 +10,10 @@ import { Input }                            from "../components/input";
 import { Modal }                            from "../components/modal";
 import { ModalLoading }                     from "./modalLoading";
 import { ModalAlert }                       from "./modalAlert";
-import { Alert, GestureResponderEvent, StyleSheet }     from 'react-native';
+import { Alert, GestureResponderEvent }     from 'react-native';
 import { useState }                         from "react";
+import { useSetOperation } from "../controllers/hooks/customHookSetOperation";
+import { handlerGetSavedObjectLocalStorage, handlerRemoveSavedObjectLocalStorage } from "../controllers/helpers/handlerObjectLocalStorage";
 
 export function ModalRegisterOcr({handlerClick,navigation}:{
     handlerClick:(event:GestureResponderEvent)=>void,
@@ -19,18 +21,19 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
 }){
 
     const [ dataForm, setDataForm ] = useState<form|null>(null);
-    // const [ operationData, setOperationData] = useState<OperationInterface>(newOperation)
     const [ alertState, setAlertState ] = useState<boolean>(false);
+    const { state, setDataOperation } = useSetOperation();
+    // const [ operationData, setOperationData] = useState<OperationInterface>(newOperation)
+    // const { state, fetchDataDetailsOp } = useApiGetDetailsOp();
+    // const { loadDataLocalStorage } = useLocalStorageLoadData();
 
-    const { state, fetchDataDetailsOp } = useApiGetDetailsOp();
-    const { loadDataLocalStorage } = useLocalStorageLoadData();
-    
+    // console.log(state)
+
     return<>
         {state.loading?
         <ModalLoading 
         label="Cargando registros" 
         handlerClick={()=>{}}/>:
-
         state.error?
         <ModalAlert 
         label="Error de consulta" 
@@ -90,13 +93,13 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                             registradoPor:'1146441925'
                         }
 
-                        fetchDataDetailsOp(`${dataForm?.['opType']}${dataForm?.['op']}`);
-                        loadDataLocalStorage('currentOcr',operationData);
-                        navigation.navigate('Production');
-                        handlerClick(e)
+                        // fetchDataDetailsOp(`${dataForm?.['opType']}${dataForm?.['op']}`);
+                        // loadDataLocalStorage('currentOcr',operationData);
+                        setDataOperation(`${dataForm?.['opType']}${dataForm?.['op']}`,navigation);
+                        // handlerClick(e)
                     }
                     else {
-
+                      
                         setAlertState(true);
                         Alert.alert('Campos vacios','Asegúrese de llenar todos los campos');
                         

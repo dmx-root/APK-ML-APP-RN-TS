@@ -10,7 +10,7 @@ import {ConectionObjectRequest}                     from '../conection/conection
 export class OcrObjectRequest extends ConectionObjectRequest{
     async OcrProcessGet(uri:string):Promise<any>{
         try {
-            const response = (await this.getData(null,uri,null)).data;
+            const response = (await this.getData(uri,null)).data;
 
             if(response.statusCodeApi===1){
                 const dataClear:Array<OcrProcessesInterface>=response.data.map((element:any)=>{
@@ -66,7 +66,7 @@ export class OcrObjectRequest extends ConectionObjectRequest{
     }
     async OcrProductionGet(uri:string,documentId:string):Promise<any>{
         try {
-            const response = (await this.getData(null,(uri+documentId),null)).data;
+            const response = (await this.getData((uri+documentId),null)).data;
             // console.log(response)
             if(response.statusCodeApi===1){
                 const dataClear:Array<OcrProcessesInterface>=response.data.map((element:any)=>{
@@ -121,7 +121,7 @@ export class OcrObjectRequest extends ConectionObjectRequest{
     }
     async OcrProductionGetByOP(uri:string,{op,color,talla}:{op:string,color:string,talla:string}):Promise<any>{
         try {
-            const response = (await this.getData(null,uri,{op,color,talla})).data;
+            const response = (await this.getData(uri,{op,color,talla})).data;
             if(response.statusCodeApi===1){
                 const dataClear:Array<OcrProcessesInterface>=response.data.map((element:any)=>{
                     return {
@@ -175,7 +175,7 @@ export class OcrObjectRequest extends ConectionObjectRequest{
     }
     async OcrProductionGetByModulo(uri:string,moduloId:string):Promise<any>{
         try {
-            const response = (await this.getData(null,(uri+moduloId),null)).data;
+            const response = (await this.getData((uri+moduloId),null)).data;
             // console.log(response.data.ocrList)
             if(response.statusCodeApi===1){
                 const dataClear:Array<OcrProcessesInterface>=response.data.ocrList.map((element:any)=>{

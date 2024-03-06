@@ -19,10 +19,10 @@ export function AuthStoredLogin({data,handlerAcceder,handlerChange}:{
                 </View>
                 <View style={authStoredLoginStyle.contentContainer}>
                     <View style={authStoredLoginStyle.row}>
-                        <Text style={{fontSize:40, color:'#FFF',fontWeight:'500'}}>David Esteban Morales</Text>
+                        <Text style={{fontSize:35, color:'#FFF',fontWeight:'500'}}>{data.nombre}</Text>
                     </View>
                     <View style={authStoredLoginStyle.row}>
-                        <Text style={{fontSize:25, color:'#FFF',fontWeight:'300'}}>Administrador</Text>
+                        <Text style={{fontSize:20, color:'#FFF',fontWeight:'300'}}>{data.rol}</Text>
                     </View>
                     <View style={authStoredLoginStyle.buttonContent}>
                         <AuthButton label='Acceder' handlerClick={handlerAcceder}/>

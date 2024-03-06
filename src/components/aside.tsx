@@ -1,9 +1,12 @@
-import { TouchableWithoutFeedback, View}  from 'react-native'
+import { OPERATIONS }                                       from '../app/operations/operations';
+import { useApiGetAuthOperations }                          from '../controllers/hooks/customHookGetAuthOperations';
+import { useMainContext }                                   from '../contexts/mainContext';
+import { AsideItem }                                        from './asideItem';
+import { LoadingComponent }                                 from './loadingComponent';
+import { EmptyComponent }                                   from './emptyComponent';
+import { TouchableWithoutFeedback, View}                    from 'react-native'
 import { ImageBackground, GestureResponderEvent, FlatList } from 'react-native'
-import { StyleSheet, Dimensions } from 'react-native'
-import { AsideItem } from './asideItem';
-import { useMainContext } from '../contexts/mainContext';
-import { OPERATIONS } from '../app/operations/operations';
+import { StyleSheet, Dimensions }                           from 'react-native'
 
 const {width,height}=Dimensions.get('window');
 const currentColorMain='#44329C';   //azul oscuro
@@ -14,7 +17,8 @@ export function Aside({navigation,handlerClick}:{
 }){
 
     const contextStorage=useMainContext();
-    
+    const { state } = useApiGetAuthOperations(contextStorage?.currentUser?.rolId||'');
+    // console.log(state)
     return <TouchableWithoutFeedback onPress={handlerClick}>
                 <View style={StyleAside.courtain}>
                     <TouchableWithoutFeedback onPress={()=>{}}>
@@ -28,14 +32,22 @@ export function Aside({navigation,handlerClick}:{
                                     {/* <Image source={require('../public/img/transparentLogo.png')} style={StyleAside.img}/> */}
                             </View>
                             <View style={StyleAside.bodyAside}>
-                                {<FlatList renderItem={(item)=>
+                                {   state.loading?
+                                    <LoadingComponent label='Cargando lista de operaciones'/>:
+                                    state.data?.length===0||!state.data?
+                                    <EmptyComponent label='No se encontraron operaciones disponibles'/>:
+                                    <FlatList renderItem={(item)=>
                                     <AsideItem 
                                     label={item.item.operacionEtiqueta} 
-                                    handlerClick={()=>OPERATIONS[item.item.operacionId].handlerClick(navigation)} 
+                                    handlerClick={(e)=>{
+                                        OPERATIONS[item.item.operacionId].handlerClick(navigation);
+                                        handlerClick(e);
+                                    }} 
                                     key={item.item.operacionId}>
                                         {OPERATIONS[item.item.operacionId].icon}
                                     </AsideItem>} 
-                                data={contextStorage?.operations}/>}
+                                data={contextStorage?.operations}/>
+                                }
                             </View>
                         </View>
                     </TouchableWithoutFeedback>

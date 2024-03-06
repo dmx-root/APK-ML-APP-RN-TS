@@ -35,7 +35,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
   
-export const useApiGetAuthOperations = (): { state: ApiState, fetchDataOperation: (profileId:string) => void  } => {
+export const useApiGetAuthOperations = (profileId:string | number): { state: ApiState } => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -45,27 +45,36 @@ export const useApiGetAuthOperations = (): { state: ApiState, fetchDataOperation
 
     const contextStorage = useMainContext()
 
-    async function fetchDataOperation(profileId:string):Promise<void>{
+    async function loaddata():Promise<void>{
         try {
             const apiQuery = new AuthObjectRequest();
             dispatch({ type: actionTypes.FETCH_INIT });
+            // console.log(contextStorage?.)
 
-            const data=await apiQuery.authGetOperations(get_auth_operations,profileId);
+            if(!contextStorage?.operations){
 
-            if(data?.statusCodeApi===1){
-                contextStorage?.setOperations(data.data);
-                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data});
+                const data=await apiQuery.authGetOperations(get_auth_operations,profileId.toString());
+                if(data?.statusCodeApi===1){
+
+                    contextStorage?.setOperations(data.data);
+                    dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data});
+                    
+                }
+                else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
+                
+            }else{
+                
+                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: contextStorage?.operations});
 
             }
-            else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
-            
         } catch (error) {
-
             dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error'});
-
         }
     };
 
-  
-    return { state, fetchDataOperation};
+    useEffect(()=>{
+        loaddata()
+    },[]);
+
+    return { state };
 };

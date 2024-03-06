@@ -7,16 +7,17 @@ import { ModalInput }                                   from '../modals/modalInp
 import { ModalLoading }                                 from '../modals/modalLoading';
 import { ModalAlert }                                   from '../modals/modalAlert';
 import { modal, form }                                  from '../interfaces/view/login';
+import { useHandlerSesion }                             from '../controllers/hooks/customHookSetSesion';
+import { AuthStoredLogin }                              from '../components/authStoredLogin';
+import { useApiGetAuth }                                from '../controllers/hooks/customHookGetAuth';
+import { handlerRemoveValueLocalStorage }               from '../controllers/helpers/handlerValueLocalStorage';
+import { useSetSesion }                                 from '../controllers/helpers/handlerSetSesion';
+import { inicialStateAuth }                             from '../interfaces/services/ml_api/authInterfaces';
 import { LoginScreenProps }                             from '../interfaces/screens/screensInterfaces';
 import {View,StyleSheet, Dimensions, Text, Alert}       from 'react-native';
 import { Image, ImageBackground }                       from 'react-native';
 import { useState }                                     from 'react';
 import * as Font                                        from 'expo-font';
-import { useSetSesion } from '../controllers/hooks/customHookSetSesion';
-import { AuthStoredLogin } from '../components/authStoredLogin';
-import { LoadingComponent } from '../components/loadingComponent';
-import { useApiGetAuth } from '../controllers/hooks/customHookGetAuth';
-import { handlerRemoveValueLocalStorage } from '../controllers/helpers/handlerValueLocalStorage';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -24,8 +25,9 @@ const currentColorDefault='#44329C';
 
 export function Login(){
 
-    const { state,setDataAuth } = useSetSesion();
     const currentSesionValidator = useApiGetAuth();
+    const { state, setDataAuth } = useHandlerSesion();
+    const { setSesion } = useSetSesion();
     
     const [ dataForm, setDataForm] = useState<form|null>(null);
     const [ modal, setModal ] = useState<modal>({state:false,label:'',type:'',value:'',key:'none',keyboard:'default',placeHolder:''});
@@ -33,7 +35,6 @@ export function Login(){
     const [ formState,setFormState] = useState(false)
     const [ passworsSave,setPasswordSave] = useState<boolean>(false);
 
-    console.log(currentSesionValidator)
     return<>
             <View style={loginStyle.backGround}>
                     <ImageBackground
@@ -54,6 +55,7 @@ export function Login(){
                         rol:currentSesionValidator.state.data.data.userProfileLAbel
                     }} 
                     handlerAcceder={()=>{
+                        setSesion(currentSesionValidator.state.data?.data||inicialStateAuth);
                         console.log('Accedió');
                     }} 
                     handlerChange={()=>{

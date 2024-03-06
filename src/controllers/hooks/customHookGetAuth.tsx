@@ -1,12 +1,10 @@
-import { useMainContext }           from '../../contexts/mainContext';
-import { get_auth }                 from '../../endpoints/ml_api/restApiMujerLatina';
-import { AuthObjectRequest }        from '../../services/ml_api/request/authObjectRequest';
-import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
-import { useGetSesion }             from './customHookGetSesion';
-import { useEffect, useReducer }               from 'react';
-import { CurrentUser } from '../../interfaces/app/account';
-import { authResponseInterface } from '../../interfaces/services/ml_api/authInterfaces';
-import { handlerGetValueLocalStorage } from '../helpers/handlerValueLocalStorage';
+import { useMainContext }               from '../../contexts/mainContext';
+import { get_auth }                     from '../../endpoints/ml_api/restApiMujerLatina';
+import { AuthObjectRequest }            from '../../services/ml_api/request/authObjectRequest';
+import { statusApi}                     from '../../interfaces/services/ml_api/apiResponse'
+import { authResponseInterface }        from '../../interfaces/services/ml_api/authInterfaces';
+import { handlerGetValueLocalStorage }  from '../helpers/handlerValueLocalStorage';
+import { useEffect, useReducer }        from 'react';
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -49,10 +47,8 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
 
     async function fetchDataAuth(token:string):Promise<void>{
         const apiQuery=new AuthObjectRequest();
-        try {
-            
+        try {     
             const data=await apiQuery.authGet(get_auth,null,token);
-
             if(data?.statusCodeApi===1){
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data });   
             }
@@ -70,7 +66,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
             dispatch({ type: actionTypes.FETCH_INIT });
             const response = await handlerGetValueLocalStorage('token');
             if(typeof(response)==='string'){
-                await fetchDataAuth(response)
+                await fetchDataAuth(response);
             }
             else{
                 dispatch({ type: actionTypes.FETCH_FAILURE, payload:response}); 

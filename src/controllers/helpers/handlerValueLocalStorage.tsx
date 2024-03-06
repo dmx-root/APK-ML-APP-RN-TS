@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { items } from '../../interfaces/storage/items';
 
-export const handlerSaveValueLocalStorage:(item:string, newData:string)=>Promise<null|Error> = async (item:string, newData:string) => {
+export const handlerSaveValueLocalStorage:(item:items, newData:string)=>Promise<null|Error> = async (item:string, newData:string) => {
     try {
         await AsyncStorage.setItem(item,newData);
         return null

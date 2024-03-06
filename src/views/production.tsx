@@ -13,10 +13,11 @@ import { OcrIcon }                                              from '../public/
 import { FieldInfo }                                            from '../components/fieldInfo';
 import { InfoLine }                                             from '../components/infoLine';
 import { OpIcon }                                               from '../public/icons/opIcon';
+import { LoadingComponent }                                     from '../components/loadingComponent';
+import { useMainContext }                                       from '../contexts/mainContext';
 import { View,StyleSheet, Dimensions, TouchableOpacity, Text }  from 'react-native';
 import { useState }                                             from 'react';
-import { LoadingComponent } from '../components/loadingComponent';
-import { useMainContext } from '../contexts/mainContext';
+import { ModalLoading } from '../modals/modalLoading';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -25,7 +26,7 @@ export function Production({navigation}:any){
     const opDetails = useLocalStorageGetData('currentOp');
     const operation = useLocalStorageGetData('currentOcr');
     const contextStorage = useMainContext();
-    // console.log(operation.state)
+    console.log(operation.state)
 
     const [ operationData, setOperationData ] = useState<OperationInterface|null>(null);
     const [ modalRegisterState,setModalRegisterState ] = useState(false);
@@ -34,8 +35,7 @@ export function Production({navigation}:any){
             <View style={productionStyle.productionContainer}>
                 <View style={productionStyle.body}>
                     {
-                        opDetails.state.loading && operation.state.loading?
-                        <LoadingComponent label='Cargando información del proceso...'/>:
+                        opDetails.state.data&&operation.state.data&&
                         <>
                             <ViewContainer>
                                 
@@ -98,6 +98,11 @@ export function Production({navigation}:any){
                 setOperationData={setOperationData}
                 handlerClick={()=>{setModalRegisterState(false)}}
                 />:
+                <></>
+            }
+            {
+                opDetails.state.loading||operation.state.loading?
+                <ModalLoading label='Cargando información del proceso...' handlerClick={()=>{}}/>:
                 <></>
             }
     </>

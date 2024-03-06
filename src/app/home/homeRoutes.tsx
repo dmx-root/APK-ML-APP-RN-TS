@@ -9,6 +9,9 @@ import { ButtonHome }                               from '../../components/butto
 import { PlusIcon }                                 from '../../public/icons/plusIcon';
 import { GestureResponderEvent }                    from 'react-native';
 import React                                        from 'react';
+import { useApiGetOpByUser } from '../../controllers/hooks/customHookGetOpByUser';
+import { useApiGetOcrByUser } from '../../controllers/hooks/customHookGetOcrByUser';
+import { useApiGetModulos } from '../../controllers/hooks/customHookGetModulos';
 
 
 export const ADMIN_HOME_ROUTES:Array<Item> = [
@@ -24,6 +27,9 @@ export const ADMIN_HOME_ROUTES:Array<Item> = [
                 <PlusIcon color="#777" size={70} width={1}/>
             </ButtonHome>
         },
+        mainFetch:(documentId?:string)=>{
+            return  useApiGetOcrByUser(documentId||'');// Id del usuario 
+        },
         filterList:FILTER_ITEMS_OCR_HOME
     },
     {
@@ -38,6 +44,9 @@ export const ADMIN_HOME_ROUTES:Array<Item> = [
                 <PlusIcon color="#777" size={70} width={1}/>
             </ButtonHome>
         },
+        mainFetch:(documentId?:string)=>{
+            return useApiGetOpByUser(documentId||'');
+        },
         filterList:FILTER_ITEMS_OP_HOME
     },
     {
@@ -50,6 +59,9 @@ export const ADMIN_HOME_ROUTES:Array<Item> = [
                 <ModuloIcon color="#777" size={35} width={1.5}/>
             </ButtonHome>
         },
+        mainFetch:(documentId?:string)=>{
+            return useApiGetModulos();
+        },
         filterList:FILTER_ITEMS_MODULOS_HOME
     },
     {
@@ -61,6 +73,9 @@ export const ADMIN_HOME_ROUTES:Array<Item> = [
             return <ButtonHome label='Adm Operarios' handlerClick={handlerClick}>
                 <EmployeerIcon color="#777" size={35} width={1.5}/>
             </ButtonHome>
+        },
+        mainFetch:(documentId?:string)=>{
+            return useApiGetModulos();
         },
         filterList:FILTER_ITEMS_EMPLOYEERS_HOME
     }
@@ -77,6 +92,9 @@ export const PROCESSES_HOME_ROUTES:Array<Item> = [
                 <></>
             </ButtonHome>
         },
+        mainFetch:(documentId?:string)=>{
+            return  useApiGetOcrByUser(documentId||'');// Id del usuario 
+        },
         filterList:FILTER_ITEMS_OCR_HOME
     },
     {
@@ -88,6 +106,10 @@ export const PROCESSES_HOME_ROUTES:Array<Item> = [
             return <ButtonHome label='' handlerClick={handlerClick}>
                 <></>
             </ButtonHome>
+        },
+        mainFetch:(documentId?:string)=>{
+            return useApiGetOpByUser(documentId||'');
+            
         },
         filterList:FILTER_ITEMS_OCR_HOME
     },
@@ -101,6 +123,9 @@ export const PROCESSES_HOME_ROUTES:Array<Item> = [
                 <></>
             </ButtonHome>
         },
+        mainFetch:(documentId?:string)=>{
+            return useApiGetModulos();
+        },
         filterList:FILTER_ITEMS_OCR_HOME
     },
     {
@@ -112,6 +137,9 @@ export const PROCESSES_HOME_ROUTES:Array<Item> = [
             return <ButtonHome label='' handlerClick={handlerClick}>
                 <></>
             </ButtonHome>
+        },
+        mainFetch:(documentId?:string)=>{
+            return useApiGetModulos();
         },
         filterList:FILTER_ITEMS_OCR_HOME
     },
@@ -128,6 +156,9 @@ export const PLANTA_HOME_ROUTES:Array<Item> = [
                 <></>
             </ButtonHome>
         },
+        mainFetch:(documentId?:string)=>{
+            return  useApiGetOcrByUser(documentId||'');// Id del usuario 
+        },
         filterList:FILTER_ITEMS_OCR_HOME
     },
     {
@@ -139,6 +170,11 @@ export const PLANTA_HOME_ROUTES:Array<Item> = [
             return <ButtonHome label='' handlerClick={handlerClick}>
                 <></>
             </ButtonHome>
+        }
+        ,
+        mainFetch:(documentId?:string)=>{
+            return useApiGetOpByUser(documentId||'');
+            
         },
         filterList:FILTER_ITEMS_OCR_HOME
     },
@@ -152,6 +188,9 @@ export const PLANTA_HOME_ROUTES:Array<Item> = [
                 <></>
             </ButtonHome>
         },
+        mainFetch:(documentId?:string)=>{
+            return useApiGetModulos();
+        },
         filterList:FILTER_ITEMS_OCR_HOME
     },
     {
@@ -163,6 +202,9 @@ export const PLANTA_HOME_ROUTES:Array<Item> = [
             return <ButtonHome label='' handlerClick={handlerClick}>
                 <></>
             </ButtonHome>
+        },
+        mainFetch:(documentId?:string)=>{
+            return useApiGetModulos();
         },
         filterList:FILTER_ITEMS_OCR_HOME
     },
@@ -179,6 +221,9 @@ export const FACTURACION_HOME_ROUTES:Array<Item> = [
                 <></>
             </ButtonHome>
         },
+        mainFetch:(documentId?:string)=>{
+            return  useApiGetOcrByUser(documentId||'');// Id del usuario 
+        },
         filterList:FILTER_ITEMS_OCR_HOME
     },
     {
@@ -191,6 +236,10 @@ export const FACTURACION_HOME_ROUTES:Array<Item> = [
                 <></>
             </ButtonHome>
         },
+        mainFetch:(documentId?:string)=>{
+            return useApiGetOpByUser(documentId||'');
+            
+        },
         filterList:FILTER_ITEMS_OCR_HOME
     },
     {
@@ -202,6 +251,9 @@ export const FACTURACION_HOME_ROUTES:Array<Item> = [
             return <ButtonHome label='' handlerClick={handlerClick}>
                 <></>
             </ButtonHome>
+        },
+        mainFetch:(documentId?:string)=>{
+            return useApiGetModulos();
         },
         filterList:FILTER_ITEMS_OCR_HOME
     }
@@ -218,6 +270,9 @@ export const GUEST_HOME_ROUTES:Array<Item> = [
                 <></>
             </ButtonHome>
         },
+        mainFetch:(documentId?:string)=>{
+            return  useApiGetOcrByUser(documentId||'');// Id del usuario 
+        },
         filterList:FILTER_ITEMS_OCR_HOME
     },
     {
@@ -230,6 +285,10 @@ export const GUEST_HOME_ROUTES:Array<Item> = [
                 <></>
             </ButtonHome>
         },
+        mainFetch:(documentId?:string)=>{
+            return useApiGetOpByUser(documentId||'');
+            
+        },
         filterList:FILTER_ITEMS_OCR_HOME
     },
     {
@@ -241,6 +300,9 @@ export const GUEST_HOME_ROUTES:Array<Item> = [
             return <ButtonHome label='' handlerClick={handlerClick}>
                 <></>
             </ButtonHome>
+        },
+        mainFetch:(documentId?:string)=>{
+            return useApiGetModulos();
         },
         filterList:FILTER_ITEMS_OCR_HOME
     }

@@ -5,7 +5,7 @@ import { ConectionObjectRequest } from "../conection/conectionObjectRequest";
 export class ModuloObjectRequest extends ConectionObjectRequest{
     async ModuloProcessGet(uri:string):Promise<any>{
         try {
-            const response = (await this.getData(null,uri,null)).data;
+            const response = (await this.getData(uri,null)).data;
 
             if(response.statusCodeApi===1){
                 const dataClear:Array<ModuloProcessInterface>=response.data.map((element:any)=>{
@@ -49,7 +49,7 @@ export class ModuloObjectRequest extends ConectionObjectRequest{
     }
     async EmployeersByModuloGet(uri:string, moduloId:string){
         try {
-            const response = (await this.getData(null,(uri+moduloId),null)).data;
+            const response = (await this.getData((uri+moduloId),null)).data;
             if(response.statusCodeApi===1){
                 const dataClear:Array<EmployeerProcessInterface>=response.data.map((element:any)=>{
                     return {

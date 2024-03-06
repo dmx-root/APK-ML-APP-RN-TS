@@ -2,18 +2,22 @@ import { StyleSheet, Text, View, Alert, Image}              from 'react-native';
 import { Dimensions, TouchableOpacity,ActivityIndicator }   from 'react-native';
 import { RowLeftIcon } from '../public/icons/rowLeftIcon';
 import { ProfileScreenProps } from '../interfaces/screens/screensInterfaces';
+import { useMainContext } from '../contexts/mainContext';
 // import { RoowLeft }                                         from '../iconosSvg';
 
 const {height,width}=Dimensions.get('screen');
 
 export function Profile({navigation}:any){
+
+    const contextStorage = useMainContext()?.currentUser;
+
     return <View style={profileStyle.mainLayer}>
                 <View style={profileStyle.header}>
                     <Image source={require('../public/img/transparentLogo.png')} style={profileStyle.img}/>
                     <Image source={require('../public/img/transparentLogo.png')} style={profileStyle.img}/>
                     <View style={profileStyle.headerContent}>
                         <View style={profileStyle.nameEmpty}></View>
-                        <Text style={profileStyle.name}>{'NNN'}</Text>
+                        <Text style={profileStyle.name}>{contextStorage?.nombre.slice(0,20)+'...'}</Text>
                     </View>
                 </View>
                 <View style={profileStyle.body}>
@@ -29,7 +33,7 @@ export function Profile({navigation}:any){
                             <Text style={profileStyle.titleInformation}>Documento</Text>
                         </View>
                         <View style={[profileStyle.fieldTitleContainer,{width:'60%'}]}>
-                            <Text style={{color:currentColorMain3,fontSize:height*0.02,fontWeight:'bold',marginLeft:'10%'}}>{}</Text>
+                            <Text style={{color:currentColorMain3,fontSize:height*0.02,fontWeight:'bold',marginLeft:'10%'}}>{contextStorage?.documentoid}</Text>
                         </View>
                     </View>
                     <View style={profileStyle.containerInformationHeader2}>
@@ -37,7 +41,7 @@ export function Profile({navigation}:any){
                             <Text style={profileStyle.titleInformation}>Tipo de documento</Text>
                         </View>
                         <View style={[profileStyle.fieldTitleContainer,{width:'60%'}]}>
-                            <Text style={{color:currentColorMain3,fontSize:height*0.02,fontWeight:'bold',marginLeft:'10%'}}></Text>
+                            <Text style={{color:currentColorMain3,fontSize:height*0.02,fontWeight:'bold',marginLeft:'10%'}}>{contextStorage?.tipoDocumento}</Text>
                         </View>
                     </View>
                     <View style={profileStyle.containerInformationHeader2}>
@@ -45,7 +49,7 @@ export function Profile({navigation}:any){
                             <Text style={profileStyle.titleInformation}>Fecha de creación</Text>
                         </View>
                         <View style={[profileStyle.fieldTitleContainer,{width:'60%'}]}>
-                            <Text style={{color:currentColorMain3,fontSize:height*0.02,fontWeight:'bold',marginLeft:'10%'}}>{}</Text>
+                            <Text style={{color:currentColorMain3,fontSize:height*0.02,fontWeight:'bold',marginLeft:'10%'}}>{contextStorage?.creacionFecha.toLocaleString().slice(0,10)}</Text>
                         </View>
                     </View>
                     <View style={profileStyle.containerInformationHeader2}>
@@ -53,7 +57,7 @@ export function Profile({navigation}:any){
                             <Text style={profileStyle.titleInformation}>Descripción</Text>
                         </View>
                         <View style={[profileStyle.fieldTitleContainer,{width:'60%'}]}>
-                            <Text style={{color:currentColorMain3,fontSize:height*0.02,fontWeight:'bold',marginLeft:'10%'}}>{}</Text>
+                            <Text style={{color:currentColorMain3,fontSize:height*0.02,fontWeight:'bold',marginLeft:'10%'}}>{contextStorage?.descripcion}</Text>
                         </View>
                     </View>
                     {/* <View style={profileStyle.root}></View> */}
@@ -62,7 +66,7 @@ export function Profile({navigation}:any){
                     <Image source={require('../public/img/photo-profile.jpg')} style={profileStyle.photoProfile}/>
                 </View>
                 <View style={profileStyle.buttonMenu}>
-                    <TouchableOpacity onPress={()=>{}}>
+                    <TouchableOpacity onPress={()=>{navigation.navigate('HomeOcr')}}>
                         <RowLeftIcon color='#FFF' size={50} width={2}/>
                     </TouchableOpacity>
                 </View>

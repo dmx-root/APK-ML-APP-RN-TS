@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { accountNavigators }            from '../../app/navigators/accountNavigators';
-import {account} from '../../app/navigators/accountNavigators'
-import { useMainContext } from '../../contexts/mainContext';
+import { accountNavigators }    from '../../app/navigators/accountNavigators';
+import { account }              from '../../interfaces/controller/navigator';
+import { useMainContext }       from '../../contexts/mainContext';
+import { useState }             from 'react';
 
 export const useGetAccount = () => {
 
@@ -21,5 +21,6 @@ export const useGetAccount = () => {
     const removeSesion = () => {
         setAccount(accountNavigators['auth'])
     };
+
     return { account, setSesion, removeSesion }
 }

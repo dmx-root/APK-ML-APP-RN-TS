@@ -11,29 +11,29 @@ import { LoadingComponent }                                             from '..
 import { MainOcrComponent }                                             from '../components/mainOcrComponent';
 import { useApiGetOcrByUser }                                           from '../controllers/hooks/customHookGetOcrByUser';
 import { EmptyComponent }                                               from '../components/emptyComponent';
-import { useApiGetAuthOperations }                                      from '../controllers/hooks/customHookGetAuthOperations';
+import { ModalOcrInfo }                                                 from '../modals/modalOcrInfo';
+import { OcrProcessesInterface }                                        from '../interfaces/services/ml_api/ocrInterfaces';
+import { ModalRegisterOcrCurrentOp }                                    from '../modals/modalRegisterOcrCurrentOp';
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList}   from 'react-native';
+import { ButtonHome }                                                   from '../components/buttonHome';
+import { Item }                                                         from '../interfaces/app/homeRoutes';
 import { useState }                                                     from 'react';
-import { ModalOcrInfo } from '../modals/modalOcrInfo';
-import { OcrProcessesInterface } from '../interfaces/services/ml_api/ocrInterfaces';
-import { ModalRegisterOcrCurrentOp } from '../modals/modalRegisterOcrCurrentOp';
-import { ButtonHome } from '../components/buttonHome';
 
 const {height,width}=Dimensions.get('screen');
 
 export function HomeOcr({navigation}:any){
 
     const contextStorage = useMainContext();
-    const {state} = useApiGetOcrByUser('1146441925');// Id del usuario 
+    // const {state} = useApiGetOcrByUser('1146441925');// Id del usuario 
 
     const [asideState,setAsideState] = useState<boolean>(false);
     const [newRegister,setNewRegister] = useState<boolean>(false);
     const [newCurrentRegister,setNewCurrentRegister] = useState<boolean>(false);
-
     const [modalInfoState,setModalInfoState] = useState<boolean>(false);
-    
     const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);
-    
+
+    const {state} =contextStorage?.account?.home?.[0].mainFetch('1146441925')
+
     return<>
     <View style={{height,width}}>
         <View style={StyleMainWindow.backRoots}></View>

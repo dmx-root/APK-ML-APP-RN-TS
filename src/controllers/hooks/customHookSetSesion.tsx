@@ -1,7 +1,6 @@
 import { statusApi}                     from '../../interfaces/services/ml_api/apiResponse';
-import { useMainContext }               from '../../contexts/mainContext';
 import { handlerSaveValueLocalStorage } from '../helpers/handlerValueLocalStorage';
-import { handlerGetSesion }             from '../helpers/handlerGetSesion';
+import { useSetSesion }                 from '../helpers/handlerSetSesion';
 import { handlerGetAuth }               from '../helpers/handlerGetAuth';
 import { useReducer }                   from 'react';
 
@@ -35,7 +34,7 @@ const dataReducer = (state: sesionState, action: ApiAction): sesionState => {
     }
 };
   
-export const useSetSesion = (): { state: sesionState; setDataAuth: (documentId:string,password:string,passwordSaveSate:boolean) => void } => {
+export const useHandlerSesion = (): { state: sesionState; setDataAuth: (documentId:string,password:string,passwordSaveSate:boolean) => void } => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -43,36 +42,65 @@ export const useSetSesion = (): { state: sesionState; setDataAuth: (documentId:s
         error: null,
     });
 
-    const contextStorage = useMainContext();
+    const { setSesion } = useSetSesion();
 
     async function setDataAuth(documentId:string,password:string,passwordSaveSate:boolean):Promise<void>{
-        console.log(passwordSaveSate)
         try {
             dispatch({ type: actionTypes.FETCH_INIT });
+
             const data = await handlerGetAuth(documentId, password);
+
             if(data.statusCodeApi===1){
-                const account = handlerGetSesion(data.data.userProfileId);
-                if(account.id!==0){ 
-                    contextStorage?.setAccount(account);
-                    contextStorage?.setCurrentUser({
-                        nombre:data.data.userName,
-                        documentoid:data.data.userDocumentId,
-                        tipoDocumento:data.data.userDocumentType,
-                        rolId:data.data.userProfileId,
-                        rolNombre:data.data.userDocumentId,
-                        descripcion:data.data.userDescription,
-                        creacionFecha:data.data.userCreteDate 
-                    });
+
+                const response=setSesion(data.data);
+
+                if(response.statusCode===1){
                     if(passwordSaveSate){
+
                         await handlerSaveValueLocalStorage("token",data.toke);
+                        dispatch({ type: actionTypes.FETCH_SUCCESS,payload:{
+                            statusCodeApi: 1,
+                            statusMessageApi: response.statusMessage
+                        }});
+
+                    }else{
+
+                        dispatch({ type: actionTypes.FETCH_FAILURE,payload:{
+                            statusCodeApi: 0,
+                            statusMessageApi: "Error al intentar guardar los datos en local storage"
+                        }});
+
                     }
                 }
+
                 else{
-                    dispatch({ type: actionTypes.FETCH_FAILURE, payload:{
+                    dispatch({ type: actionTypes.FETCH_FAILURE,payload:{
                         statusCodeApi: -1,
-                        statusMessageApi: "Error al intentar establecer la sesión"
+                        statusMessageApi: response.statusMessage
                     }});
                 }
+                // const account = handlerGetSesion(data.data.userProfileId);
+                // if(account.id!==0){ 
+                //     contextStorage?.setAccount(account);
+                //     contextStorage?.setCurrentUser({
+                //         nombre:data.data.userName,
+                //         documentoid:data.data.userDocumentId,
+                //         tipoDocumento:data.data.userDocumentType,
+                //         rolId:data.data.userProfileId,
+                //         rolNombre:data.data.userDocumentId,
+                //         descripcion:data.data.userDescription,
+                //         creacionFecha:data.data.userCreteDate 
+                //     });
+                //     if(passwordSaveSate){
+                //         await handlerSaveValueLocalStorage("token",data.toke);
+                //     }
+                // }
+                // else{
+                //     dispatch({ type: actionTypes.FETCH_FAILURE, payload:{
+                //         statusCodeApi: -1,
+                //         statusMessageApi: "Error al intentar establecer la sesión"
+                //     }});
+                // }
             }
             else{
                 dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});

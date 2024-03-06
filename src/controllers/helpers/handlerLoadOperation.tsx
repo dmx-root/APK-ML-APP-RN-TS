@@ -1,6 +1,5 @@
 import { OperationInterface, newOperation } from "../../interfaces/view/production";
 
-
 export const handlerLoadOperation:(dataForm:any)=>OperationInterface = (dataForm:any) => {
     
     const operationData: OperationInterface={

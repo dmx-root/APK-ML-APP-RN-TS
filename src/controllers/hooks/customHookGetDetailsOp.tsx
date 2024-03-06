@@ -2,7 +2,7 @@ import { get_detail_op }                from '../../endpoints/ml_api/restApiMuje
 import { OpDetail }                     from '../../interfaces/services/ml_api/detailOpInteface';
 import { OpObjectRequest }              from '../../services/ml_api/request/opObjectRequest';
 import { useReducer }                   from 'react';
-import { handlerSaveObjectLocalStorage } from '../helpers/handlerSaveObjectLocalStorage';
+import { handlerSaveObjectLocalStorage } from '../helpers/handlerObjectLocalStorage';
 
 //  Doc 
 //  Este reducer tiene la finalidad de solicitar la lista de detalles de la Op que le sea solicitada 
@@ -59,7 +59,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
             const data=await apiQuery.DetailOpGet(get_detail_op,op);
             if(data.statusCodeApi===1){
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data });
-                handlerSaveObjectLocalStorage('currentOp',data.data)
+                // handlerSaveObjectLocalStorage('currentOp',data.data);
             }
             else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data?.statusMessageApi})
            
