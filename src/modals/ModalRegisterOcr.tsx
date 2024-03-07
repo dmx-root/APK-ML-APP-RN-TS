@@ -12,23 +12,18 @@ import { ModalLoading }                     from "./modalLoading";
 import { ModalAlert }                       from "./modalAlert";
 import { Alert, GestureResponderEvent }     from 'react-native';
 import { useState }                         from "react";
-import { useSetOperation } from "../controllers/hooks/customHookSetOperation";
+import { useSetOperation }                  from "../controllers/hooks/customHookSetOperation";
 import { handlerGetSavedObjectLocalStorage, handlerRemoveSavedObjectLocalStorage } from "../controllers/helpers/handlerObjectLocalStorage";
 
 export function ModalRegisterOcr({handlerClick,navigation}:{
     handlerClick:(event:GestureResponderEvent)=>void,
-    navigation:any
+    navigation:any,
 }){
 
     const [ dataForm, setDataForm ] = useState<form|null>(null);
     const [ alertState, setAlertState ] = useState<boolean>(false);
     const { state, setDataOperation } = useSetOperation();
-    // const [ operationData, setOperationData] = useState<OperationInterface>(newOperation)
-    // const { state, fetchDataDetailsOp } = useApiGetDetailsOp();
-    // const { loadDataLocalStorage } = useLocalStorageLoadData();
-
-    // console.log(state)
-
+  
     return<>
         {state.loading?
         <ModalLoading 
@@ -86,16 +81,14 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
 
                         const operationData: OperationInterface={
                             ...newOperation,
-                            op:dataForm?.['opType']+dataForm?.['op'],
-                            moduloId:dataForm?.['modulo'],
-                            inicioOperacion:new Date().toLocaleTimeString(),
-                            fechaRegistro:new Date().toLocaleDateString(),
-                            registradoPor:'1146441925'
+                            op:                 dataForm?.['opType']+dataForm?.['op'],
+                            moduloId:           dataForm?.['modulo'],
+                            inicioOperacion:    new Date().toLocaleTimeString(),
+                            fechaRegistro:      new Date().toLocaleDateString(),
+                            registradoPor:      '1146441925'
                         }
 
-                        // fetchDataDetailsOp(`${dataForm?.['opType']}${dataForm?.['op']}`);
-                        // loadDataLocalStorage('currentOcr',operationData);
-                        setDataOperation(`${dataForm?.['opType']}${dataForm?.['op']}`,navigation);
+                        setDataOperation(`${dataForm?.['opType']}${dataForm?.['op']}`,operationData,navigation);
                         // handlerClick(e)
                     }
                     else {

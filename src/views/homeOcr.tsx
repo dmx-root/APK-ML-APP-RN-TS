@@ -18,6 +18,9 @@ import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList}   from 're
 import { ButtonHome }                                                   from '../components/buttonHome';
 import { Item }                                                         from '../interfaces/app/homeRoutes';
 import { useState }                                                     from 'react';
+import { useLocalStorageGetData } from '../controllers/hooks/customHookGetDataLocalStorage';
+import { useRemoveDataOperation } from '../controllers/hooks/customHookRemoveOperation';
+import { handlerRemoveSavedObjectLocalStorage } from '../controllers/helpers/handlerObjectLocalStorage';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -28,11 +31,16 @@ export function HomeOcr({navigation}:any){
 
     const [asideState,setAsideState] = useState<boolean>(false);
     const [newRegister,setNewRegister] = useState<boolean>(false);
-    const [newCurrentRegister,setNewCurrentRegister] = useState<boolean>(false);
+    const [newCurrentRegister,setNewCurrentRegister] = useState<boolean>(true);
     const [modalInfoState,setModalInfoState] = useState<boolean>(false);
     const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);
 
-    const {state} =contextStorage?.account?.home?.[0].mainFetch('1146441925')
+    const {state} =contextStorage?.account?.home?.[0].mainFetch('1146441925');
+    const currentOcr = useLocalStorageGetData('currentOcr');
+    const currentOp = useLocalStorageGetData('currentOp');
+
+    console.log(currentOcr.state.data);
+    console.log(currentOp.state.data);
 
     return<>
     <View style={{height,width}}>
@@ -118,10 +126,28 @@ export function HomeOcr({navigation}:any){
         <></>
     }
     {
+        newRegister&&newCurrentRegister&&currentOcr.state.data&&currentOp.state.data?
+        <ModalRegisterOcrCurrentOp 
+        data={currentOcr.state.data}
+        handlerClose={()=>{
+            setNewCurrentRegister(false);
+        }}
+        handlerNext={()=>{
+
+        }}
+        handlerBack={()=>{
+            handlerRemoveSavedObjectLocalStorage('currentOcr');
+            handlerRemoveSavedObjectLocalStorage('currentOp');
+            setNewCurrentRegister(false);
+        }}
+        />:
         newRegister?
-        <ModalRegisterOcr handlerClick={()=>setNewRegister(false)} navigation={navigation}/>:
+        <ModalRegisterOcr 
+        handlerClick={()=>setNewRegister(false)} 
+        navigation={navigation}/>:
         <></>
     }
+
     {
         modalInfoState?
         <ModalOcrInfo 
@@ -132,13 +158,7 @@ export function HomeOcr({navigation}:any){
         }}/>:
         <></>
     }
-    {
-        newCurrentRegister?
-        <ModalRegisterOcrCurrentOp handlerClick={()=>{
-            setNewCurrentRegister(false);
-        }}/>:
-        <></>
-    }
+
     </>
 }
 

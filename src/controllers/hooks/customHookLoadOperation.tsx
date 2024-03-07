@@ -1,4 +1,4 @@
-import { DetailProcessResponseInterface, OpDetail }                     from '../../interfaces/services/ml_api/detailOpInteface';
+import { DetailProcessResponseInterface, OpDetail }   from '../../interfaces/services/ml_api/detailOpInteface';
 import { useReducer }                   from 'react';
 import { handlerGetDetailsOp } from '../helpers/handlerGetDetailsOp';
 import { statusApi } from '../../interfaces/services/ml_api/apiResponse';
@@ -37,7 +37,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
   
-   export const useSetOperation = (): { state: ApiState; setDataOperation: (op:string, operation:OperationInterface, navigation:any) => void } => {
+   export const useLoadDataOperation = (): { state: ApiState; loadDataOperation: (operation:OperationInterface | null,detailsOp:Array<OpDetail>, navigation:any) => void } => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -45,23 +45,41 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         error: null,
     });
 
-    async function setDataOperation(op:string, operation:OperationInterface, navigation:any):Promise<void>{
+    async function loadDataOperation(operation:OperationInterface | null, detailsOp:Array<OpDetail>, navigation:any):Promise<void>{
         try {
 
             dispatch({ type: actionTypes.FETCH_INIT });
-            const response:DetailProcessResponseInterface = await handlerGetDetailsOp(op);
 
-            if(response.statusCodeApi===1){
+            if(operation){
+                const ocr:OperationInterface={
+                    ...operation,
+                    cantidad:0,
+                    fechaRegistro:'',
+                    inicioOperacion:'',
+                    finOperacion:'',
+                }
+                
+                await handlerSaveObjectLocalStorage('currentOcr',ocr); // Reestablecemos la operacion en el local estorage
 
-                await handlerSaveObjectLocalStorage('currentOp',response.data);
-                await handlerSaveObjectLocalStorage('currentOcr',operation);
-                navigation.navigate('Production');
+                const modifyValue = detailsOp.map(element=>{
+                    if (element.ean===operation.ean){
+                        return {
+                            ...element,
+                            opLoteCompletado:++operation.cantidad
+                        }
+                    }
+                    return element;
+                });
+
+                await handlerSaveObjectLocalStorage('currentOp', modifyValue); // alteramos la informacion del local estorage 
+                
+                // await handlerSaveObjectLocalStorage('detailOp',modifyValue);
+
                 dispatch({ type: actionTypes.FETCH_SUCCESS});
 
             }else{
-                dispatch({ type: actionTypes.FETCH_FAILURE,payload:response});
+                dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Falló la carga de la información en el local storage'});
             }
-
         } catch (error) {
             console.log(error)
             dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error de proceso'});
@@ -69,5 +87,5 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         }
     };
   
-    return { state, setDataOperation };
+    return { state, loadDataOperation };
 };

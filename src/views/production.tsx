@@ -1,7 +1,7 @@
 import { useLocalStorageGetData }                               from '../controllers/hooks/customHookGetDataLocalStorage';
 import { ProductionScreenProps }                                from '../interfaces/screens/screensInterfaces';
 import { ModalProductionRegister }                              from '../modals/modalProductionRegister';
-import { OperationInterface }                                   from '../interfaces/view/production';
+import { OperationInterface, newOperation }                     from '../interfaces/view/production';
 import { InfoLineButton }                                       from '../components/InfoLineButton';
 import { InfoLineDouble }                                       from '../components/infoLineDouble';
 import { RowLeftIcon }                                          from '../public/icons/rowLeftIcon';
@@ -15,21 +15,29 @@ import { InfoLine }                                             from '../compone
 import { OpIcon }                                               from '../public/icons/opIcon';
 import { LoadingComponent }                                     from '../components/loadingComponent';
 import { useMainContext }                                       from '../contexts/mainContext';
-import { View,StyleSheet, Dimensions, TouchableOpacity, Text }  from 'react-native';
-import { useState }                                             from 'react';
-import { ModalLoading } from '../modals/modalLoading';
+import { ModalLoading }                                         from '../modals/modalLoading';
+import { InfoLineButton2 }                                      from '../components/InfoLineButton2';
+import { View,StyleSheet, Dimensions, TouchableOpacity, Text, Alert }   from 'react-native';
+import { useState }                                                     from 'react';
+import { useLoadDataOperation } from '../controllers/hooks/customHookLoadOperation';
+import { useRemoveDataOperation } from '../controllers/hooks/customHookRemoveOperation';
 
 const {height,width}=Dimensions.get('screen');
 
 export function Production({navigation}:any){
+    
+    const contextStorage = useMainContext();
 
     const opDetails = useLocalStorageGetData('currentOp');
     const operation = useLocalStorageGetData('currentOcr');
-    const contextStorage = useMainContext();
-    console.log(operation.state)
+
+    const loadData = useLoadDataOperation();
+    const removeData = useRemoveDataOperation();
 
     const [ operationData, setOperationData ] = useState<OperationInterface|null>(null);
     const [ modalRegisterState,setModalRegisterState ] = useState(false);
+
+    // console.log(state)
 
     return<>
             <View style={productionStyle.productionContainer}>
@@ -42,58 +50,72 @@ export function Production({navigation}:any){
                                 <FieldInfo label='Información de operario' color='#44329C'>
                                     <UserIcon color='#44329C' size={24} width={2}/>
                                 </FieldInfo>
-                                <InfoLine title='Fecha' content={operation.state.data.fechaRegistro}/>
-                                <InfoLineDouble title1='Nombre de Operario' content1={contextStorage?.currentUser?.nombre||'No definido'} title2='Documento' content2={contextStorage?.currentUser?.documentoid||'No definido'}/>
+                                <InfoLine title='Operario' content={contextStorage?.currentUser?.nombre||'No definido'}/>
+                                <InfoLineDouble title1='Fecha de registro' content1={operation.state.data.fechaRegistro} title2='Hora de inicio' content2={operation.state.data.inicioOperacion||'No Def'}/>
                             
                             </ViewContainer>
                             <ViewContainer>
-                                <FieldInfo label='Información de la OP' color='#44329C'>
+                                <FieldInfo label={`Información de OP por talla y color`} color='#44329C'>
                                     <OpIcon color='#44329C' size={24} width={2}/>
                                 </FieldInfo>
-                                <InfoLine title='OP' content={''}/>
-                                <InfoLineDouble title1='Planeado' content1={''} title2='Ejecutado' content2='254'/>
+                                <InfoLine title='OP en proceso' content={operation.state.data.op||'No Def'}/>
+                                <InfoLineDouble title1='Planeado' content1={opDetails.state.data[0].opLotePlaneado||'No Def'} title2='Ejecutado' content2={opDetails.state.data[0].opLoteCompletado}/>
                         
                                 <FieldInfo label='Informacion del MÓDULO' color='#44329C'>
                                     <ModuloIcon color='#44329C' size={24} width={2}/>
                                 </FieldInfo>
-                                <InfoLine title='MODULO' content='Modulo-1'/>
-                                <InfoLineDouble title1='Planeado' content1='3000' title2='Ejecutado' content2='254'/>
+                                <InfoLine title='MODULO en proceso' content={operation.state.data.moduloId?`Modulo-${operation.state.data.moduloId}`:'No Def'}/>
+                                <InfoLineDouble title1='Planeado' content1='- - -   - - -   - - -   - - -' title2='Ejecutado' content2='- - -   - - -   - - -   - - -'/>
                             </ViewContainer>
                             <ViewContainer>
                                 <FieldInfo label='Registro Actual' color='#44329C'>
                                     <OcrIcon color='#44329C' size={24} width={2}/>
                                 </FieldInfo>
-                                <InfoLineDouble title1='Color' content1='Piel' title2='COD-Color' content2='1204'/>
-                                <InfoLine title='TALLA' content='XL'/>
-                                <InfoLine title='EAN' content='11454112441'/>
-                                {/* <InfoLineDouble title1='Talla' content1='XL' title2='' content2=''/> */}
-                                {/* <InfoLine title='Cantidad Registrada' content='30'/> */}
-                            
-                                {/* <FieldInfo label='Registro Actual' color='#44329C'>
-                                    <OcrIcon color='#44329C' size={24} width={2}/>
-                                </FieldInfo> */}
-                                <InfoLineButton colorBtn='#44329C' fontBtn='#FFF' labelBtn='Editar...' handlerClick={()=>{}} title='Cantidad Registrada' content='Editar'/>
-                                <InfoLineButton colorBtn='#44329C' fontBtn='#FFF' labelBtn='Editar...' handlerClick={()=>{}} title='Parada Inmediata' content='Sin Eventos'/>
-                                <InfoLineButton colorBtn='#44329C' fontBtn='#FFF' labelBtn='Registrar...' handlerClick={()=>{setModalRegisterState(true)}} title='Ingreso de unidades' content='Sin Registros'/>
+                                <InfoLineDouble title1='Color' content1={operation.state.data.colorEtiqueta||operationData?.colorEtiqueta||'No asignado aún'} title2='COD-Color' content2={operation.state.data.colorId||operationData?.colorId||'No asignado aún'}/>
+                                <InfoLine title='TALLA EN PROCESO' content={operation.state.data.tallaId||operationData?.tallaId||'Sin registros aún'}/>
+                                <InfoLine title='EAN EN PROCESO' content={operation.state.data.ean||operationData?.ean||'Sin registros aún'}/>
+                                <InfoLineButton colorBtn='#44329C' fontBtn='#FFF' labelBtn='Editar...' title='Cantidad Registrada' content={operationData?.cantidad.toString()||'No asignado aún'}  
+                                handlerClick={()=>{
+                                    if(operationData?.cantidad){
+                                        console.log(operationData?.cantidad)
+                                    }else{
+                                        Alert.alert('!Acción no permitida!','No se puede editar el campo si aún no se ha generado registros')
+                                    }
+                                }} />
+                                <InfoLineButton2 colorBtn='#44329C' fontBtn='#FFF' labelBtn='Registrar...' title='Ingreso de unidades'
+                                handlerClick={()=>{
+                                    setModalRegisterState(true);
+                                    setOperationData(operation.state.data);
+                                }}/>
+                                <InfoLineButton2 colorBtn='#44329C' fontBtn='#FFF' labelBtn='Editar...' title='Agregar parada Inmediata' 
+                                handlerClick={()=>{
+
+                                }}/>
                             </ViewContainer>
                         </>
                     }
                 </View>
 
                 <View style={productionStyle.footer}>
-                    <TouchableOpacity style={[productionStyle.button,{backgroundColor:'#C7CCEC'}]} onPress={()=>{navigation.navigate('HomeOcr')}}>
+                    <TouchableOpacity style={[productionStyle.button,{backgroundColor:'#C7CCEC'}]} onPress={()=>{
+                            removeData.removeDataOperation(navigation)
+                        }}>
                         <RowLeftIcon color="#44329C" size={30} width={2}/>
                         <Text style={{color:'#44329C',fontSize:18,fontWeight:'600', marginLeft:'5%'}}>Cancelar</Text>
                     </TouchableOpacity>
+
                     <TouchableOpacity style={productionStyle.button}>
                         <SendIcon color="#FFF" size={30} width={2}/>
-                        <Text style={{color:'#FFF',fontSize:18,fontWeight:'600', marginLeft:'5%'}}>Enviar Información</Text>
+                        <Text style={{color:'#FFF',fontSize:18,fontWeight:'600', marginLeft:'5%'}} onPress={()=>{
+                            loadData.loadDataOperation(operationData,opDetails.state.data,navigation);
+                        }}>Enviar Información</Text>
                     </TouchableOpacity>
                 </View>
             </View>
             {
                 modalRegisterState?
                 <ModalProductionRegister 
+                opDetails={opDetails.state.data}
                 operationData={operationData}
                 setOperationData={setOperationData}
                 handlerClick={()=>{setModalRegisterState(false)}}
@@ -102,7 +124,9 @@ export function Production({navigation}:any){
             }
             {
                 opDetails.state.loading||operation.state.loading?
-                <ModalLoading label='Cargando información del proceso...' handlerClick={()=>{}}/>:
+                <ModalLoading 
+                label='Cargando información del proceso...' 
+                handlerClick={()=>{}}/>:
                 <></>
             }
     </>

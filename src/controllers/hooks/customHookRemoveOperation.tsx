@@ -1,9 +1,7 @@
-import { DetailProcessResponseInterface, OpDetail }                     from '../../interfaces/services/ml_api/detailOpInteface';
+import { OpDetail }   from '../../interfaces/services/ml_api/detailOpInteface';
 import { useReducer }                   from 'react';
-import { handlerGetDetailsOp } from '../helpers/handlerGetDetailsOp';
-import { statusApi } from '../../interfaces/services/ml_api/apiResponse';
-import { handlerSaveObjectLocalStorage } from '../helpers/handlerObjectLocalStorage';
 import { OperationInterface } from '../../interfaces/view/production';
+import { handlerRemoveSavedObjectLocalStorage } from '../helpers/handlerObjectLocalStorage';
 
 
 const actionTypes = {
@@ -37,7 +35,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
   
-   export const useSetOperation = (): { state: ApiState; setDataOperation: (op:string, operation:OperationInterface, navigation:any) => void } => {
+   export const useRemoveDataOperation = (): { state: ApiState; removeDataOperation: ( navigation:any) => void } => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -45,23 +43,15 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         error: null,
     });
 
-    async function setDataOperation(op:string, operation:OperationInterface, navigation:any):Promise<void>{
+    async function removeDataOperation( navigation:any):Promise<void>{
         try {
 
             dispatch({ type: actionTypes.FETCH_INIT });
-            const response:DetailProcessResponseInterface = await handlerGetDetailsOp(op);
-
-            if(response.statusCodeApi===1){
-
-                await handlerSaveObjectLocalStorage('currentOp',response.data);
-                await handlerSaveObjectLocalStorage('currentOcr',operation);
-                navigation.navigate('Production');
-                dispatch({ type: actionTypes.FETCH_SUCCESS});
-
-            }else{
-                dispatch({ type: actionTypes.FETCH_FAILURE,payload:response});
-            }
-
+            await handlerRemoveSavedObjectLocalStorage('currentOcr');
+            await handlerRemoveSavedObjectLocalStorage('currentOp')
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload:'Elementos eliminados correctamente' });
+            navigation.navigate('HomeOcr')
+            
         } catch (error) {
             console.log(error)
             dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error de proceso'});
@@ -69,5 +59,5 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         }
     };
   
-    return { state, setDataOperation };
+    return { state, removeDataOperation };
 };

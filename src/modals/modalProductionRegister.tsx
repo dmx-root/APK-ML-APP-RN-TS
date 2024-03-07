@@ -1,17 +1,64 @@
-import { ButtonFullWidth }                                          from '../components/buttonFullWidth';
-import { OperationInterface }                                       from '../interfaces/view/production';
-import { ModalContainer }                                           from '../components/modalContainer';
-import { Modal }                                                    from '../components/modal';
-import { StyleSheet, View, Text, GestureResponderEvent, TextInput}  from 'react-native';
-import { useState }                                                 from 'react';
+import { OpDetail }                                                     from '../interfaces/services/ml_api/detailOpInteface';
+import { ButtonFullWidth }                                              from '../components/buttonFullWidth';
+import { OperationInterface, newOperation }                             from '../interfaces/view/production';
+import { ModalContainer }                                               from '../components/modalContainer';
+import { Modal }                                                        from '../components/modal';
+import { StyleSheet,View,Text,GestureResponderEvent, TextInput, Alert}  from 'react-native';
+import { useEffect, useState }                                          from 'react';
+import { handlerSaveObjectLocalStorage } from '../controllers/helpers/handlerObjectLocalStorage';
 
-export function ModalProductionRegister({handlerClick, operationData, setOperationData}:{
-    handlerClick:(event:GestureResponderEvent)=>void,
-    setOperationData: React.Dispatch<React.SetStateAction<OperationInterface | null>>
-    operationData: OperationInterface | null,
+export function ModalProductionRegister({
+    handlerClick, 
+    setOperationData, 
+    operationData, 
+    opDetails
+}:{
+    handlerClick:       (event:GestureResponderEvent)=>void,
+    setOperationData:   React.Dispatch<React.SetStateAction<OperationInterface | null>>
+    operationData:      OperationInterface | null,
+    opDetails:          Array<OpDetail>
 }){
-    const [ cant, setCant] = useState<number>(0);
-    const [ value, setValue] = useState<string>('')
+
+    const [ value, setValue ] = useState<string>(''); 
+    // const [ currentOpDetail, setCurrentOpDetail ] = useState<OpDetail | null>(null)   
+
+    // console.log(operationData)
+
+    useEffect(()=>{
+        // Test value -> 7705531160577 para MOB3548
+
+        if(value.length>12){// validamos la longitud de caracteres ingresados en el código de barras
+            setValue('');
+
+            if(operationData&&!operationData.cantidad){// validamos el primer registro 
+
+                const response = opDetails.find(element=>element.ean===value);// se busca la coincidencia entre el elemento leído y el elemento cargado
+                
+                if(response&&operationData){ // validamos si el ean ingresado pertenece a las listas de OP's proporcionadas
+                    
+                    setOperationData({ // establecemos la información inicial
+                        ...operationData,
+                        colorEtiqueta:  response.colorEtiqueta,
+                        colorId:        response.colorCodigo,
+                        ean:            response.ean,
+                        tallaId:        response.talla,
+                        refererncia:    response.referencia,
+                        cantidad:       1,
+                    });
+                }
+            }else{
+                if(operationData&&operationData.ean===value){// validamos si la informacion 
+    
+                    setOperationData({ // Se da inicio al conteo de prendas 
+                        ...operationData,
+                        cantidad:(operationData.cantidad+1)
+                    });
+                }else{
+                    Alert.alert('¡Error en la lectura de los datos!', 'La prenda ingresada no pertenece a la OP seleccionada')
+                }
+            }
+        }
+    },[value]);
 
     return <Modal handlerClick={handlerClick}>
                 <ModalContainer color='#FFF'>
@@ -21,13 +68,13 @@ export function ModalProductionRegister({handlerClick, operationData, setOperati
                                 <Text style={prodRegister.title}>COLOR</Text>
                             </View>
                             <View style={prodRegister.column}>
-                                <Text style={prodRegister.title}>{operationData?.colorEtiqueta.slice(0,10)}</Text>
+                                <Text style={prodRegister.title}>{operationData?.colorEtiqueta.slice(0,10)||'No asignado'}</Text>
                             </View>
                             <View style={prodRegister.column}>
                                 <Text style={prodRegister.title}>EAN</Text>
                             </View>
                             <View style={prodRegister.column}>
-                                <Text style={prodRegister.title}>{operationData?.ean}</Text>
+                                <Text style={prodRegister.title}>{operationData?.ean||'No asignado'}</Text>
                             </View>
                         </View>
                         <View style={prodRegister.row}>
@@ -35,13 +82,13 @@ export function ModalProductionRegister({handlerClick, operationData, setOperati
                                 <Text style={prodRegister.title}>TALLA</Text>
                             </View>
                             <View style={prodRegister.column}>
-                                <Text style={prodRegister.title}>{operationData?.tallaId}</Text>
+                                <Text style={prodRegister.title}>{operationData?.tallaId||'No asignado'}</Text>
                             </View>
                             <View style={prodRegister.column}>
                                 <Text style={prodRegister.title}>UNIDADES</Text>
                             </View>
                             <View style={prodRegister.column}>
-                                <Text style={prodRegister.title}>{operationData?.cantidad}</Text>
+                                <Text style={prodRegister.title}>{operationData?.cantidad||0}</Text>
                             </View>
                         </View>
                         <View style={prodRegister.row}>
@@ -50,10 +97,7 @@ export function ModalProductionRegister({handlerClick, operationData, setOperati
                             </View>
                             <TextInput 
                             style={[prodRegister.column,{width:'50%'}]}
-                            onChangeText={(text)=>{
-                                setValue(text);
-                                console.log(text)
-                            }}
+                            onChangeText={(text)=>setValue(text)}
                             value={value}
                             />
                         </View>
