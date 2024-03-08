@@ -1,9 +1,9 @@
-import { DetailProcessResponseInterface, OpDetail }                     from '../../interfaces/services/ml_api/detailOpInteface';
-import { useReducer }                   from 'react';
-import { handlerGetDetailsOp } from '../helpers/handlerGetDetailsOp';
-import { statusApi } from '../../interfaces/services/ml_api/apiResponse';
-import { handlerSaveObjectLocalStorage } from '../helpers/handlerObjectLocalStorage';
-import { OperationInterface } from '../../interfaces/view/production';
+import { DetailProcessResponseInterface, OpDetail }     from '../../interfaces/services/ml_api/detailOpInteface';
+import { useReducer }                                   from 'react';
+import { handlerGetDetailsOp }                          from '../helpers/handlerGetDetailsOp';
+import { statusApi }                                    from '../../interfaces/services/ml_api/apiResponse';
+import { handlerSaveObjectLocalStorage }                from '../helpers/handlerObjectLocalStorage';
+import { OperationInterface }                           from '../../interfaces/view/production';
 
 
 const actionTypes = {
@@ -37,7 +37,13 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
   
-   export const useSetOperation = (): { state: ApiState; setDataOperation: (op:string, operation:OperationInterface, navigation:any) => void } => {
+// Este compoenente tiene la finalidad de cargar la información en el almacenamiento local
+// Una vez se ha cargado la informacion se cambia a la vista de producción 
+// recibe como parámetros de entrada:
+// op: la orden de produccion a la cual se le solicita cada uno de sus detalles 
+// operation: es la información relacionada con la operación en produccion 
+
+export const useSetOperation = (): { state: ApiState; setDataOperation: (op:string, operation:OperationInterface, navigation:any) => void } => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -54,8 +60,9 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
             if(response.statusCodeApi===1){
 
                 await handlerSaveObjectLocalStorage('currentOp',response.data);
-                await handlerSaveObjectLocalStorage('currentOcr',operation);
-                navigation.navigate('Production');
+                await handlerSaveObjectLocalStorage('currentModulo',operation.moduloId);
+
+                navigation.navigate('Production',operation);
                 dispatch({ type: actionTypes.FETCH_SUCCESS});
 
             }else{

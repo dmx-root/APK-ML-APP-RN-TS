@@ -1,9 +1,7 @@
-import { DetailProcessResponseInterface, OpDetail }   from '../../interfaces/services/ml_api/detailOpInteface';
-import { useReducer }                   from 'react';
-import { handlerGetDetailsOp } from '../helpers/handlerGetDetailsOp';
-import { statusApi } from '../../interfaces/services/ml_api/apiResponse';
-import { handlerSaveObjectLocalStorage } from '../helpers/handlerObjectLocalStorage';
-import { OperationInterface } from '../../interfaces/view/production';
+import {  OpDetail }                        from '../../interfaces/services/ml_api/detailOpInteface';
+import { OperationInterface }               from '../../interfaces/view/production';
+import { handlerSaveObjectLocalStorage }    from '../helpers/handlerObjectLocalStorage';
+import { useReducer }                       from 'react';
 
 
 const actionTypes = {
@@ -51,30 +49,19 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
             dispatch({ type: actionTypes.FETCH_INIT });
 
             if(operation){
-                const ocr:OperationInterface={
-                    ...operation,
-                    cantidad:0,
-                    fechaRegistro:'',
-                    inicioOperacion:'',
-                    finOperacion:'',
-                }
                 
-                await handlerSaveObjectLocalStorage('currentOcr',ocr); // Reestablecemos la operacion en el local estorage
-
                 const modifyValue = detailsOp.map(element=>{
                     if (element.ean===operation.ean){
+                        const newCant= element.opLoteCompletado+operation.cantidad;
                         return {
                             ...element,
-                            opLoteCompletado:++operation.cantidad
+                            opLoteCompletado:newCant
                         }
                     }
                     return element;
                 });
 
                 await handlerSaveObjectLocalStorage('currentOp', modifyValue); // alteramos la informacion del local estorage 
-                
-                // await handlerSaveObjectLocalStorage('detailOp',modifyValue);
-
                 dispatch({ type: actionTypes.FETCH_SUCCESS});
 
             }else{

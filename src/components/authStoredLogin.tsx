@@ -34,15 +34,14 @@ export function AuthStoredLogin({data,handlerAcceder,handlerChange}:{
 }
 
 const authStoredLoginStyle= StyleSheet.create({
+    
     container:{
         width:'100%',
         height:'60%',
-        // backgroundColor:'aqua'
     },
     header:{
         width:'100%',
         height:'40%',
-        // backgroundColor:'aquamarine',
         flexDirection:'row',
         justifyContent:'center',
         alignItems:'center'
@@ -51,7 +50,6 @@ const authStoredLoginStyle= StyleSheet.create({
         width:250,
         height:250,
         borderRadius:125,
-        backgroundColor:'aqua',
         overflow:'hidden',
         borderWidth:5,
         borderColor:'#FFF'
@@ -67,12 +65,10 @@ const authStoredLoginStyle= StyleSheet.create({
         width:'100%',
         height:'60%',
         alignItems:'center',
-        // backgroundColor:'aqua'
     },
     row:{
         height:'15%',
         width:'100%',
-        // backgroundColor:'aquamarine',
         justifyContent:'center',
         alignItems:'center'
     },

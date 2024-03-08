@@ -1,46 +1,38 @@
-import { PlusIcon }                                                     from '../public/icons/plusIcon';
-import { MenuIcon }                                                     from '../public/icons/menuIcon';
-import { SearchIcon }                                                   from '../public/icons/searchIcon';
-import { ItemResize }                                                   from '../components/ItemResize';
-import { FilterIcon }                                                   from '../public/icons/filterIcon';
-import { ItemNavigation }                                               from '../components/itemNavigation';
-import { Aside }                                                        from '../components/aside';
-import { ModalRegisterOcr }                                             from '../modals/ModalRegisterOcr';
-import { useMainContext }                                               from '../contexts/mainContext';
-import { LoadingComponent }                                             from '../components/loadingComponent';
-import { MainOcrComponent }                                             from '../components/mainOcrComponent';
-import { useApiGetOcrByUser }                                           from '../controllers/hooks/customHookGetOcrByUser';
-import { EmptyComponent }                                               from '../components/emptyComponent';
-import { ModalOcrInfo }                                                 from '../modals/modalOcrInfo';
+import { useLocalStorageGetData }                                       from '../controllers/hooks/customHookGetDataLocalStorage';
+import { handlerRemoveSavedObjectLocalStorage }                         from '../controllers/helpers/handlerObjectLocalStorage';
 import { OcrProcessesInterface }                                        from '../interfaces/services/ml_api/ocrInterfaces';
 import { ModalRegisterOcrCurrentOp }                                    from '../modals/modalRegisterOcrCurrentOp';
+import { LoadingComponent }                                             from '../components/loadingComponent';
+import { MainOcrComponent }                                             from '../components/mainOcrComponent';
+import { EmptyComponent }                                               from '../components/emptyComponent';
+import { ItemNavigation }                                               from '../components/itemNavigation';
+import { FilterIcon }                                                   from '../public/icons/filterIcon';
+import { SearchIcon }                                                   from '../public/icons/searchIcon';
+import { ModalRegisterOcr }                                             from '../modals/ModalRegisterOcr';
+import { MenuIcon }                                                     from '../public/icons/menuIcon';
+import { ItemResize }                                                   from '../components/ItemResize';
+import { useMainContext }                                               from '../contexts/mainContext';
+import { ModalOcrInfo }                                                 from '../modals/modalOcrInfo';
+import { Aside }                                                        from '../components/aside';
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList}   from 'react-native';
-import { ButtonHome }                                                   from '../components/buttonHome';
-import { Item }                                                         from '../interfaces/app/homeRoutes';
 import { useState }                                                     from 'react';
-import { useLocalStorageGetData } from '../controllers/hooks/customHookGetDataLocalStorage';
-import { useRemoveDataOperation } from '../controllers/hooks/customHookRemoveOperation';
-import { handlerRemoveSavedObjectLocalStorage } from '../controllers/helpers/handlerObjectLocalStorage';
 
 const {height,width}=Dimensions.get('screen');
 
 export function HomeOcr({navigation}:any){
 
     const contextStorage = useMainContext();
-    // const {state} = useApiGetOcrByUser('1146441925');// Id del usuario 
 
-    const [asideState,setAsideState] = useState<boolean>(false);
-    const [newRegister,setNewRegister] = useState<boolean>(false);
-    const [newCurrentRegister,setNewCurrentRegister] = useState<boolean>(true);
-    const [modalInfoState,setModalInfoState] = useState<boolean>(false);
-    const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);
+    const [ asideState,setAsideState ] =                    useState<boolean>(false);
+    const [ newRegister,setNewRegister ] =                  useState<boolean>(false);
+    const [ newCurrentRegister,setNewCurrentRegister ] =    useState<boolean>(true);
+    const [ modalInfoState,setModalInfoState ] =            useState<boolean>(false);
+    const [ ocrProcessData, setOcrProcessData ] =           useState<OcrProcessesInterface|null>(null);
+    
+    const currentOp =      useLocalStorageGetData('currentOp');
+    const currentModulo =  useLocalStorageGetData('currentModulo');
 
     const {state} =contextStorage?.account?.home?.[0].mainFetch('1146441925');
-    const currentOcr = useLocalStorageGetData('currentOcr');
-    const currentOp = useLocalStorageGetData('currentOp');
-
-    console.log(currentOcr.state.data);
-    console.log(currentOp.state.data);
 
     return<>
     <View style={{height,width}}>
@@ -95,13 +87,14 @@ export function HomeOcr({navigation}:any){
                             data={item.item} 
                             handlerClick={() => {
                                 setOcrProcessData(item.item);
-                                setModalInfoState(true);
+                                // setModalInfoState(true);
                             }}/>} 
                         data={state?.data}/>
                     }
                 </View>
                 {contextStorage?.account?.home?.filter(icon=>icon.id===1)[0].actionObject(()=>{
                     setNewRegister(true);
+                    setNewCurrentRegister(true);
                 })||<></>}
             </View>
             <View style={StyleMainWindow.root2}>
@@ -126,17 +119,19 @@ export function HomeOcr({navigation}:any){
         <></>
     }
     {
-        newRegister&&newCurrentRegister&&currentOcr.state.data&&currentOp.state.data?
+        newRegister&&newCurrentRegister&&currentOp.state.data?
         <ModalRegisterOcrCurrentOp 
-        data={currentOcr.state.data}
+        modulo={currentModulo.state.data}
+        op={currentOp.state.data[0].op}
+        navigation={navigation}
         handlerClose={()=>{
             setNewCurrentRegister(false);
+            setNewRegister(false);
         }}
         handlerNext={()=>{
-
+            
         }}
         handlerBack={()=>{
-            handlerRemoveSavedObjectLocalStorage('currentOcr');
             handlerRemoveSavedObjectLocalStorage('currentOp');
             setNewCurrentRegister(false);
         }}

@@ -10,6 +10,16 @@ export interface modal{
     keyboard:KeyboardTypeOptions,
 }
 
+export const newModal:modal = {
+    state:false,
+    label:'',
+    type:'',
+    value:'',
+    key:'none',
+    keyboard:'default',
+    placeHolder:''
+}
+
 export interface form{
     [key:string]:string
 }

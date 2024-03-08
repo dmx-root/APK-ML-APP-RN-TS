@@ -5,37 +5,37 @@ import { ModalContainer }                                               from '..
 import { Modal }                                                        from '../components/modal';
 import { StyleSheet,View,Text,GestureResponderEvent, TextInput, Alert}  from 'react-native';
 import { useEffect, useState }                                          from 'react';
-import { handlerSaveObjectLocalStorage } from '../controllers/helpers/handlerObjectLocalStorage';
+import { handlerSaveObjectLocalStorage }                                from '../controllers/helpers/handlerObjectLocalStorage';
 
 export function ModalProductionRegister({
     handlerClick, 
     setOperationData, 
+    setDetailOp,
     operationData, 
+    
     opDetails
 }:{
     handlerClick:       (event:GestureResponderEvent)=>void,
-    setOperationData:   React.Dispatch<React.SetStateAction<OperationInterface | null>>
-    operationData:      OperationInterface | null,
+    setOperationData:   React.Dispatch<React.SetStateAction<OperationInterface>>,
+    setDetailOp:        React.Dispatch<React.SetStateAction<OpDetail | null>>,
+    // detailOp:           OpDetail,
+    operationData:      OperationInterface,
     opDetails:          Array<OpDetail>
 }){
 
     const [ value, setValue ] = useState<string>(''); 
-    // const [ currentOpDetail, setCurrentOpDetail ] = useState<OpDetail | null>(null)   
-
-    // console.log(operationData)
 
     useEffect(()=>{
         // Test value -> 7705531160577 para MOB3548
 
         if(value.length>12){// validamos la longitud de caracteres ingresados en el código de barras
             setValue('');
-
             if(operationData&&!operationData.cantidad){// validamos el primer registro 
 
                 const response = opDetails.find(element=>element.ean===value);// se busca la coincidencia entre el elemento leído y el elemento cargado
                 
                 if(response&&operationData){ // validamos si el ean ingresado pertenece a las listas de OP's proporcionadas
-                    
+                    setDetailOp(response);
                     setOperationData({ // establecemos la información inicial
                         ...operationData,
                         colorEtiqueta:  response.colorEtiqueta,

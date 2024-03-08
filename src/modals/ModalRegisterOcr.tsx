@@ -1,35 +1,37 @@
-// import { useLocalStorageLoadData }          from "../controllers/hooks/customHookLoadDataLocalStorage";
-import { useApiGetDetailsOp }               from "../controllers/hooks/customHookGetDetailsOp";
+import { useSetOperation }                  from "../controllers/hooks/customHookSetOperation";
 import { ButtonFullWidth }                  from "../components/buttonFullWidth";
 import { newOperation, OperationInterface } from "../interfaces/view/production";
 import { ModalContainer }                   from "../components/modalContainer";
 import { InfoIcon }                         from "../public/icons/infoIcon";
 import { form }                             from '../interfaces/view/login';
 import { FieldInfo }                        from "../components/fieldInfo";
+import { useMainContext }                   from "../contexts/mainContext";
 import { Input }                            from "../components/input";
 import { Modal }                            from "../components/modal";
 import { ModalLoading }                     from "./modalLoading";
 import { ModalAlert }                       from "./modalAlert";
 import { Alert, GestureResponderEvent }     from 'react-native';
 import { useState }                         from "react";
-import { useSetOperation }                  from "../controllers/hooks/customHookSetOperation";
-import { handlerGetSavedObjectLocalStorage, handlerRemoveSavedObjectLocalStorage } from "../controllers/helpers/handlerObjectLocalStorage";
 
 export function ModalRegisterOcr({handlerClick,navigation}:{
     handlerClick:(event:GestureResponderEvent)=>void,
     navigation:any,
 }){
 
-    const [ dataForm, setDataForm ] = useState<form|null>(null);
-    const [ alertState, setAlertState ] = useState<boolean>(false);
-    const { state, setDataOperation } = useSetOperation();
+    const contextStorage =                  useMainContext();
+    const [ dataForm, setDataForm ] =       useState<form|null>(null);
+    const [ alertState, setAlertState ] =   useState<boolean>(false);
+    const { state, setDataOperation } =     useSetOperation();
   
     return<>
-        {state.loading?
+        {
+        state.loading?
+        
         <ModalLoading 
         label="Cargando registros" 
         handlerClick={()=>{}}/>:
         state.error?
+
         <ModalAlert 
         label="Error de consulta" 
         content={typeof(state.data)==='string'?state.data:false||'La consulta falló'} 
@@ -85,10 +87,10 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                             moduloId:           dataForm?.['modulo'],
                             inicioOperacion:    new Date().toLocaleTimeString(),
                             fechaRegistro:      new Date().toLocaleDateString(),
-                            registradoPor:      '1146441925'
+                            registradoPor:      contextStorage?.currentUser?.documentoid||''
                         }
 
-                        setDataOperation(`${dataForm?.['opType']}${dataForm?.['op']}`,operationData,navigation);
+                        setDataOperation(operationData.op,operationData,navigation);
                         // handlerClick(e)
                     }
                     else {

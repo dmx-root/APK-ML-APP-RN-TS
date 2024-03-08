@@ -10,7 +10,7 @@ export interface OperationInterface{
     tallaId: string,
     ean: string,
     cantidad: number,
-    eventualidadId: null| string,
+    eventualidadId: null | string,
     categoria: number,
     fechaRegistro: Date | string,
 }

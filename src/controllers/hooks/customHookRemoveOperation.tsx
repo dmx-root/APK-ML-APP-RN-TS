@@ -1,7 +1,7 @@
-import { OpDetail }   from '../../interfaces/services/ml_api/detailOpInteface';
-import { useReducer }                   from 'react';
-import { OperationInterface } from '../../interfaces/view/production';
+import { OpDetail }                             from '../../interfaces/services/ml_api/detailOpInteface';
 import { handlerRemoveSavedObjectLocalStorage } from '../helpers/handlerObjectLocalStorage';
+import { useReducer }                           from 'react';
+import { handlerRemoveValueLocalStorage } from '../helpers/handlerValueLocalStorage';
 
 
 const actionTypes = {
@@ -47,8 +47,8 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         try {
 
             dispatch({ type: actionTypes.FETCH_INIT });
-            await handlerRemoveSavedObjectLocalStorage('currentOcr');
             await handlerRemoveSavedObjectLocalStorage('currentOp')
+            await handlerRemoveValueLocalStorage('currentModulo');
             dispatch({ type: actionTypes.FETCH_SUCCESS, payload:'Elementos eliminados correctamente' });
             navigation.navigate('HomeOcr')
             
