@@ -6,7 +6,7 @@ interface Data {
 
 export class ConectionObjectResponse{
 
-    async postData(path:string,data:Data,id:string|undefined,params:Data|null){
+    async postData(path:string,data:any, params?:any){
         const axiosData:AxiosRequestConfig={
             method:"post",
             url:path,

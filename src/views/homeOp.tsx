@@ -21,12 +21,12 @@ export function HomeOp({navigation}:any){
     const contextStorage = useMainContext();
     const [ itemState, setItemSelec ] = useState<number|null>(1);
     const [ newRegister, setNewRegister ] = useState<boolean>(false);
-    const { state } =contextStorage?.account?.home?.[1].mainFetch('1146441925')
+    const { state } =contextStorage?.account?.home?.[1].mainFetch(contextStorage.currentUser?.documentoid)
 
     const [ detailOpListState, setDetailOpListState ] = useState<boolean>(false);
     const [ opId,setopId] = useState<string|null>(null);
 
-
+    // console.log
     return<>
      <View style={{height,width}}>
 

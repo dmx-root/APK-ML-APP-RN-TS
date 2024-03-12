@@ -1,16 +1,15 @@
-import { Alert } from "react-native";
-import { useMainContext } from "../../contexts/mainContext";
-import { handlerGetValueLocalStorage, handlerRemoveValueLocalStorage } from "../../controllers/helpers/handlerValueLocalStorage";
-import { CalendarIcon }     from "../../public/icons/calendarIcon";
-import { CreateOcrIcon }    from "../../public/icons/createOcrIcon";
-import { EmployeerIcon }    from "../../public/icons/employeerIcon";
-import { LogoutIcon }       from "../../public/icons/logoutIcon";
-import { ModuloIcon }       from "../../public/icons/moduloIcon";
-import { OcrIcon }          from "../../public/icons/ocrIcon";
-import { OpIcon }           from "../../public/icons/opIcon";
-import { UserIcon }         from "../../public/icons/userIcon";
-import { handlerGetSesion } from "../../controllers/helpers/handlerGetSesion";
-import { accountNavigators } from "../navigators/accountNavigators";
+import { handlerGetValueLocalStorage, 
+    handlerRemoveValueLocalStorage }    from "../../controllers/helpers/handlerValueLocalStorage";
+import { useMainContext }               from "../../contexts/mainContext";
+import { CalendarIcon }                 from "../../public/icons/calendarIcon";
+import { CreateOcrIcon }                from "../../public/icons/createOcrIcon";
+import { EmployeerIcon }                from "../../public/icons/employeerIcon";
+import { LogoutIcon }                   from "../../public/icons/logoutIcon";
+import { ModuloIcon }                   from "../../public/icons/moduloIcon";
+import { OcrIcon }                      from "../../public/icons/ocrIcon";
+import { OpIcon }                       from "../../public/icons/opIcon";
+import { UserIcon }                     from "../../public/icons/userIcon";
+import { Alert }                        from "react-native";
 
 interface operationInterface{
     [key:number]:any
@@ -128,12 +127,16 @@ export const useOperationHandler  = ():{ OPERATIONS_ITEMS:operationInterface } =
         16:{
             icon:<CreateOcrIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Crear OCR", 
-            handlerClick:() => {}
+            handlerClick:(navigation:any) => {
+                // navigation.navigate('Profile');
+            }
         },
         19:{
             icon:<OcrIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Mostrar OCR",
-            handlerClick:() => {}
+            handlerClick:(navigation:any) => {
+                navigation.navigate('HomeOcr');
+            }
         },
         20:{
             icon:<OpIcon color='#FFF' size={35} width={2}/>,
@@ -153,7 +156,9 @@ export const useOperationHandler  = ():{ OPERATIONS_ITEMS:operationInterface } =
         25:{
             icon:<OpIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Ver OP's",
-            handlerClick:() => {}
+            handlerClick:(navigation:any) => {
+                navigation.navigate('HomeOp')
+            }
         },
         26:{
             icon:<ModuloIcon color='#FFF' size={35} width={2}/>,

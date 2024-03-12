@@ -31,7 +31,7 @@ export function Modal({children,handlerClick}:{
 const modalStyle= StyleSheet.create({
     cortain:{
         position:'absolute',
-        backgroundColor:'#00000070',
+        backgroundColor:'#00000090',
         width:width,
         height:height,
         zIndex:30,

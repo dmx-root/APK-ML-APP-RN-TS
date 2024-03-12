@@ -1,6 +1,6 @@
-import { statusApi }                                from '../../../interfaces/services/ml_api/apiResponse';
 import { OcrProcessesInterface, OcrProcessesResponseInterface } from '../../../interfaces/services/ml_api/ocrInterfaces';
-import {ConectionObjectRequest}                     from '../conection/conectionObjectRequest';
+import { statusApi }                                            from '../../../interfaces/services/ml_api/apiResponse';
+import {ConectionObjectRequest}                                 from '../conection/conectionObjectRequest';
 
 //  Doc 
 //  Este componente tiene la finalidad de establecer la conexión entre nuestro front y un servicio(RES_API_ML)

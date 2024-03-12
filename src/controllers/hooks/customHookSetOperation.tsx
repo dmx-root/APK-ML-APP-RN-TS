@@ -1,9 +1,9 @@
 import { DetailProcessResponseInterface, OpDetail }     from '../../interfaces/services/ml_api/detailOpInteface';
-import { useReducer }                                   from 'react';
-import { handlerGetDetailsOp }                          from '../helpers/handlerGetDetailsOp';
 import { statusApi }                                    from '../../interfaces/services/ml_api/apiResponse';
-import { handlerSaveObjectLocalStorage }                from '../helpers/handlerObjectLocalStorage';
 import { OperationInterface }                           from '../../interfaces/view/production';
+import { handlerSaveObjectLocalStorage }                from '../helpers/handlerObjectLocalStorage';
+import { handlerGetDetailsOp }                          from '../helpers/handlerGetDetailsOp';
+import { useReducer }                                   from 'react';
 
 
 const actionTypes = {
@@ -61,8 +61,8 @@ export const useSetOperation = (): { state: ApiState; setDataOperation: (op:stri
 
                 await handlerSaveObjectLocalStorage('currentOp',response.data);
                 await handlerSaveObjectLocalStorage('currentModulo',operation.moduloId);
-
                 navigation.navigate('Production',operation);
+
                 dispatch({ type: actionTypes.FETCH_SUCCESS});
 
             }else{

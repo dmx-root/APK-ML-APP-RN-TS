@@ -1,3 +1,7 @@
+import { useLocalStorageGetData }                           from "../controllers/hooks/customHookGetDataLocalStorage";
+import { handlerRemoveSavedObjectLocalStorage }             from "../controllers/helpers/handlerObjectLocalStorage";
+import { handlerRemoveValueLocalStorage }                   from "../controllers/helpers/handlerValueLocalStorage";
+import { useRemoveDataOperation }                           from "../controllers/hooks/customHookRemoveOperation";
 import { ButtonFullWidth }                                  from "../components/buttonFullWidth";
 import { OperationInterface, newOperation }                 from "../interfaces/view/production";
 import { ModalContainer }                                   from "../components/modalContainer";
@@ -7,21 +11,17 @@ import { FieldInfo }                                        from "../components/
 import { InfoLine }                                         from "../components/infoLine";
 import { Modal }                                            from "../components/modal";
 import { GestureResponderEvent, StyleSheet, View, Text }    from "react-native";
-import { useRemoveDataOperation } from "../controllers/hooks/customHookRemoveOperation";
-import { handlerRemoveValueLocalStorage } from "../controllers/helpers/handlerValueLocalStorage";
-import { handlerRemoveSavedObjectLocalStorage } from "../controllers/helpers/handlerObjectLocalStorage";
 
-
-export function ModalRegisterOcrCurrentOp({handlerClose, handlerNext, handlerBack,navigation,op,modulo}:{
+export function ModalRegisterOcrCurrentOp({handlerClose, handlerNext, handlerBack,navigation}:{
     handlerClose:(event:GestureResponderEvent)=>void,
     handlerNext:(event:GestureResponderEvent)=>void,
     handlerBack:(event:GestureResponderEvent)=>void,
-    navigation:any,
-    op:string,
-    modulo:string
+    navigation:any
 }){
-    const constexStorage = useMainContext()
-    const { removeDataOperation } = useRemoveDataOperation();
+
+    const constexStorage = useMainContext();
+    const op = useLocalStorageGetData('currentOp');
+    const modulo = useLocalStorageGetData('currentModulo');
 
     return <Modal handlerClick={handlerClose}>
                 <ModalContainer color='#C7CCEC'>
@@ -30,8 +30,8 @@ export function ModalRegisterOcrCurrentOp({handlerClose, handlerNext, handlerBac
                         <Text style={modalStyle.content}>¿Desea continuar con la misma información?</Text>
                     </View>
 
-                    <InfoLine title='OP' content={op}/>
-                    <InfoLine title='MODULO' content={`Modulo-${modulo}`}/>
+                    <InfoLine title='OP' content={op.state.data?op.state.data[0].op:''}/>
+                    <InfoLine title='MODULO' content={`Modulo-${modulo.state.data?modulo.state.data:''}`}/>
 
                     <FieldInfo label='La información no se registrará si no ingresa los datos correctos ' color='#44329C'>
                         <InfoIcon color="#44329C" size={24} width={2}/>
@@ -45,11 +45,16 @@ export function ModalRegisterOcrCurrentOp({handlerClose, handlerNext, handlerBac
                     label='Registrar   ->' 
                     handlerClick={(e)=>{
                         handlerNext(e);
+
+                        // en caso de que se quiera continuar con la misma información se carga la información necesaria a la vista
                         const operationData: OperationInterface={
                             ...newOperation,
                             inicioOperacion:    new Date().toLocaleTimeString(),
                             fechaRegistro:      new Date().toLocaleDateString(),
-                            moduloId:           modulo,
+                            moduloId:           parseInt(modulo.state.data),
+                            refererncia:        op.state.data[0].referencia,
+                            op:                 op.state.data[0].op,
+                            colorId:            op.state.data[0].colorCodigo,
                             registradoPor:      constexStorage?.currentUser?.documentoid||''
                         }
                         navigation.navigate('Production',operationData);
@@ -60,11 +65,17 @@ export function ModalRegisterOcrCurrentOp({handlerClose, handlerNext, handlerBac
                     color='#FFF' 
                     label='<-   Ingresar Nueva Información' 
                     handlerClick={(e)=>{
+
                         handlerBack(e);
-                        handlerRemoveValueLocalStorage('currentModulo').then(response=>{
+                        // en caso de ingresar nueva información  se retira los valores previamente cargados en el local storage 
+                        handlerRemoveValueLocalStorage('currentModulo').
+                        then(response=>{
                             console.log(response)
-                        }).catch(err=>console.log(err));
-                        handlerRemoveSavedObjectLocalStorage('currentOp').then(response=>{
+                        }).
+                        catch(err=>console.log(err));
+
+                        handlerRemoveSavedObjectLocalStorage('currentOp').
+                        then(response=>{
                             console.log(response);
                         }).catch(err=>console.log(err))
                     }}/>

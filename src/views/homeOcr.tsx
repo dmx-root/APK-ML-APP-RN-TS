@@ -26,13 +26,14 @@ export function HomeOcr({navigation}:any){
     const [ asideState,setAsideState ] =                    useState<boolean>(false);
     const [ newRegister,setNewRegister ] =                  useState<boolean>(false);
     const [ newCurrentRegister,setNewCurrentRegister ] =    useState<boolean>(true);
+
     const [ modalInfoState,setModalInfoState ] =            useState<boolean>(false);
     const [ ocrProcessData, setOcrProcessData ] =           useState<OcrProcessesInterface|null>(null);
     
     const currentOp =      useLocalStorageGetData('currentOp');
-    const currentModulo =  useLocalStorageGetData('currentModulo');
+    // console.log(currentOp)
 
-    const {state} =contextStorage?.account?.home?.[0].mainFetch('1146441925');
+    const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
 
     return<>
     <View style={{height,width}}>
@@ -87,7 +88,7 @@ export function HomeOcr({navigation}:any){
                             data={item.item} 
                             handlerClick={() => {
                                 setOcrProcessData(item.item);
-                                // setModalInfoState(true);
+                                setModalInfoState(true);
                             }}/>} 
                         data={state?.data}/>
                     }
@@ -121,15 +122,14 @@ export function HomeOcr({navigation}:any){
     {
         newRegister&&newCurrentRegister&&currentOp.state.data?
         <ModalRegisterOcrCurrentOp 
-        modulo={currentModulo.state.data}
-        op={currentOp.state.data[0].op}
         navigation={navigation}
         handlerClose={()=>{
             setNewCurrentRegister(false);
             setNewRegister(false);
         }}
         handlerNext={()=>{
-            
+            setNewCurrentRegister(false);
+            setNewRegister(false);
         }}
         handlerBack={()=>{
             handlerRemoveSavedObjectLocalStorage('currentOp');

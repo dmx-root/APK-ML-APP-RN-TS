@@ -1,7 +1,7 @@
-import { statusApi }                                from '../../../interfaces/services/ml_api/apiResponse';
 import { DetailProcessResponseInterface, OpDetail } from '../../../interfaces/services/ml_api/detailOpInteface';
 import { OpInterface, allBasicOpResponseInterface } from '../../../interfaces/services/ml_api/opInterfaces';
-import {ConectionObjectRequest}                     from '../conection/conectionObjectRequest';
+import { statusApi }                                from '../../../interfaces/services/ml_api/apiResponse';
+import { ConectionObjectRequest }                   from '../conection/conectionObjectRequest';
 
 //  Doc 
 //  Este componente tiene la finalidad de establecer la conexión entre nuestro front y un servicio(RES_API_ML)
@@ -144,4 +144,47 @@ export class OpObjectRequest extends ConectionObjectRequest{
         }
         
     }
+    async OpProductionGetAll(uri:string):Promise<any>{
+        try {
+            const response = (await this.getData(uri,null)).data;
+            // console.log(response)
+            if(response.statusCodeApi===1){
+                const dataClear:Array<OpInterface>=response.data.map((element:any)=>{
+                    return {
+                        op:element.op,
+                        referencia: element.ref,
+                        ocrCantidad: element.cant_ocr,
+                        opLotePlaneado: element.cant_planned,
+                        opLoteCompletado: element.cant_completed,
+                        opEstado: null,
+                        opFechaAperturaProceso: element.op_dete_open_task,
+                        opFechaCierreProceso: element.op_dete_close_task,
+                        opFechaAperturaProcesoPlaneado: element.op_dete_open_planned,
+                        opFechaCierreProcesoPlaneado: element.op_dete_close_planned
+                    }
+                });
+
+                const basicInfoOpInterface:allBasicOpResponseInterface={
+                    statusCodeApi:response.statusCodeApi,
+                    statusMessageApi:response.statusMessageApi,
+                    data:dataClear
+                }
+                return basicInfoOpInterface;
+            }
+            
+            const basicInfoOpInterface:statusApi={
+                statusCodeApi:response.statusCodeApi,
+                statusMessageApi:response.statusMessageApi,
+            }
+            return basicInfoOpInterface;
+ 
+        } catch (error) {
+            console.log(error)
+            const basicInfoOpInterface:statusApi={
+                statusCodeApi:-1,
+                statusMessageApi:'Error de consulta',
+            }
+            return basicInfoOpInterface;
+        }
+    } 
 }

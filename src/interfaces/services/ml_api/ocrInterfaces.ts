@@ -25,6 +25,19 @@ export interface OcrProcessesInterface {
     categoriaEtiqueta:string
 }
 
+export interface OperationInformationInterface {
+        inicioOperacion: Date | string,
+        finOperacion: Date | String,
+        registradoPorId: string,
+        moduloId: number,
+        cantidadUnidades: number,
+        colorId: string,
+        tallaId: string,
+        op: string,
+        anormalidadCodigo?: string,
+        categoriaId: number,
+}
+
 export interface OcrProcessesResponseInterface extends statusApi{
     data:Array<OcrProcessesInterface>
 }

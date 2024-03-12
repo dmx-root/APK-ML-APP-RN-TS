@@ -1,4 +1,4 @@
-import {OPERATIONS_ITEMS, useOperationHandler }                                       from '../app/operations/operations';
+import {OPERATIONS_ITEMS, useOperationHandler }             from '../app/operations/operations';
 import { useApiGetAuthOperations }                          from '../controllers/hooks/customHookGetAuthOperations';
 import { useMainContext }                                   from '../contexts/mainContext';
 import { AsideItem }                                        from './asideItem';
@@ -20,7 +20,6 @@ export function Aside({navigation,handlerClick}:{
     const { state } = useApiGetAuthOperations(contextStorage?.currentUser?.rolId||'');
     const { OPERATIONS_ITEMS } = useOperationHandler();
     
-    // console.log(state)
     return <TouchableWithoutFeedback onPress={handlerClick}>
                 <View style={StyleAside.courtain}>
                     <TouchableWithoutFeedback onPress={()=>{}}>
@@ -71,10 +70,8 @@ const StyleAside=StyleSheet.create({
         width:width,
         height:height,
         zIndex:30,
-        // backgroundColor:'#00000040'
     }
     ,headerAside:{
-        // backgroundColor:'aqua',
         width:'80%',
         height:'10%',
         justifyContent:'flex-end',
@@ -97,13 +94,9 @@ const StyleAside=StyleSheet.create({
         borderColor:'#FFF'
     },
     img:{
-        // height:'100%',
-        // width:'100%',
         alignSelf:'center',
         flex:1,
-        resizeMode:'repeat',
-        // opacity:0.5
-
+        resizeMode:'repeat'
     },
     backgroundImage: {
         flex: 1,
@@ -122,7 +115,6 @@ const StyleAside=StyleSheet.create({
     fieldOptionContainer:{
         width:'100%',
         height:'10%',
-        // borderTopWidth:height*0.002,
         flexDirection:'row',
         justifyContent:'center'
     },
@@ -137,7 +129,6 @@ const StyleAside=StyleSheet.create({
         width:'50%',
         justifyContent:'center',
         alignItems:'flex-start'
-        // backgroundColor:'aqua'
     },
     contentOptions:{
         color:'#FFF',

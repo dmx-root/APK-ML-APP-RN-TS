@@ -1,5 +1,7 @@
+import { post_ocr_data_process } from '../../endpoints/ml_api/restApiMujerLatina';
 import {  OpDetail }                        from '../../interfaces/services/ml_api/detailOpInteface';
 import { OperationInterface }               from '../../interfaces/view/production';
+import { OcrObjectResponse } from '../../services/ml_api/response/OcrObJectResponse';
 import { handlerSaveObjectLocalStorage }    from '../helpers/handlerObjectLocalStorage';
 import { useReducer }                       from 'react';
 
@@ -35,7 +37,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
   
-   export const useLoadDataOperation = (): { state: ApiState; loadDataOperation: (operation:OperationInterface | null,detailsOp:Array<OpDetail>, navigation:any) => void } => {
+   export const useLoadDataOperation = (): { state: ApiState; loadDataOperation: (operation:OperationInterface,detailsOp:Array<OpDetail>, navigation:any) => void } => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -43,13 +45,26 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         error: null,
     });
 
-    async function loadDataOperation(operation:OperationInterface | null, detailsOp:Array<OpDetail>, navigation:any):Promise<void>{
+    async function loadDataOperation(operation:OperationInterface , detailsOp:Array<OpDetail>, navigation:any):Promise<void>{
+        const apiQuery = new OcrObjectResponse();
         try {
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            if(operation){
-                
+            const response = await apiQuery.OcrLoadNewData(post_ocr_data_process,{
+                categoriaId:        1,
+                finOperacion:       new Date().toLocaleTimeString(),
+                registradoPorId:    operation.registradoPor,
+                inicioOperacion:    operation.inicioOperacion,
+                moduloId:           operation.moduloId,
+                cantidadUnidades:   operation.cantidad,
+                colorId:            operation.colorId,
+                tallaId:            operation.tallaId,
+                op:                 operation.op,
+            });
+
+            // console.log(response)
+            if(response.statusCodeApi===1){
                 const modifyValue = detailsOp.map(element=>{
                     if (element.ean===operation.ean){
                         const newCant= element.opLoteCompletado+operation.cantidad;
@@ -60,13 +75,16 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
                     }
                     return element;
                 });
-
+                // console.log('envión')
                 await handlerSaveObjectLocalStorage('currentOp', modifyValue); // alteramos la informacion del local estorage 
                 dispatch({ type: actionTypes.FETCH_SUCCESS});
-
-            }else{
-                dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Falló la carga de la información en el local storage'});
+                navigation.navigate('HomeOcr')
             }
+            else{
+                dispatch({ type: actionTypes.FETCH_FAILURE, payload:response});
+            }
+            
+
         } catch (error) {
             console.log(error)
             dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error de proceso'});

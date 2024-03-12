@@ -1,8 +1,8 @@
-import { get_all_ocr_production, get_all_op_production, get_all_op_production_by_user }                 from '../../endpoints/ml_api/restApiMujerLatina';
+import { OpObjectRequest }          from '../../services/ml_api/request/opObjectRequest';
+import { OpInterface }              from '../../interfaces/services/ml_api/opInterfaces';
 import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
-import { useEffect, useReducer }               from 'react';
-import { OpObjectRequest } from '../../services/ml_api/request/opObjectRequest';
-import { OpInterface } from '../../interfaces/services/ml_api/opInterfaces';
+import { get_all_op_production }    from '../../endpoints/ml_api/restApiMujerLatina';
+import { useEffect, useReducer }    from 'react';
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -35,7 +35,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
   
-export const useApiGetOpByUser = (documentId:string): { state: ApiState } => {
+export const useApiGetOpAll = (): { state: ApiState } => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -50,7 +50,7 @@ export const useApiGetOpByUser = (documentId:string): { state: ApiState } => {
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.OpProductionGet(get_all_op_production_by_user,documentId);
+            const data=await apiQuery.OpProductionGetAll(get_all_op_production)
 
             if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
             else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});

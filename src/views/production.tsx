@@ -1,41 +1,45 @@
-import { useLocalStorageGetData }                               from '../controllers/hooks/customHookGetDataLocalStorage';
-import { useRemoveDataOperation }                               from '../controllers/hooks/customHookRemoveOperation';
-import { useLoadDataOperation }                                 from '../controllers/hooks/customHookLoadOperation';
-import { ModalProductionRegister }                              from '../modals/modalProductionRegister';
-import { OperationInterface, newOperation }                     from '../interfaces/view/production';
-import { InfoLineButton2 }                                      from '../components/InfoLineButton2';
-import { InfoLineButton }                                       from '../components/InfoLineButton';
-import { InfoLineDouble }                                       from '../components/infoLineDouble';
-import { RowLeftIcon }                                          from '../public/icons/rowLeftIcon';
-import { ViewContainer }                                        from '../components/viewContainer';
-import { ModuloIcon }                                           from '../public/icons/moduloIcon';
-import { UserIcon }                                             from '../public/icons/userIcon';
-import { SendIcon }                                             from '../public/icons/sendIcon';
-import { OcrIcon }                                              from '../public/icons/ocrIcon';
-import { FieldInfo }                                            from '../components/fieldInfo';
-import { InfoLine }                                             from '../components/infoLine';
-import { OpIcon }                                               from '../public/icons/opIcon';
-import { useMainContext }                                       from '../contexts/mainContext';
-import { ModalLoading }                                         from '../modals/modalLoading';
+import { useLocalStorageGetData }                                       from '../controllers/hooks/customHookGetDataLocalStorage';
+import { OpDetail }                                                     from '../interfaces/services/ml_api/detailOpInteface';
+import { useRemoveDataOperation }                                       from '../controllers/hooks/customHookRemoveOperation';
+import { useLoadDataOperation }                                         from '../controllers/hooks/customHookLoadOperation';
+import { ModalProductionRegister }                                      from '../modals/modalProductionRegister';
+import { OperationInterface }                                           from '../interfaces/view/production';
+import { InfoLineButton2 }                                              from '../components/InfoLineButton2';
+import { InfoLineButton }                                               from '../components/InfoLineButton';
+import { InfoLineDouble }                                               from '../components/infoLineDouble';
+import { RowLeftIcon }                                                  from '../public/icons/rowLeftIcon';
+import { ViewContainer }                                                from '../components/viewContainer';
+import { ModuloIcon }                                                   from '../public/icons/moduloIcon';
+import { ModalAlertEvents }                                             from '../modals/modalAlertEvents';
+import { UserIcon }                                                     from '../public/icons/userIcon';
+import { SendIcon }                                                     from '../public/icons/sendIcon';
+import { OcrIcon }                                                      from '../public/icons/ocrIcon';
+import { useMainContext }                                               from '../contexts/mainContext';
+import { FieldInfo }                                                    from '../components/fieldInfo';
+import { InfoLine }                                                     from '../components/infoLine';
+import { OpIcon }                                                       from '../public/icons/opIcon';
+import { ModalLoading }                                                 from '../modals/modalLoading';
 import { View,StyleSheet, Dimensions, TouchableOpacity, Text, Alert }   from 'react-native';
 import { useState }                                                     from 'react';
-import { OpDetail } from '../interfaces/services/ml_api/detailOpInteface';
 
 const {height,width}=Dimensions.get('screen');
 
 export function Production({route,navigation}:any){
 
     const operation:OperationInterface=route.params;
+    
+    const contextStorage =  useMainContext();                   //información almacenada en el contexto de la información
+    const opDetails =       useLocalStorageGetData('currentOp');//información almacenada en el local storage 
+    const loadData =        useLoadDataOperation();             //reducer que nos permite cargar la información una vez se haya terminado la operación 
+    const removeData =      useRemoveDataOperation();           //reducer que nos permirte remover la información del local storage
+    
+    const [ operationData, setOperationData ] = useState<OperationInterface>(operation);
+    const [ detailOp, setDetailop ] =           useState<OpDetail | null>(null);
 
-    const contextStorage =  useMainContext();
-    const opDetails =       useLocalStorageGetData('currentOp');
-    const loadData =        useLoadDataOperation();
-    const removeData =      useRemoveDataOperation();
-
-    const [ operationData, setOperationData ] =             useState<OperationInterface>(operation);
-    const [ detailOp, setDetailop ] =                       useState<OpDetail | null>(null);
-
-    const [ modalRegisterState,setModalRegisterState ] =    useState(false);
+    const [ modalRegisterState,setModalRegisterState ] =   useState<boolean>(false);
+    const [ modalValidateLoad,setModalValidateLoad] =      useState<boolean>(false);
+    const [ modalValidateCancel,setModalValidateCancel] =  useState<boolean>(false);
+    const [ modalEditProduction,setModalEditProduction] =  useState<boolean>(false);
 
     return<>
             <View style={productionStyle.productionContainer}>
@@ -53,25 +57,26 @@ export function Production({route,navigation}:any){
                             
                             </ViewContainer>
                             <ViewContainer>
-                                <FieldInfo label={`Información de OP por talla y color`} color='#44329C'>
-                                    <OpIcon color='#44329C' size={24} width={2}/>
-                                </FieldInfo>
-                                <InfoLine title='OP en proceso' content={opDetails.state.data[0].op}/>
-                                <InfoLineDouble title1='Planeado' content1={detailOp?.opLotePlaneado.toString()||'No Def'} title2='Ejecutado' content2={((detailOp?.opLoteCompletado||0)+operationData.cantidad).toString()}/>
-                        
                                 <FieldInfo label='Informacion del MÓDULO' color='#44329C'>
                                     <ModuloIcon color='#44329C' size={24} width={2}/>
                                 </FieldInfo>
-                                <InfoLine title='MODULO en proceso' content={`Modulo-${operation.moduloId}`}/>
-                                <InfoLineDouble title1='Planeado' content1='- - -   - - -   - - -   - - -' title2='Ejecutado' content2='- - -   - - -   - - -   - - -'/>
+                                <InfoLine title='Módulo en proceso' content={`Modulo-${operation.moduloId}`}/>
+                                <FieldInfo label={`Información de OP`} color='#44329C'>
+                                    <OpIcon color='#44329C' size={24} width={2}/>
+                                </FieldInfo>
+                                <InfoLineDouble title1='OP en proceso' content1={opDetails.state.data[0].op} title2='Referencia' content2={operationData.refererncia||'No def'}/>
+
+                                <InfoLine title={`Cantidad planeada para la talla ${operationData?.tallaId}`} content={detailOp?.opLotePlaneado.toString()||'No Def'}/>
+                                <InfoLine title={`Cantidad ejecutada para la talla ${operationData?.tallaId}`} content={((detailOp?.opLoteCompletado||0)+operationData.cantidad).toString()}/>
+                        
                             </ViewContainer>
                             <ViewContainer>
                                 <FieldInfo label='Registro Actual' color='#44329C'>
                                     <OcrIcon color='#44329C' size={24} width={2}/>
                                 </FieldInfo>
                                 <InfoLineDouble title1='Color' content1={operationData?.colorEtiqueta||'No asignado aún'} title2='COD-Color' content2={operationData?.colorId||'No asignado aún'}/>
-                                <InfoLine title='TALLA EN PROCESO' content={operationData?.tallaId||'Sin registros aún'}/>
-                                <InfoLine title='EAN EN PROCESO' content={operationData?.ean||'Sin registros aún'}/>
+                                <InfoLine title='Talla en proceso' content={operationData?.tallaId||'Sin registros aún'}/>
+                                <InfoLine title='EAN en proceso' content={operationData?.ean||'Sin registros aún'}/>
                                 <InfoLineButton colorBtn='#44329C' fontBtn='#FFF' labelBtn='Editar...' title='Cantidad Registrada' content={operationData?.cantidad.toString()||'No asignado aún'}  
                                 handlerClick={()=>{
                                     if(operationData?.cantidad){
@@ -96,14 +101,14 @@ export function Production({route,navigation}:any){
 
                 <View style={productionStyle.footer}>
                     <TouchableOpacity style={[productionStyle.button,{backgroundColor:'#C7CCEC'}]} onPress={()=>{
-                            removeData.removeDataOperation(navigation)
+                            setModalValidateCancel(!modalValidateCancel)    
                         }}>
                         <RowLeftIcon color="#44329C" size={30} width={2}/>
                         <Text style={{color:'#44329C',fontSize:18,fontWeight:'600', marginLeft:'5%'}}>Cancelar</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={productionStyle.button} onPress={()=>{
-                            loadData.loadDataOperation(operationData,opDetails.state.data,navigation);
+                            setModalValidateLoad(!modalValidateLoad)
                         }}>
                         <SendIcon color="#FFF" size={30} width={2}/>
                         <Text style={{color:'#FFF',fontSize:18,fontWeight:'600', marginLeft:'5%'}}>Enviar Información</Text>
@@ -122,10 +127,46 @@ export function Production({route,navigation}:any){
                 <></>
             }
             {
-                opDetails.state.loading?
+                opDetails.state.loading||loadData.state.loading?
                 <ModalLoading 
                 label='Cargando información del proceso...' 
-                handlerClick={()=>{}}/>:
+                handlerClick={()=>{
+
+                }}/>:
+                <></>
+            }
+            {
+                modalValidateLoad?
+                <ModalAlertEvents
+                label='La información será enviada'
+                content='¿Está seguro de enviar la información?'
+                textButtonCancel='Cancelar'
+                textButtonOk='Enviar'
+                handlerOk={()=>{
+                    loadData.loadDataOperation(operationData,opDetails.state.data,navigation);
+                    setModalValidateLoad(!modalValidateLoad)
+                }}
+                handlerCancel={()=>{
+                    setModalValidateLoad(!modalValidateLoad)
+                }}
+                />:
+                <></>
+            }
+            {
+                modalValidateCancel?
+                <ModalAlertEvents
+                label='La operación será cancelada'
+                content='¿Está seguro de cancelar la operación?'
+                textButtonCancel='Cerrar'
+                textButtonOk='Cancelar operación'
+                handlerOk={()=>{
+                    removeData.removeDataOperation(navigation);
+                    setModalValidateCancel(!modalValidateCancel)
+                }}
+                handlerCancel={()=>{
+                    setModalValidateCancel(!modalValidateCancel)
+                }}
+                />:
                 <></>
             }
     </>
@@ -146,7 +187,6 @@ const productionStyle=StyleSheet.create({
         alignItems:'center'
     },
     footer:{
-        // paddingTop:10,
         width:'100%',
         height:'10%',
         flexDirection:'row',
@@ -158,11 +198,8 @@ const productionStyle=StyleSheet.create({
         width:'45%',
         height:70,
         borderRadius:35,
-        // marginRight:'5%',
         marginBottom:'5%',
-        // backgroundColor:'#C7E5FD',
         backgroundColor:'#44329C',
-        // elevation:height*0.006,
         flexDirection:'row',
         paddingLeft:8,
         alignItems:'center',
@@ -174,6 +211,5 @@ const productionStyle=StyleSheet.create({
         height:160,
         alignItems:'center',
         justifyContent:'center',
-        // backgroundColor:'#FFF'
     }
 })

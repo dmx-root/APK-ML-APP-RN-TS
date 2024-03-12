@@ -18,10 +18,10 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
     navigation:any,
 }){
 
-    const contextStorage =                  useMainContext();
-    const [ dataForm, setDataForm ] =       useState<form|null>(null);
-    const [ alertState, setAlertState ] =   useState<boolean>(false);
-    const { state, setDataOperation } =     useSetOperation();
+    const contextStorage =                useMainContext();
+    const [ dataForm, setDataForm ] =     useState<form|null>(null);
+    const [ alertState, setAlertState ] = useState<boolean>(false);
+    const { state, setDataOperation } =   useSetOperation();
   
     return<>
         {
@@ -84,14 +84,13 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                         const operationData: OperationInterface={
                             ...newOperation,
                             op:                 dataForm?.['opType']+dataForm?.['op'],
-                            moduloId:           dataForm?.['modulo'],
+                            moduloId:           parseInt(dataForm?.['modulo']),
                             inicioOperacion:    new Date().toLocaleTimeString(),
                             fechaRegistro:      new Date().toLocaleDateString(),
                             registradoPor:      contextStorage?.currentUser?.documentoid||''
                         }
 
                         setDataOperation(operationData.op,operationData,navigation);
-                        // handlerClick(e)
                     }
                     else {
                       

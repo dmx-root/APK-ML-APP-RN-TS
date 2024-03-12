@@ -3,35 +3,35 @@ import { ButtonFullWidth }                                              from '..
 import { OperationInterface, newOperation }                             from '../interfaces/view/production';
 import { ModalContainer }                                               from '../components/modalContainer';
 import { Modal }                                                        from '../components/modal';
-import { StyleSheet,View,Text,GestureResponderEvent, TextInput, Alert}  from 'react-native';
-import { useEffect, useState }                                          from 'react';
-import { handlerSaveObjectLocalStorage }                                from '../controllers/helpers/handlerObjectLocalStorage';
+import { StyleSheet,View,Text,GestureResponderEvent, TextInput, Alert }  from 'react-native';
+import { useEffect, useRef, useState }                                          from 'react';
 
 export function ModalProductionRegister({
     handlerClick, 
     setOperationData, 
     setDetailOp,
     operationData, 
-    
     opDetails
 }:{
     handlerClick:       (event:GestureResponderEvent)=>void,
     setOperationData:   React.Dispatch<React.SetStateAction<OperationInterface>>,
     setDetailOp:        React.Dispatch<React.SetStateAction<OpDetail | null>>,
-    // detailOp:           OpDetail,
     operationData:      OperationInterface,
     opDetails:          Array<OpDetail>
 }){
 
     const [ value, setValue ] = useState<string>(''); 
+    const input = useRef<any>(null);
 
     useEffect(()=>{
         // Test value -> 7705531160577 para MOB3548
-
+        
         if(value.length>12){// validamos la longitud de caracteres ingresados en el código de barras
             setValue('');
+            input.current?.focus();
+            // console.log(input.current.value)
             if(operationData&&!operationData.cantidad){// validamos el primer registro 
-
+                
                 const response = opDetails.find(element=>element.ean===value);// se busca la coincidencia entre el elemento leído y el elemento cargado
                 
                 if(response&&operationData){ // validamos si el ean ingresado pertenece a las listas de OP's proporcionadas
@@ -46,19 +46,31 @@ export function ModalProductionRegister({
                         cantidad:       1,
                     });
                 }
-            }else{
-                if(operationData&&operationData.ean===value){// validamos si la informacion 
-    
-                    setOperationData({ // Se da inicio al conteo de prendas 
-                        ...operationData,
-                        cantidad:(operationData.cantidad+1)
+                else{
+                setValue('');
+                Alert.alert('¡Error en la lectura de los datos!', 'La prenda ingresada no pertenece a la OP seleccionada')
+            }
+        }else{
+            if(operationData&&operationData.ean===value){// validamos si la informacion 
+                
+                setOperationData({ // Se da inicio al conteo de prendas 
+                    ...operationData,
+                    cantidad:(operationData.cantidad+1)
                     });
                 }else{
+                    setValue('');
                     Alert.alert('¡Error en la lectura de los datos!', 'La prenda ingresada no pertenece a la OP seleccionada')
                 }
             }
         }
     },[value]);
+
+    // Keyboard.addListener(
+    //     'keyboardDidShow',
+    //     () => {
+    //     // Oculta el teclado si el TextInput tiene el foco
+    //     // console.log(Keyboard.isVisible)
+    // })
 
     return <Modal handlerClick={handlerClick}>
                 <ModalContainer color='#FFF'>
@@ -97,7 +109,15 @@ export function ModalProductionRegister({
                             </View>
                             <TextInput 
                             style={[prodRegister.column,{width:'50%'}]}
-                            onChangeText={(text)=>setValue(text)}
+                            onChangeText={(text)=>{
+                                setValue(text)
+                                // console.log(text)
+                            }}
+                            
+                            // editable={false}
+                            
+                            ref={input}
+                           
                             value={value}
                             />
                         </View>
