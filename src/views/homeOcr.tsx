@@ -30,8 +30,7 @@ export function HomeOcr({navigation}:any){
     const [ modalInfoState,setModalInfoState ] =            useState<boolean>(false);
     const [ ocrProcessData, setOcrProcessData ] =           useState<OcrProcessesInterface|null>(null);
     
-    const currentOp =      useLocalStorageGetData('currentOp');
-    // console.log(currentOp)
+    const currentOp = useLocalStorageGetData('currentOp');
 
     const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
 

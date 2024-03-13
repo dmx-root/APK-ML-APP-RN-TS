@@ -8,7 +8,7 @@ import {ConectionObjectRequest}                                 from '../conecti
 //  para este componente se hizo uso de la programación orientada a objetos (OOP)
 
 export class OcrObjectRequest extends ConectionObjectRequest{
-    async OcrProcessGet(uri:string):Promise<any>{
+    async OcrProductionGetAll(uri:string):Promise<any>{
         try {
             const response = (await this.getData(uri,null)).data;
 

@@ -11,8 +11,8 @@ import { OpIcon }                                   from '../../public/icons/opI
 import { FILTER_ITEMS_EMPLOYEERS_HOME, FILTER_ITEMS_MODULOS_HOME, FILTER_ITEMS_OCR_HOME, FILTER_ITEMS_OP_HOME }                    from './homeFilter';
 import { GestureResponderEvent }                    from 'react-native';
 import React                                        from 'react';
-import { useApiGetOpAll } from '../../controllers/hooks/customHookGetAll';
-
+import { useApiGetOpAll }                           from '../../controllers/hooks/customHookGetAllOp'
+import { useApiGetOcrAll }                          from '../../controllers/hooks/customHookGetAllOcr';
 
 export const ADMIN_HOME_ROUTES:Array<Item> = [
     {
@@ -28,7 +28,7 @@ export const ADMIN_HOME_ROUTES:Array<Item> = [
             </ButtonHome>
         },
         mainFetch:(documentId?:string)=>{
-            return  useApiGetOcrByUser(documentId||'');// Id del usuario 
+            return useApiGetOcrAll();
         },
         filterList:FILTER_ITEMS_OCR_HOME
     },
@@ -93,7 +93,7 @@ export const PROCESSES_HOME_ROUTES:Array<Item> = [
             </ButtonHome>
         },
         mainFetch:(documentId?:string)=>{
-            return  useApiGetOcrByUser(documentId||'');// Id del usuario 
+            return useApiGetOcrAll();
         },
         filterList:FILTER_ITEMS_OCR_HOME
     },
@@ -108,8 +108,7 @@ export const PROCESSES_HOME_ROUTES:Array<Item> = [
             </ButtonHome>
         },
         mainFetch:(documentId?:string)=>{
-            return useApiGetOpByUser(documentId||'');
-            
+            return useApiGetOpAll();
         },
         filterList:FILTER_ITEMS_OCR_HOME
     },
@@ -218,7 +217,7 @@ export const FACTURACION_HOME_ROUTES:Array<Item> = [
             return <></>
         },
         mainFetch:(documentId?:string)=>{
-            return  useApiGetOcrByUser(documentId||'');// Id del usuario 
+            return useApiGetOcrAll();
         },
         filterList:FILTER_ITEMS_OCR_HOME
     },
@@ -230,9 +229,8 @@ export const FACTURACION_HOME_ROUTES:Array<Item> = [
         actionObject:(handlerClick:(event:GestureResponderEvent)=>void)=>{
             return <></>
         },
-        mainFetch:(documentId?:string)=>{
-            return useApiGetOpByUser(documentId||'');
-            
+        mainFetch:(documentId?:string)=>{             
+            return useApiGetOpAll();
         },
         filterList:FILTER_ITEMS_OCR_HOME
     },
@@ -261,7 +259,7 @@ export const GUEST_HOME_ROUTES:Array<Item> = [
             return <></>
         },
         mainFetch:(documentId?:string)=>{
-            return  useApiGetOcrByUser(documentId||'');// Id del usuario 
+            return useApiGetOcrAll();
         },
         filterList:FILTER_ITEMS_OCR_HOME
     },
@@ -274,8 +272,7 @@ export const GUEST_HOME_ROUTES:Array<Item> = [
             return <></>
         },
         mainFetch:(documentId?:string)=>{
-            return useApiGetOpByUser(documentId||'');
-            
+            return useApiGetOpAll();
         },
         filterList:FILTER_ITEMS_OCR_HOME
     },
