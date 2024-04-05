@@ -35,7 +35,7 @@ export function InformationOcrCheckComponent({handlerClick,data}:{
             <View style={ocrStyle.rowField}>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={ocrStyle.labelTitle}>{`Inicio a las ${data.inicioOperacion}`}</Text>
+                        <Text style={ocrStyle.labelTitle}>{`Inicio a las ${data.inicioOperacion?.toLocaleString().slice(11,19)}`}</Text>
                     </View>
                 </View>
                 <View style={ocrStyle.rowContente}>
@@ -64,7 +64,7 @@ export function InformationOcrCheckComponent({handlerClick,data}:{
             <View style={ocrStyle.rowField}>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={ocrStyle.labelTitle}>{`Finalización a las ${data.finOperacion}`}</Text>
+                        <Text style={ocrStyle.labelTitle}>{`Finalización a las ${data.finOperacion?.toLocaleString().slice(11,19)}`}</Text>
                         {/* <ClockIcon color='#777' size={20} width={2}/> */}
                     </View>
                 </View>

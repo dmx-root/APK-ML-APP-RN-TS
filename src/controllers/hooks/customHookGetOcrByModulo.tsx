@@ -1,4 +1,4 @@
-import { get_all_ocr_by_modulo, get_all_ocr_by_op }        from '../../endpoints/ml_api/restApiMujerLatina';
+import { api_ml_production_ocr_get_by_modulo }        from '../../endpoints/ml_api/restApiMujerLatina';
 import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
 import { OcrProcessesInterface }    from '../../interfaces/services/ml_api/ocrInterfaces';
 import { OcrObjectRequest }         from '../../services/ml_api/request/ocrObjectRequest';
@@ -48,7 +48,7 @@ export const useApiGetOcrByModulo = (moduloId:string): { state: ApiState } => {
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.OcrProductionGetByModulo(get_all_ocr_by_modulo,moduloId);
+            const data=await apiQuery.OcrProductionGetByModulo(api_ml_production_ocr_get_by_modulo,moduloId);
 
             if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
             else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});

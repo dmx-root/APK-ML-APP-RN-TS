@@ -15,9 +15,9 @@ import { useEffect }                    from "react"
 
 const {width} = Dimensions.get('window');
 export function ModalDetailOpList({opId,handlerClick,navigation}:{
-    opId:string | null,
-    handlerClick:(event:GestureResponderEvent)=>void,
-    navigation:any
+    opId : string | null,
+    handlerClick:(event : GestureResponderEvent) => void,
+    navigation : any
 }){
     const { state, fetchDataDetailsOp } = useApiGetDetailsOp();
     useEffect(()=>{fetchDataDetailsOp(opId||'')},[]);

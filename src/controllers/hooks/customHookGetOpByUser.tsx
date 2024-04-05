@@ -1,4 +1,4 @@
-import { get_all_ocr_production, get_all_op_production, get_all_op_production_by_user }                 from '../../endpoints/ml_api/restApiMujerLatina';
+import { api_ml_production_op_get_by_user }                 from '../../endpoints/ml_api/restApiMujerLatina';
 import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
 import { useEffect, useReducer }               from 'react';
 import { OpObjectRequest } from '../../services/ml_api/request/opObjectRequest';
@@ -50,7 +50,7 @@ export const useApiGetOpByUser = (documentId:string): { state: ApiState } => {
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.OpProductionGet(get_all_op_production_by_user,documentId);
+            const data=await apiQuery.OpProductionGetByUser(api_ml_production_op_get_by_user,documentId);
 
             if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
             else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});

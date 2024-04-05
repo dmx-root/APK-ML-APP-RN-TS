@@ -33,7 +33,7 @@ export function InformationDetailOp({route,navigation}:any){
 
     const { state } = useApiGetOcrByOP({
         op:opDetailsData.op,
-        talla:opDetailsData.talla,
+        talla:opDetailsData.tallaId,
         color:opDetailsData.colorCodigo
     });
 

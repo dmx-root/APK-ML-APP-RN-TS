@@ -1,4 +1,4 @@
-import { get_detail_op }                from '../../endpoints/ml_api/restApiMujerLatina';
+import { api_ml_production_op_details_get }                from '../../endpoints/ml_api/restApiMujerLatina';
 import { OpDetail }                     from '../../interfaces/services/ml_api/detailOpInteface';
 import { OpObjectRequest }              from '../../services/ml_api/request/opObjectRequest';
 import { useReducer }                   from 'react';
@@ -56,7 +56,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.DetailOpGet(get_detail_op,op);
+            const data=await apiQuery.DetailOpGet(api_ml_production_op_details_get,op);
             if(data.statusCodeApi===1){
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data });
                 // handlerSaveObjectLocalStorage('currentOp',data.data);

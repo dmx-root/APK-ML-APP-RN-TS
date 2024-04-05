@@ -32,6 +32,7 @@ export function InformationModulo({route,navigation}:any){
     ]
 
     const moduloData:ModuloProcessInterface=route.params;
+    
     const [itemState,setItemSelec]=useState<number|null>(1);
     const { state } = useApiGetOcrByModulo(moduloData.moduloId.toString());
 

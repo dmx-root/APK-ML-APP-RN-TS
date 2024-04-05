@@ -1,4 +1,4 @@
-import { get_all_ocr_by_op }        from '../../endpoints/ml_api/restApiMujerLatina';
+import { api_ml_production_ocr_get_by_op }        from '../../endpoints/ml_api/restApiMujerLatina';
 import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
 import { OcrProcessesInterface }    from '../../interfaces/services/ml_api/ocrInterfaces';
 import { OcrObjectRequest }         from '../../services/ml_api/request/ocrObjectRequest';
@@ -34,7 +34,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
   
-export const useApiGetOcrByOP = ({op,color,talla}:{op:string,color:string,talla:string}): { state: ApiState } => {
+export const useApiGetOcrByOP = ({op,color,talla}:{op:string,color:string,talla:number}): { state: ApiState } => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -48,7 +48,7 @@ export const useApiGetOcrByOP = ({op,color,talla}:{op:string,color:string,talla:
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.OcrProductionGetByOP(get_all_ocr_by_op,{op,color,talla});
+            const data=await apiQuery.OcrProductionGetByOP(api_ml_production_ocr_get_by_op,{op,color,talla});
 
             if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
             else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});

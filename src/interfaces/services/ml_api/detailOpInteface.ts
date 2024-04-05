@@ -6,14 +6,17 @@ export interface OpDetail {
     ocrCantidad: number,
     opLotePlaneado: number,
     opLoteCompletado: number,
+    opLoteRestante: number,
+    colorEtiqueta:string,
+    colorCodigo: string,
+    tallaId:number,
+    talla: string,
+    ean: string,
     opFechaAperturaProceso:null|Date,
     opFechaCierreProceso: null|Date,
     opFechaAperturaProcesoPlaneado:null|Date,
-    opFechaCierreProcesoPlaneado: null|Date
-    colorEtiqueta:string,
-    colorCodigo: string,
-    talla: string,
-    ean: string
+    opFechaCierreProcesoPlaneado: null|Date,
+
 }
 
 export interface DetailProcessResponseInterface extends statusApi{
