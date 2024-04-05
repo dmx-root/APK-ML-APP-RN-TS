@@ -1,3 +1,7 @@
+import { FILTER_ITEMS_EMPLOYEERS_HOME, 
+        FILTER_ITEMS_MODULOS_HOME, 
+        FILTER_ITEMS_OCR_HOME, 
+        FILTER_ITEMS_OP_HOME }                      from './homeFilter';
 import { useApiGetOcrByUser }                       from '../../controllers/hooks/customHookGetOcrByUser';
 import { useApiGetOpByUser }                        from '../../controllers/hooks/customHookGetOpByUser';
 import { useApiGetModulos }                         from '../../controllers/hooks/customHookGetModulos';
@@ -8,7 +12,6 @@ import { ButtonHome }                               from '../../components/butto
 import { PlusIcon }                                 from '../../public/icons/plusIcon';
 import { OcrIcon }                                  from '../../public/icons/ocrIcon';
 import { OpIcon }                                   from '../../public/icons/opIcon';
-import { FILTER_ITEMS_EMPLOYEERS_HOME, FILTER_ITEMS_MODULOS_HOME, FILTER_ITEMS_OCR_HOME, FILTER_ITEMS_OP_HOME }                    from './homeFilter';
 import { GestureResponderEvent }                    from 'react-native';
 import React                                        from 'react';
 import { useApiGetOpAll }                           from '../../controllers/hooks/customHookGetAllOp'

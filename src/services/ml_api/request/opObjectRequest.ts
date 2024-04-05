@@ -144,37 +144,38 @@ export class OpObjectRequest extends ConectionObjectRequest{
         }
         
     }
-    async OpProductionGetAll(uri:string):Promise<any>{
+    async OpProductionGetAll(uri:string, token? : string):Promise<any>{
         try {
-            const response = (await this.getData(uri,null)).data;
-            // console.log(response)
-            if(response.statusCodeApi===1){
-                const dataClear:Array<OpInterface>=response.data.map((element:any)=>{
+            const response = (await this.getData(uri,null,token)).data;
+            if(response.apiCode === 1){
+                const dataClear :  OpInterface[] =response.data.map(( element : any )=>{
                     return {
-                        op:element.op,
-                        referencia: element.ref,
-                        ocrCantidad: element.cant_ocr,
-                        opLotePlaneado: element.cant_planned,
-                        opLoteCompletado: element.cant_completed,
-                        opEstado: null,
-                        opFechaAperturaProceso: element.op_dete_open_task,
-                        opFechaCierreProceso: element.op_dete_close_task,
-                        opFechaAperturaProcesoPlaneado: element.op_dete_open_planned,
-                        opFechaCierreProcesoPlaneado: element.op_dete_close_planned
+                        op:                             element.op_id,
+                        referencia:                     element.referencia,
+                        ocrCantidad:                    element.ocr_cantidad,
+                        opLotePlaneado:                 element.cantidad_planeada,
+                        opLoteCompletado:               element.cantidad_ejecutada,
+                        opFechaAperturaProceso:         element.fecha_apertura_proceso,
+                        opFechaCierreProceso:           element.fecha_cierre_proceso,
+                        opFechaAperturaProcesoPlaneado: element.fecha_planeada_apertura_proceso,
+                        opFechaCierreProcesoPlaneado:   element.fecha_planeada_cierre_proceso,
+                        opEstado:                       element.estado,
                     }
                 });
-
-                const basicInfoOpInterface:allBasicOpResponseInterface={
-                    statusCodeApi:response.statusCodeApi,
-                    statusMessageApi:response.statusMessageApi,
+                
+                const basicInfoOpInterface : allBasicOpResponseInterface = {
+                    statusCodeApi:response.apiCode,
+                    statusMessageApi:response.apiMessage,
                     data:dataClear
                 }
+                console.log(basicInfoOpInterface)
+
                 return basicInfoOpInterface;
             }
             
             const basicInfoOpInterface:statusApi={
-                statusCodeApi:response.statusCodeApi,
-                statusMessageApi:response.statusMessageApi,
+                statusCodeApi:response.apiCode,
+                statusMessageApi:response.apiMessage,
             }
             return basicInfoOpInterface;
  

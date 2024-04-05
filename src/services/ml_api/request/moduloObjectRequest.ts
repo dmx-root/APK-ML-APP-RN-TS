@@ -3,37 +3,44 @@ import { EmployeerProcessInterface, EmployeerProcessResponseInterface, ModuloPro
 import { ConectionObjectRequest } from "../conection/conectionObjectRequest";
 
 export class ModuloObjectRequest extends ConectionObjectRequest{
-    async ModuloProcessGet(uri:string):Promise<any>{
+    async ModuloProcessGet(uri:string, token? : string ):Promise<any>{
         try {
-            const response = (await this.getData(uri,null)).data;
+            const response = (await this.getData(uri,null,token)).data;
 
-            if(response.statusCodeApi===1){
+            if(response.apiCode===1){
                 const dataClear:Array<ModuloProcessInterface>=response.data.map((element:any)=>{
-                    return {
-                        moduloId: element.mdl_id,
-                        numeroTrabajadores: element.number_employees,
-                        numeroMaquinas: element.number_machine,
-                        moduloEstadoProceso: element.operation_state,
-                        moduloEstado: element.modulo_state,
-                        moduloEtiqueta: element.mdl_label,
-                        produccionDiaria:null,
-                        metaDiaria:null,
-                        referenciaActual:null,
-                        opActual:null
-                    }
+                    const data : ModuloProcessInterface ={
+                        moduloId:               element.id_modulo,
+                        numeroTrabajadores:     element.operarios_cantidad,
+                        numeroMaquinas:         element.maquinas_cantidad,
+                        moduloEstadoProceso:    element.estado_operacion,
+                        moduloEstado:           element.estado,
+                        moduloEtiqueta:         element.modulo_etiqueta,
+                        referenciaActual:       element.referencia_actual,
+                        opActual:               element.op_actual,
+                        revisorActualId:        element.revisor_actual,
+                        tallaActual:            element.talla_id_actual,
+                        colorActual:            element.color_id_actual,
+                        eventualidad:           element.eventualidad_actual,
+                        revisorActualNombre:    'XXX - XXX - XXX',
+                        produccionDiaria:       0,
+                        metaDiaria:             0,
+                    };
+                    return data;
                 });
-
+                
+                // console.log(dataClear)
                 const ocrProcessInterface:ModuloProcessesResponseInterface={
-                    statusCodeApi:response.statusCodeApi,
-                    statusMessageApi:response.statusMessageApi,
+                    statusCodeApi:response.apiCode,
+                    statusMessageApi:response.apiMessage,
                     data:dataClear
                 }
                 return ocrProcessInterface;
             }
             
             const ocrProcessInterface:statusApi={
-                statusCodeApi:response.statusCodeApi,
-                statusMessageApi:response.statusMessageApi,
+                statusCodeApi:response.apiCode,
+                statusMessageApi:response.apiMessage,
             }
             return ocrProcessInterface;
  

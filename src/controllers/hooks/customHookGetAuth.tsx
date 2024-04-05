@@ -1,5 +1,5 @@
 import { useMainContext }               from '../../contexts/mainContext';
-import { get_auth }                     from '../../endpoints/ml_api/restApiMujerLatina';
+import { api_ml_local_auth_get_by_token }                     from '../../endpoints/ml_api/restApiMujerLatina';
 import { AuthObjectRequest }            from '../../services/ml_api/request/authObjectRequest';
 import { statusApi}                     from '../../interfaces/services/ml_api/apiResponse'
 import { authResponseInterface }        from '../../interfaces/services/ml_api/authInterfaces';
@@ -48,8 +48,10 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     async function fetchDataAuth(token:string):Promise<void>{
         const apiQuery=new AuthObjectRequest();
         try {     
-            const data=await apiQuery.authGet(get_auth,null,token);
-            if(data?.statusCodeApi===1){
+            // const data=await apiQuery.authGet(get_auth,null,token);
+            const data = await apiQuery.authGetByToken(api_ml_local_auth_get_by_token,token);
+            // console.log(data)
+            if(data?.apiCode===1){
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data });   
             }
             else{
@@ -65,6 +67,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         try {
             dispatch({ type: actionTypes.FETCH_INIT });
             const response = await handlerGetValueLocalStorage('token');
+            // console.log(response)
             if(typeof(response)==='string'){
                 await fetchDataAuth(response);
             }

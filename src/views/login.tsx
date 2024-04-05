@@ -16,10 +16,13 @@ import { useMainContext }                               from '../contexts/mainCo
 import { ModalLoading }                                 from '../modals/modalLoading';
 import { ModalInput }                                   from '../modals/modalInput';
 import { ModalAlert }                                   from '../modals/modalAlert';
-import {View,StyleSheet, Dimensions, Text, Alert}       from 'react-native';
+import { View, StyleSheet, Dimensions, Text, Alert }    from 'react-native';
 import { ImageBackground }                              from 'react-native';
 import * as Font                                        from 'expo-font';
 import { useEffect, useState }                          from 'react';
+
+import { AuthObjectRequest } from '../services/ml_api/request/authObjectRequest'
+import {api_ml_local_auth_get_by_token } from '../endpoints/ml_api/restApiMujerLatina'
 
 const {height,width}=Dimensions.get('screen');
 
@@ -38,10 +41,15 @@ export function Login(){
     const [ passworsSave, setPasswordSave] = useState<boolean>(false);
     const [ modal, setModal ] =              useState<modal>(newModal);
 
-    useEffect(()=>{
-        console.log('entró')
-        // contextStorage?.setAccount(accountNavigators["Auth"])
-    },[]);
+    async function load(){
+        try {
+            const query = new AuthObjectRequest();
+            const response = await query.authGetByToken(api_ml_local_auth_get_by_token,'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMTQ2NDQxOTI1IiwidXNlck5hbWUiOiJEQVZJRCBFU1RFQkFOIE1PUkFMRVMgw5FVU1RFUyIsInVzZXJEZXNjcmlwdGlvbiI6IkRlc2Fycm9sbGFkb3IganVuaW9yIiwicm9sZUlkIjoxLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFET1IiLCJkb2N1bWVudFR5cGVJZCI6MSwiZG9jdWVtZW50VHlwZU5hbWUiOiJDRURVTEEgREUgQ0lVREFEQU5JQSIsImlhdCI6MTcxMjMzMDQ3NSwiZXhwIjoxNzE0OTYwMjc1fQ.tF9mlmd2XzAufiC5XWNwm4DzUZw-8Om81hAd8bafQPQw6Okz1yQpD6N4rkSFfLbFRbFy1Wg0dSqskkFnljtwqCzgjsLbJ58V8i67m7TnngAr7CMCTptnce0p4Q4CEEma4ChD1nPx5z1W56Ka9dpbH5yleQc6GePSJDtJ2Iv8c-MAWzByLfks6ULMJROgYbIQ734mSf9fzjJuusUp-N7Okltiz0DgN0z1zGcjXc3B8tNgYsSvbX8f4d1NYRgh39mJVhiv9Nd__HzpvZT70YMqQviJBbA4kkKtkTXzmRW36BR_zb3Ox9ObdaEwnk8qWlXOzIZ8BIsLCndjuIeTAzfwrQ')
+            // console.log(response)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return<>
             <View style={loginStyle.backGround}>
@@ -59,11 +67,11 @@ export function Login(){
                     currentSesionValidator.state.data&&!formState?
                     <AuthStoredLogin 
                     data={{
-                        nombre:currentSesionValidator.state.data.data.userName, 
-                        rol:currentSesionValidator.state.data.data.userProfileLAbel
+                        nombre: currentSesionValidator.state.data.data.userName, 
+                        rol:    currentSesionValidator.state.data.data.userProfileLAbel
                     }} 
                     handlerAcceder={()=>{
-                        setSesion(currentSesionValidator.state.data?.data||inicialStateAuth);
+                        setSesion(currentSesionValidator.state.data?.data || inicialStateAuth);
                         console.log('Accedió');
                     }} 
                     handlerChange={()=>{
@@ -77,16 +85,16 @@ export function Login(){
                         <View style={loginStyle.form}>
                             <InputAuth 
                                 label='Documento'
-                                value={dataForm?.['Document']?dataForm?.['Document']:''} 
+                                value={dataForm?.['Document'] || ''} 
                                 handlerClick={()=>{
                                     setModal({
-                                        label:'DOCUMENTO',
-                                        key:'Document',
-                                        type:'text',
-                                        state:true,
-                                        value:'',
+                                        state:      true,
+                                        value:      '',
                                         placeHolder:'Ingrese el documento',
-                                        keyboard:'numeric'
+                                        label:      'DOCUMENTO',
+                                        key:        'Document',
+                                        keyboard:   'numeric',
+                                        type:       'text',
                                     })
                                 }}>
                                 <UserIcon color='#FFF' size={45} width={1}/>
@@ -96,13 +104,13 @@ export function Login(){
                                 value={dataForm?.['Password']?'* * * * * * * * * * * *':''} 
                                 handlerClick={()=>{
                                     setModal({
-                                        label:'CONTRASEÑA',
-                                        key:'Password',
-                                        type:'password',
-                                        state:true,
-                                        value:'',
+                                        state:      true,
+                                        value:      '',
                                         placeHolder:'Ingrese el documento',
-                                        keyboard:'default'
+                                        label:      'CONTRASEÑA',
+                                        type:       'password',
+                                        key:        'Password',
+                                        keyboard:   'default'
                                     })
                                 }}>
                                 <LockIcon color='#FFF' size={45} width={1}/>
@@ -116,8 +124,9 @@ export function Login(){
                             <AuthButton 
                                 label='Acceder' 
                                 handlerClick={()=>{
+                                    // load();
                                     dataForm?.['Password']&&dataForm?.['Document']?
-                                    setDataAuth(dataForm?.['Document'],dataForm?.['Password'],passworsSave):
+                                    setDataAuth(dataForm?.['Document'], dataForm?.['Password'], passworsSave): 
                                     Alert.alert('Campos vacios','Asegúrese de llenar todos los campos') 
                                     setAlert(true);
                                 }}/>
@@ -131,11 +140,11 @@ export function Login(){
     {
         modal.state?
         <ModalInput 
-            label={modal.label} 
-            type={modal.type} 
-            value={modal.value}
+            label =     {modal.label} 
+            type=       {modal.type} 
+            value=      {modal.value}
             placeHolder={modal.placeHolder}
-            keyboard={modal.keyboard}
+            keyboard=   {modal.keyboard}
             handlerValue={(text:string)=>{
                 setModal({...modal,value:text})
             }}

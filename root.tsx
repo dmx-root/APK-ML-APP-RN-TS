@@ -15,7 +15,7 @@ export function Root() {
     const storage = useMainContext();
 
     useEffect(()=>{
-
+        // extrae la sesion del context
         storage?.account?
         setAccount(storage?.account):
         setAccount(accountNavigators['auth']);

@@ -1,5 +1,5 @@
 
-import { get_all_modulos }                 from '../../endpoints/ml_api/restApiMujerLatina';
+import { api_ml_production_modulo_get_all }                 from '../../endpoints/ml_api/restApiMujerLatina';
 import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
 import { useEffect, useReducer }               from 'react';
 import { ModuloProcessInterface } from '../../interfaces/services/ml_api/moduloInterfaces';
@@ -51,7 +51,7 @@ export const useApiGetModulos = (): { state: ApiState } => {
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.ModuloProcessGet(get_all_modulos);
+            const data=await apiQuery.ModuloProcessGet(api_ml_production_modulo_get_all);
 
             if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
             else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});

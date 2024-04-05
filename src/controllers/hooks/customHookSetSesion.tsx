@@ -44,20 +44,23 @@ export const useHandlerSesion = (): { state: sesionState; setDataAuth: (document
 
     const { setSesion } = useSetSesion();
 
-    async function setDataAuth(documentId:string,password:string,passwordSaveSate:boolean):Promise<void>{
+    async function setDataAuth(documentId : string, password : string, passwordSaveSate : boolean) : Promise <void>{
         try {
             dispatch({ type: actionTypes.FETCH_INIT });
 
             const data = await handlerGetAuth(documentId, password);
+            // console.log(data)
 
-            if(data.statusCodeApi===1){
+            if(data.apiCode===1){
 
                 const response=setSesion(data.data);
 
                 if(response.statusCode===1){
                     if(passwordSaveSate){
 
-                        await handlerSaveValueLocalStorage("token",data.toke);
+                        console.log(data.token)
+
+                        await handlerSaveValueLocalStorage("token",data.token);
                         dispatch({ type: actionTypes.FETCH_SUCCESS,payload:{
                             statusCodeApi: 1,
                             statusMessageApi: response.statusMessage

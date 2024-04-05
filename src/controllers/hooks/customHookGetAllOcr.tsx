@@ -1,7 +1,7 @@
 import { OcrProcessesInterface }        from '../../interfaces/services/ml_api/ocrInterfaces';
 import { OcrObjectRequest }             from '../../services/ml_api/request/ocrObjectRequest';
 import { statusApi}                     from '../../interfaces/services/ml_api/apiResponse';
-import { get_all_ocr_production_all }   from '../../endpoints/ml_api/restApiMujerLatina';
+import { api_ml_production_ocr_get_all }   from '../../endpoints/ml_api/restApiMujerLatina';
 import { useEffect, useReducer }        from 'react';
 
 const actionTypes = {
@@ -11,7 +11,7 @@ const actionTypes = {
 };
 
 interface ApiState {
-    data: Array<OcrProcessesInterface> | null;
+    data: OcrProcessesInterface[] | null;
     loading: boolean;
     error: statusApi | null;
 }
@@ -34,7 +34,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
   
-export const useApiGetOcrAll = (): { state: ApiState } => {
+export const useApiGetOcrAll = () : { state: ApiState } => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -42,16 +42,17 @@ export const useApiGetOcrAll = (): { state: ApiState } => {
         error: null,
     });
 
-    async function fetchData():Promise<void>{
+    async function fetchData() : Promise <void> {
         try {
             const apiQuery = new OcrObjectRequest()
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.OcrProductionGetAll(get_all_ocr_production_all);
-            // console.log('la informacion se está consumendo correctamenete ')
-            if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
-            else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
+            const data=await apiQuery.OcrProductionGetAll(api_ml_production_ocr_get_all);
+
+            data?.statusCodeApi===1?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
+            dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
             
         } catch (error) {
 
@@ -59,6 +60,7 @@ export const useApiGetOcrAll = (): { state: ApiState } => {
 
         }
     };
+
     useEffect(()=>{
         fetchData();
     },[]);

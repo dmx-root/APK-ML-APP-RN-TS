@@ -7,10 +7,10 @@ export interface OpInterface{
     opLotePlaneado: number,
     opLoteCompletado: number,
     opEstado: boolean,
-    opFechaAperturaProceso:null|Date,
-    opFechaCierreProceso: null|Date,
-    opFechaAperturaProcesoPlaneado:null|Date,
-    opFechaCierreProcesoPlaneado: null|Date
+    opFechaAperturaProceso: null | Date,
+    opFechaCierreProceso: null | Date,
+    opFechaAperturaProcesoPlaneado: null | Date,
+    opFechaCierreProcesoPlaneado: null | Date
 }
 
 export interface allBasicOpResponseInterface extends statusApi{

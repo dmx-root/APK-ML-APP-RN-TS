@@ -4,12 +4,12 @@ import { View, TextInput, StyleSheet, Text, KeyboardTypeOptions } from 'react-na
 // Este componente tiene el proposito actuar como entrada de texto en al cual ya se establece el label correspondiente
 // Este componente ya viene con una altura definida por defecto pero su amplitud viene definida por su componente padre 
 // Recibe como parámetros de entrada los siguientes valores:
-// color:string => color del label 
-// label:string => label o etiqueta
-// handlerInput:(value:string)=>void =>manejador de eventos para la entrada de texto
-// textType:KeyboardTypeOptions => tipo de entrada de texto, numeric, password, pad, etc.
-// value:string => valor que será renderizado en el input
-// placeholder:string => valor placeholder 
+// color:           string => color del label 
+// label:           string => label o etiqueta
+// handlerInput:    (value:string)=>void => manejador de eventos para la entrada de texto
+// textType:        KeyboardTypeOptions => tipo de entrada de texto, numeric, password, pad, etc.
+// value:           string => valor que será renderizado en el input
+// placeholder:     string => valor placeholder 
 
 export function Input({color,label,handlerInput,textType,placeholder,value}:{
     color:string,

@@ -1,7 +1,6 @@
 import {statusApi} from './apiResponse'
 
 export interface ModuloProcessInterface{
-
     moduloId: number,
     numeroTrabajadores: number,
     numeroMaquinas: null,
@@ -11,7 +10,12 @@ export interface ModuloProcessInterface{
     produccionDiaria:number,
     metaDiaria:number,
     referenciaActual:string,
-    opActual:string
+    opActual:string | null,
+    tallaActual: number | string ,
+    colorActual: string | null,
+    eventualidad: string | null,
+    revisorActualId: string | null,
+    revisorActualNombre: string | null
 
 }
 

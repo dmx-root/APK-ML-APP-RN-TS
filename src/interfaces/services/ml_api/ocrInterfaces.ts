@@ -4,25 +4,30 @@ export interface OcrProcessesInterface {
     op: string,
     referencia: string,
     colorId: string,
-    tallaId: string,
+    tallaId: number,
+    tallaEtiqueta: string,
     ean: string,
     colorEtiqueta: string,
     ocrId: number,
     moduloId: number,
+    moduloEtiqueta: string,
     registroFecha: Date | string,
     inicioOperacion: null| Date | string,
     finOperacion: null|Date|String,
     cantidadUnidades: number,
     registradoPorId: string,
+    registradoPorNombre: string,
     ocrState: boolean,
     anormalidadCodigo: null| string,
     revisadoPorId: string|null,
+    revisadoporNombre: string | null,
     revisadoFecha: Date | null | string,
     estadoActualProceso: string,
     estadoProceso: number,
     anormalidadEtiqueta: string,
     categoriaId: number,
-    categoriaEtiqueta:string
+    categoriaEtiqueta:string,
+
 }
 
 export interface OperationInformationInterface {

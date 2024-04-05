@@ -1,7 +1,7 @@
 import { OpObjectRequest }          from '../../services/ml_api/request/opObjectRequest';
 import { OpInterface }              from '../../interfaces/services/ml_api/opInterfaces';
 import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
-import { get_all_op_production }    from '../../endpoints/ml_api/restApiMujerLatina';
+import { api_ml_production_op_get_all }    from '../../endpoints/ml_api/restApiMujerLatina';
 import { useEffect, useReducer }    from 'react';
 
 const actionTypes = {
@@ -50,7 +50,7 @@ export const useApiGetOpAll = (): { state: ApiState } => {
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.OpProductionGetAll(get_all_op_production)
+            const data=await apiQuery.OpProductionGetAll(api_ml_production_op_get_all);
 
             if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
             else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});

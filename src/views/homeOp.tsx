@@ -1,17 +1,15 @@
-import { View,StyleSheet, Dimensions, TouchableOpacity,Text, FlatList} from 'react-native';
-import { MainOpComponent }                                  from '../components/mainOpComponent';
-import { PlusIcon }                                         from '../public/icons/plusIcon';
-import { MenuIcon }                                         from '../public/icons/menuIcon';
-import { SearchIcon }                                       from '../public/icons/searchIcon';
-import { ItemResize }                                       from '../components/ItemResize';
-import { FilterIcon }                                       from '../public/icons/filterIcon';
-import { ItemNavigation }                                   from '../components/itemNavigation';
-import { useMainContext }                                   from '../contexts/mainContext';
-import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
 import { LoadingComponent }                                 from '../components/loadingComponent';
+import { MainOpComponent }                                  from '../components/mainOpComponent';
+import { ItemNavigation }                                   from '../components/itemNavigation';
 import { EmptyComponent }                                   from '../components/emptyComponent';
-import { useApiGetOpByUser }                                from '../controllers/hooks/customHookGetOpByUser';
 import { ModalDetailOpList }                                from '../modals/modalDetailOpList';
+import { SearchIcon }                                       from '../public/icons/searchIcon';
+import { FilterIcon }                                       from '../public/icons/filterIcon';
+import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
+import { MenuIcon }                                         from '../public/icons/menuIcon';
+import { ItemResize }                                       from '../components/ItemResize';
+import { useMainContext }                                   from '../contexts/mainContext';
+import { View,StyleSheet, Dimensions, Text, FlatList}       from 'react-native';
 import { useState }                                         from 'react'
 
 const {height,width}=Dimensions.get('screen');
@@ -19,14 +17,14 @@ const {height,width}=Dimensions.get('screen');
 export function HomeOp({navigation}:any){
 
     const contextStorage = useMainContext();
-    const [ itemState, setItemSelec ] = useState<number|null>(1);
-    const [ newRegister, setNewRegister ] = useState<boolean>(false);
-    const { state } =contextStorage?.account?.home?.[1].mainFetch(contextStorage.currentUser?.documentoid)
+    const [ itemState, setItemSelec ] = useState <number | null>(1);
+    const [ newRegister, setNewRegister ] = useState <boolean>(false);
 
-    const [ detailOpListState, setDetailOpListState ] = useState<boolean>(false);
-    const [ opId,setopId] = useState<string|null>(null);
+    const { state } = contextStorage?.account?.home?.[1].mainFetch(contextStorage.currentUser?.documentoid)
 
-    // console.log
+    const [ detailOpListState, setDetailOpListState ] = useState <boolean>(false);
+    const [ opId,  setopId] = useState <string | null>(null);
+
     return<>
      <View style={{height,width}}>
 
