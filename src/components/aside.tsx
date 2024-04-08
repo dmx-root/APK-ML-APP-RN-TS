@@ -1,4 +1,4 @@
-import {OPERATIONS_ITEMS, useOperationHandler }             from '../app/operations/operations';
+import { useOperationHandler }             from '../app/operations/operations';
 import { useApiGetAuthOperations }                          from '../controllers/hooks/customHookGetAuthOperations';
 import { useMainContext }                                   from '../contexts/mainContext';
 import { AsideItem }                                        from './asideItem';
@@ -19,6 +19,7 @@ export function Aside({navigation,handlerClick}:{
     const contextStorage=useMainContext();
     const { state } = useApiGetAuthOperations(contextStorage?.currentUser?.rolId||'');
     const { OPERATIONS_ITEMS } = useOperationHandler();
+    // console.log(OPERATIONS_ITEMS)
     
     return <TouchableWithoutFeedback onPress={handlerClick}>
                 <View style={StyleAside.courtain}>

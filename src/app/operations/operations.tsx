@@ -9,6 +9,7 @@ import { ModuloIcon }                   from "../../public/icons/moduloIcon";
 import { OcrIcon }                      from "../../public/icons/ocrIcon";
 import { OpIcon }                       from "../../public/icons/opIcon";
 import { UserIcon }                     from "../../public/icons/userIcon";
+import { EditICon }                     from '../../public/icons/editIcon'
 import { Alert }                        from "react-native";
 
 interface operationInterface{
@@ -132,58 +133,58 @@ export const useOperationHandler  = ():{ OPERATIONS_ITEMS:operationInterface } =
             }
         },
         19:{
+            icon:<EditICon color='#FFF' size={35} width={2}/> ,
+            operation_label: "Revisar OCR",
+            handlerClick:() => {}
+        },
+        20:{
             icon:<OcrIcon color='#FFF' size={35} width={2}/>,
-            operation_label: "Mostrar OCR",
+            operation_label: "Mostrar OCR's",
             handlerClick:(navigation:any) => {
                 navigation.navigate('HomeOcr');
             }
         },
-        20:{
+        21:{
             icon:<OpIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Abrir OP",  
             handlerClick:() => {}
         },
-        21:{
+        22:{
             icon:<CalendarIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Asignar Fecha de Ejecucion de OP",
             handlerClick:() => {}
         },
-        22:{
+        23:{
             icon:<CalendarIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Asignar Fecha de Ejecucion de Detalle OP",
             handlerClick:() => {}
         },
-        25:{
+        26:{
             icon:<OpIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Ver OP's",
             handlerClick:(navigation:any) => {
                 navigation.navigate('HomeOp')
             }
         },
-        26:{
+        27:{
             icon:<ModuloIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Asignar op al módulo",
             handlerClick:() => {}
         },
         
-        27:{
+        28:{
             icon:<EmployeerIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Administrar Operarios",
             handlerClick:() => {}
         },
-        31:{
+        32:{
             icon:<ModuloIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Mostrar Módulos",
             handlerClick:(navigation:any) => {
                 navigation.navigate('HomeModulos')
             }
         },
-        28:{
-            icon:<EmployeerIcon color='#FFF' size={35} width={2}/>,
-            operation_label: "Remover Operario",  
-            handlerClick:() => {}
-        },
-        30:{
+        31:{
             icon:<EmployeerIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Mostrar Operarios", 
             handlerClick:() => {}

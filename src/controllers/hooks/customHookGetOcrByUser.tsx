@@ -1,7 +1,7 @@
 import { OcrObjectRequest }             from '../../services/ml_api/request/ocrObjectRequest';
 import { OcrProcessesInterface }        from '../../interfaces/services/ml_api/ocrInterfaces';
 import { statusApi}                     from '../../interfaces/services/ml_api/apiResponse';
-import { get_all_ocr_production }       from '../../endpoints/ml_api/restApiMujerLatina';
+import {  get_ml_production_ocr_get_by_user }       from '../../endpoints/ml_api/restApiMujerLatina';
 import { useEffect, useReducer }        from 'react';
 
 const actionTypes = {
@@ -50,7 +50,7 @@ export const useApiGetOcrByUser = (documentId:string): { state: ApiState } => {
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.OcrProductionGet(get_all_ocr_production,documentId);
+            const data=await apiQuery.OcrProductionGetByUser(get_ml_production_ocr_get_by_user,documentId);
 
             if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
             else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});

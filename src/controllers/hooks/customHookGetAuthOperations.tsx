@@ -1,9 +1,9 @@
-import { get_auth_operations }      from '../../endpoints/ml_api/restApiMujerLatina';
-import { AuthObjectRequest }        from '../../services/ml_api/request/authObjectRequest';
-import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
-import { OperationsInterfaces }     from '../../interfaces/services/ml_api/operations';
-import { useEffect, useReducer }    from 'react';
-import { useMainContext } from '../../contexts/mainContext';
+import { api_ml_sesion_mobile_get_operations }      from '../../endpoints/ml_api/restApiMujerLatina';
+import { AuthObjectRequest }                        from '../../services/ml_api/request/authObjectRequest';
+import { statusApi}                                 from '../../interfaces/services/ml_api/apiResponse'
+import { OperationsInterfaces }                     from '../../interfaces/services/ml_api/operations';
+import { useMainContext }                           from '../../contexts/mainContext';
+import { useEffect, useReducer }                    from 'react';
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -53,7 +53,7 @@ export const useApiGetAuthOperations = (profileId:string | number): { state: Api
 
             if(!contextStorage?.operations){
 
-                const data=await apiQuery.authGetOperations(get_auth_operations,profileId.toString());
+                const data=await apiQuery.authGetOperations(api_ml_sesion_mobile_get_operations,profileId.toString());
                 if(data?.statusCodeApi===1){
 
                     contextStorage?.setOperations(data.data);

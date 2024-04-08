@@ -169,36 +169,36 @@ export class AuthObjectRequest extends ConectionObjectRequest{
         }
     } 
 
-    async authGetOperations(uri:string, profileId:string):Promise<any>{
+    async authGetOperations(uri:string, profileId:string, token? : string):Promise<any>{
         try {
-            const response = (await this.getData((uri+profileId),null)).data;
+            const response = (await this.getData((uri+profileId),null,token)).data;
 
-            if(response.statusCodeApi===1){
-                const dataClear:Array<OperationsInterfaces>=response.data.map((element:any)=>{
+            if(response.apiCode===1){
+                const dataClear : OperationsInterfaces[] = response.data.map((element:any)=>{
                     return {
-                        entornoId:element.env_id,
-                        profileId:element.prf_id,
-                        operacionEtiqueta:element.operation_label,
-                        operacionId:element .ope_id
+                        entornoId:          element.entorno_id,
+                        profileId:          element.perfil_id,
+                        operacionEtiqueta:  element.operacion,
+                        operacionId:        element.operacion_id
                     }
                 });
 
                 const ocrProcessInterface:OperationsResponseApi={
-                    statusCodeApi:response.statusCodeApi,
-                    statusMessageApi:response.statusMessageApi,
+                    statusCodeApi:response.apiCode,
+                    statusMessageApi:response.apiMessage,
                     data:dataClear
                 }
                 return ocrProcessInterface;
             }
             
             const ocrProcessInterface:statusApi={
-                statusCodeApi:response.statusCodeApi,
-                statusMessageApi:response.statusMessageApi,
+                statusCodeApi:response.apiCode,
+                statusMessageApi:response.apiMessage,
             }
             return ocrProcessInterface;
  
         } catch (error) {
-            console.log(error)
+            
             const ocrProcessInterface:statusApi={
                 statusCodeApi:-1,
                 statusMessageApi:'Error de consulta',

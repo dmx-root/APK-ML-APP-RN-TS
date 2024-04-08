@@ -5,6 +5,8 @@ import { FILTER_ITEMS_EMPLOYEERS_HOME,
 import { useApiGetOcrByUser }                       from '../../controllers/hooks/customHookGetOcrByUser';
 import { useApiGetOpByUser }                        from '../../controllers/hooks/customHookGetOpByUser';
 import { useApiGetModulos }                         from '../../controllers/hooks/customHookGetModulos';
+import { useApiGetOcrAll }                          from '../../controllers/hooks/customHookGetAllOcr';
+import { useApiGetOpAll }                           from '../../controllers/hooks/customHookGetAllOp'
 import { EmployeerIcon }                            from '../../public/icons/employeerIcon';
 import { Item }                                     from '../../interfaces/app/homeRoutes';
 import { ModuloIcon }                               from '../../public/icons/moduloIcon';
@@ -14,8 +16,6 @@ import { OcrIcon }                                  from '../../public/icons/ocr
 import { OpIcon }                                   from '../../public/icons/opIcon';
 import { GestureResponderEvent }                    from 'react-native';
 import React                                        from 'react';
-import { useApiGetOpAll }                           from '../../controllers/hooks/customHookGetAllOp'
-import { useApiGetOcrAll }                          from '../../controllers/hooks/customHookGetAllOcr';
 
 export const ADMIN_HOME_ROUTES:Array<Item> = [
     {
@@ -158,7 +158,7 @@ export const PLANTA_HOME_ROUTES:Array<Item> = [
                 <PlusIcon color="#777" size={70} width={1}/>
             </ButtonHome>
         },
-        mainFetch:(documentId?:string)=>{
+        mainFetch:(documentId? : string)=>{
             return  useApiGetOcrByUser(documentId||'');// Id del usuario 
         },
         filterList:FILTER_ITEMS_OCR_HOME
