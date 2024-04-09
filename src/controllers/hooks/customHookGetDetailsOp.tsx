@@ -57,11 +57,12 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
             dispatch({ type: actionTypes.FETCH_INIT });
 
             const data=await apiQuery.DetailOpGet(api_ml_production_op_details_get,op);
-            if(data.statusCodeApi===1){
-                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data });
-                // handlerSaveObjectLocalStorage('currentOp',data.data);
-            }
-            else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data?.statusMessageApi})
+            
+            data?.statusCodeApi===1?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
+            data?.statusCodeApi===0?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: 0 }):
+            dispatch({ type: actionTypes.FETCH_FAILURE});
            
         } catch (error) {
             console.log(error)

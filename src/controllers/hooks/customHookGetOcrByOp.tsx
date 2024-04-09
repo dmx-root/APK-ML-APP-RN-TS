@@ -50,8 +50,11 @@ export const useApiGetOcrByOP = ({op,color,talla}:{op:string,color:string,talla:
 
             const data=await apiQuery.OcrProductionGetByOP(api_ml_production_ocr_get_by_op,{op,color,talla});
 
-            if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
-            else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
+            data?.statusCodeApi===1?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
+            data?.statusCodeApi===0?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null }):
+            dispatch({ type: actionTypes.FETCH_FAILURE});
             
         } catch (error) {
 

@@ -52,8 +52,11 @@ export const useApiGetOcrByUser = (documentId:string): { state: ApiState } => {
 
             const data=await apiQuery.OcrProductionGetByUser(get_ml_production_ocr_get_by_user,documentId);
 
-            if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
-            else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
+            data?.statusCodeApi===1?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
+            data?.statusCodeApi===0?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: 0 }):
+            dispatch({ type: actionTypes.FETCH_FAILURE});
             
         } catch (error) {
 

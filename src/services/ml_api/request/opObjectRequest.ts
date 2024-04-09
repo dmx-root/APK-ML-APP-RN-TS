@@ -1,6 +1,7 @@
 import { DetailProcessResponseInterface, OpDetail } from '../../../interfaces/services/ml_api/detailOpInteface';
 import { OpInterface, allBasicOpResponseInterface } from '../../../interfaces/services/ml_api/opInterfaces';
 import { statusApi }                                from '../../../interfaces/services/ml_api/apiResponse';
+import { handlerAxiosError }                        from '../../../utilities/handlerAxiosError';
 import { ConectionObjectRequest }                   from '../conection/conectionObjectRequest';
 
 //  Doc 
@@ -10,7 +11,7 @@ import { ConectionObjectRequest }                   from '../conection/conection
 
 export class OpObjectRequest extends ConectionObjectRequest{
 
-    async OpGet(uri:string):Promise<any>{
+    async OpGet(uri : string) : Promise <any>{
         try {
             const response = (await this.getData(uri,null)).data;
 
@@ -46,15 +47,12 @@ export class OpObjectRequest extends ConectionObjectRequest{
  
         } catch (error) {
             console.log(error)
-            const basicInfoOpInterface:statusApi={
-                statusCodeApi:-1,
-                statusMessageApi:'Error de consulta',
-            }
-            return basicInfoOpInterface;
+            const response = handlerAxiosError(error);
+            return response;
         }
         
     }
-    async DetailOpGet(uri : string, op : string, token? : string):Promise<any>{
+    async DetailOpGet(uri : string, op : string, token? : string) : Promise <any>{
         try {
             const response = (await this.getData((uri+op),null, token)).data;
 
@@ -94,15 +92,11 @@ export class OpObjectRequest extends ConectionObjectRequest{
             return basicInfoOpInterface;
  
         } catch (error) {
-            console.log(error)
-            const basicInfoOpInterface:statusApi={
-                statusCodeApi:-1,
-                statusMessageApi:'Error de consulta',
-            }
-            return basicInfoOpInterface;
+            const response = handlerAxiosError(error);
+            return response;
         } 
     }
-    async OpProductionGetByUser(uri : string, documentId : string, token? : string):Promise<any>{
+    async OpProductionGetByUser(uri : string, documentId : string, token? : string) : Promise <any>{
         try {
             const response = (await this.getData((uri+documentId),null,token)).data;
             // console.log(response)
@@ -137,16 +131,11 @@ export class OpObjectRequest extends ConectionObjectRequest{
             return basicInfoOpInterface;
  
         } catch (error) {
-            console.log(error)
-            const basicInfoOpInterface:statusApi={
-                statusCodeApi:-1,
-                statusMessageApi:'Error de consulta',
-            }
-            return basicInfoOpInterface;
-        }
-        
+            const response = handlerAxiosError(error);
+            return response;
+        }    
     }
-    async OpProductionGetAll(uri:string, token? : string):Promise<any>{
+    async OpProductionGetAll(uri : string, token? : string) : Promise <any>{
         try {
             const response = (await this.getData(uri,null,token)).data;
             if(response.apiCode === 1){
@@ -182,12 +171,8 @@ export class OpObjectRequest extends ConectionObjectRequest{
             return basicInfoOpInterface;
  
         } catch (error) {
-            console.log(error)
-            const basicInfoOpInterface:statusApi={
-                statusCodeApi:-1,
-                statusMessageApi:'Error de consulta',
-            }
-            return basicInfoOpInterface;
+            const response = handlerAxiosError(error);
+            return response;
         }
     } 
 }

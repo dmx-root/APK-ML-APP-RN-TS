@@ -1,7 +1,7 @@
 import { OcrProcessesInterface, OcrProcessesResponseInterface } from '../../../interfaces/services/ml_api/ocrInterfaces';
 import { statusApi }                                            from '../../../interfaces/services/ml_api/apiResponse';
-import {ConectionObjectRequest}                                 from '../conection/conectionObjectRequest';
-
+import { ConectionObjectRequest }                               from '../conection/conectionObjectRequest';
+import { handlerAxiosError } from '../../../utilities/handlerAxiosError';
 //  Doc 
 //  Este componente tiene la finalidad de establecer la conexión entre nuestro front y un servicio(RES_API_ML)
 //  Por lo tanto el componente establece una interfaz intermedia que permite definir los parámetros entre la interacción del front y el servicio al cual solo se le solicitará información 
@@ -69,7 +69,7 @@ export class OcrObjectRequest extends ConectionObjectRequest{
         }
         
     }
-    async OcrProductionGetByUser(uri:string, documentId:string, token?: string):Promise<any>{
+    async OcrProductionGetByUser(uri : string, documentId : string, token? : string) : Promise <any>{
         try {
             const response = (await this.getData((uri+documentId),null,token)).data;
             // console.log(response)
@@ -128,7 +128,7 @@ export class OcrObjectRequest extends ConectionObjectRequest{
             return ocrProcessInterface;
         }
     }
-    async OcrProductionGetByOP(uri : string, {op,color,talla}:{op:string,color:string,talla:number},token? : string):Promise<any>{
+    async OcrProductionGetByOP(uri : string, {op, color, talla} : {op : string, color : string, talla : number},token? : string) : Promise <any>{
         try {
             const response = (await this.getData(uri,{op,color,talla},token)).data;
             if(response.apiCode===1){
@@ -186,7 +186,7 @@ export class OcrObjectRequest extends ConectionObjectRequest{
             return ocrProcessInterface;
         }
     }
-    async OcrProductionGetByModulo(uri : string, moduloId : string, token? : string):Promise<any>{
+    async OcrProductionGetByModulo(uri : string, moduloId : string, token? : string) : Promise <any>{
         try {
             const response = (await this.getData((uri+moduloId),null,token)).data;
 

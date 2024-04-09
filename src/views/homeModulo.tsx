@@ -70,7 +70,7 @@ export function HomeModulos({navigation}:any){
                             <LoadingComponent label='Cargando lista de registros...'/>:
                             state.error?
                             <EmptyComponent label='Hubo un error en la carga de datos'/>:
-                            state.data?.length===0?
+                            state.data=== null?
                             <EmptyComponent label='El usuario no cuenta con registros aún'/>:
                             <FlatList 
                             renderItem={(item)=>

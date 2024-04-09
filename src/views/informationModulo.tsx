@@ -77,7 +77,7 @@ export function InformationModulo({route,navigation}:any){
                     <LoadingComponent label='Cargando Información...'/>:
                     state.error?
                     <EmptyComponent label='Hubo un error al momento de cargar los datos, inténtelo más tarde'/>:
-                    state.data?.length===0?
+                    state.data===null?
                     <EmptyComponent label='EL módulo no cuenta con registros aún...'/>:
                     <>
                         <InformationHeaderViewComponentModulo/>

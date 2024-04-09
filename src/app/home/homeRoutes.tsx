@@ -192,22 +192,7 @@ export const PLANTA_HOME_ROUTES:Array<Item> = [
             return useApiGetModulos();
         },
         filterList:FILTER_ITEMS_OCR_HOME
-    },
-    /*{
-        id:4,
-        item:'HomeEmployeers',
-        NAVIGATE:(view:string,dispatch:any)=>{dispatch.navigate(view)},
-        icon:<EmployeerIcon color='#777' size={35} width={2}/>,
-        actionObject:(handlerClick:(event:GestureResponderEvent)=>void)=>{
-            return <ButtonHome label='' handlerClick={handlerClick}>
-                <EmployeerIcon color="#777" size={35} width={1.5}/>
-            </ButtonHome>
-        },
-        mainFetch:(documentId?:string)=>{
-            return useApiGetModulos();
-        },
-        filterList:FILTER_ITEMS_OCR_HOME
-    },*/
+    }
 ]; 
 
 export const FACTURACION_HOME_ROUTES:Array<Item> = [

@@ -29,6 +29,7 @@ export function HomeOcr({navigation}:any){
 
     const [ modalInfoState,setModalInfoState ] =            useState<boolean>(false);
     const [ ocrProcessData, setOcrProcessData ] =           useState<OcrProcessesInterface|null>(null);
+    const [ itemSelect, setItemSelect ] =                   useState<number>(1);
     
     const currentOp = useLocalStorageGetData('currentOp');
 
@@ -55,7 +56,9 @@ export function HomeOcr({navigation}:any){
                     <View style={StyleMainWindow.labels}>
                         {
                         contextStorage?.account?.home?.filter(icon=>icon.id===1)[0].filterList.map(element=>
-                            <ItemResize key={element.id} state={false} handlerClick={()=>{}} label={element.label}/>)
+                            <ItemResize key={element.id} state={element.id===itemSelect?true:false} handlerClick={()=>{
+                                setItemSelect(element.id)
+                            }} label={element.label}/>)
                         }
                     </View>
                     <View style={StyleMainWindow.labelsIcon}>
@@ -79,7 +82,7 @@ export function HomeOcr({navigation}:any){
                         <LoadingComponent label='Cargando lista de registros...'/>:
                         state.error?
                         <EmptyComponent label='Hubo un error en la carga de datos'/>:
-                        state.data?.length===0?
+                        state.data===0?
                         <EmptyComponent label='El usuario no cuenta con registros aún'/>:
                         <FlatList renderItem={(item)=>
                             <MainOcrComponent 

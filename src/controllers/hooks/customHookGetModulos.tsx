@@ -53,8 +53,12 @@ export const useApiGetModulos = (): { state: ApiState } => {
 
             const data=await apiQuery.ModuloProcessGet(api_ml_production_modulo_get_all);
 
-            if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
-            else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
+            data?.statusCodeApi===1?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
+            data?.statusCodeApi===0?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null }):
+            dispatch({ type: actionTypes.FETCH_FAILURE});
+            
             
         } catch (error) {
 

@@ -21,7 +21,7 @@ export function HomeOp({navigation}:any){
     const [ newRegister, setNewRegister ] = useState <boolean>(false);
 
     const { state } = contextStorage?.account?.home?.[1].mainFetch(contextStorage.currentUser?.documentoid)
-
+    console.log(state)
     const [ detailOpListState, setDetailOpListState ] = useState <boolean>(false);
     const [ opId,  setopId] = useState <string | null>(null);
 
@@ -73,7 +73,7 @@ export function HomeOp({navigation}:any){
                             <LoadingComponent label='Cargando lista de registros...'/>:
                             state.error?
                             <EmptyComponent label='Hubo un error en la carga de datos'/>:
-                            state.data?.length===0?
+                            state.data===0?
                             <EmptyComponent label='El usuario no cuenta con registros aún'/>:
                             <FlatList 
                             renderItem={(item)=>

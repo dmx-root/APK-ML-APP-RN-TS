@@ -1,8 +1,8 @@
-import { api_ml_production_op_get_by_user }                 from '../../endpoints/ml_api/restApiMujerLatina';
-import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
-import { useEffect, useReducer }               from 'react';
-import { OpObjectRequest } from '../../services/ml_api/request/opObjectRequest';
-import { OpInterface } from '../../interfaces/services/ml_api/opInterfaces';
+import { api_ml_production_op_get_by_user }     from '../../endpoints/ml_api/restApiMujerLatina';
+import { statusApi}                             from '../../interfaces/services/ml_api/apiResponse'
+import { OpObjectRequest }                      from '../../services/ml_api/request/opObjectRequest';
+import { OpInterface }                          from '../../interfaces/services/ml_api/opInterfaces';
+import { useEffect, useReducer }                from 'react';
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -20,7 +20,6 @@ interface ApiAction {
     type: string;
     payload?: any;
 }
-
 
 const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     switch (action.type) {
@@ -52,13 +51,14 @@ export const useApiGetOpByUser = (documentId:string): { state: ApiState } => {
 
             const data=await apiQuery.OpProductionGetByUser(api_ml_production_op_get_by_user,documentId);
 
-            if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
-            else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
+            data?.statusCodeApi===1?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
+            data?.statusCodeApi===0?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: 0 }):
+            dispatch({ type: actionTypes.FETCH_FAILURE});
             
         } catch (error) {
-
             dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error'});
-
         }
     };
     useEffect(()=>{

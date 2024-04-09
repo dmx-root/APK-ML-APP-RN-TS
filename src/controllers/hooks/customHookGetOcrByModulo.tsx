@@ -50,8 +50,11 @@ export const useApiGetOcrByModulo = (moduloId:string): { state: ApiState } => {
 
             const data=await apiQuery.OcrProductionGetByModulo(api_ml_production_ocr_get_by_modulo,moduloId);
 
-            if(data?.statusCodeApi===1)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data })
-            else dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
+            data?.statusCodeApi===1?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
+            data?.statusCodeApi===0?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null}):
+            dispatch({ type: actionTypes.FETCH_FAILURE});
             
         } catch (error) {
 

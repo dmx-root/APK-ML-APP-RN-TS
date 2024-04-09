@@ -52,7 +52,9 @@ export const useApiGetOcrAll = () : { state: ApiState } => {
 
             data?.statusCodeApi===1?
             dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
-            dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
+            data?.statusCodeApi===0?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: 0 }):
+            dispatch({ type: actionTypes.FETCH_FAILURE});
             
         } catch (error) {
 
