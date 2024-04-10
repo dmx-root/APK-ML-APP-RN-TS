@@ -1,5 +1,4 @@
-import {View,StyleSheet, Dimensions, TouchableOpacity,Text, FlatList} from 'react-native';
-import { PlusIcon }                                         from '../public/icons/plusIcon';
+import {View,StyleSheet, Dimensions, Text, FlatList}        from 'react-native';
 import { MenuIcon }                                         from '../public/icons/menuIcon';
 import { SearchIcon }                                       from '../public/icons/searchIcon';
 import { ItemResize }                                       from '../components/ItemResize';
@@ -8,11 +7,10 @@ import { ItemNavigation }                                   from '../components/
 import { MainModuloComponent }                              from '../components/mainModuloComponent';
 import { useMainContext }                                   from '../contexts/mainContext';
 import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
-import { useApiGetModulos }                                 from '../controllers/hooks/customHookGetModulos';
+import { useApiGetModulosAll }                              from '../controllers/hooks/customHookGetModulosGetAllFilter'
 import { LoadingComponent }                                 from '../components/loadingComponent';
 import { EmptyComponent }                                   from '../components/emptyComponent';
 import { useState }                                         from 'react'
-import { useApiGetModulosAll } from '../controllers/hooks/customHookGetModulosGetAllFilter'
 
 const {height,width}=Dimensions.get('screen');
 
@@ -58,11 +56,13 @@ export function HomeModulos({navigation}:any){
                             </View>
                         </View>
                         <View style={StyleMainWindow.fieldContainer}>
-                            <View style={{width:'13%',height:'100%'}}></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'30%',height:'100%'}}><Text style={StyleMainWindow.textField}>NOMBRE DE OPERARIO</Text></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>DOCUMENTO</Text></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'20%',height:'100%'}}><Text style={StyleMainWindow.textField}>CÓDIGO</Text></View>
-                            <View style={{justifyContent:'center',alignItems:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>MODULO</Text></View>
+                            <View style={{width:'20%',height:'100%'}}></View>
+                            <View style={{justifyContent:'center',width:'14%',height:'100%'}}><Text style={StyleMainWindow.textField}>MÓDULO</Text></View>
+                            <View style={{justifyContent:'center',width:'9%',height:'100%'}}><Text style={StyleMainWindow.textField}>OCR</Text></View>
+                            <View style={{justifyContent:'center',width:'11%',height:'100%'}}><Text style={StyleMainWindow.textField}>TALLA</Text></View>
+                            <View style={{justifyContent:'center',width:'16%',height:'100%'}}><Text style={StyleMainWindow.textField}>COLOR</Text></View>
+                            <View style={{justifyContent:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>OP</Text></View>
+                            <View style={{justifyContent:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>REFERENCIA</Text></View>
                         </View> 
                     </View>
                     <View style={StyleMainWindow.root1}>
@@ -86,7 +86,6 @@ export function HomeModulos({navigation}:any){
                         }
                         </View>
                         {contextStorage?.account?.home?.filter(icon=>icon.id===3)[0].actionObject(()=>{
-
                             })||<></>}
                     </View>
                     <View style={StyleMainWindow.root2}>

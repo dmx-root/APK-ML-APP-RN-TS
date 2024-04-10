@@ -1,42 +1,41 @@
-import { Dimensions, StyleSheet, View,Text,Image }    from 'react-native';
+import { Dimensions, StyleSheet, View, Image }  from 'react-native';
 import { ItemList }                             from './itemList';
 import { AnalitycsIcon }                        from '../public/icons/analitycsIcon';
 import { OpIcon }                               from '../public/icons/opIcon';
-import { OcrIcon }                              from '../public/icons/ocrIcon';
-import { CalendarIcon }                         from '../public/icons/calendarIcon';
-import { EmployeerIcon } from '../public/icons/employeerIcon';
-import { UserIcon } from '../public/icons/userIcon';
+import { EmployeerIcon }                        from '../public/icons/employeerIcon';
+import { UserIcon }                             from '../public/icons/userIcon';
+import { ModuloProcessInterface } from '../interfaces/services/ml_api/moduloInterfaces'
 
 const {height} = Dimensions.get('window');
 
-export function InformationHeaderViewComponentModulo(){
+export function InformationHeaderViewComponentModulo({data}:{data: ModuloProcessInterface}){
     return  <View style={headComponentStyle.container}>
                 <View style={headComponentStyle.iconContainer}>
                     <Image  style={headComponentStyle.img} source={require('../public/img/modulo-img-2.png')}/>
                 </View>
                 <View style={headComponentStyle.body}>
                     <View style={headComponentStyle.column}>
-                        <ItemList label='MODULO 10' style={2} position='start'>
+                        <ItemList label={data.moduloEtiqueta} style={2} position='start'>
                             <></>
                         </ItemList>
-                        <ItemList label='12 Operarios' style={1} position='start'>
+                        <ItemList label={`${data.numeroTrabajadores||0} Operarios`} style={1} position='start'>
                             <EmployeerIcon color='#AAA' size={24} width={2}/>
                         </ItemList>
-                        <ItemList label='Revisor 1146441925' style={1} position='start'>
+                        <ItemList label={`Revisor ${data.revisorActualNombre?.slice(0,10)+'...'||'No definido'}`} style={1} position='start'>
                             <UserIcon color='#AAA' size={24} width={2}/>
                         </ItemList>
                         
                     </View>
                     <View style={headComponentStyle.column}>
-                        <ItemList label='200 Unidades Planeadas' style={2} position='end'>
+                        <ItemList label={`Referencia... ${data.referenciaActual|| 'No definido'}`||'200 Unidades Planeadas'} style={2} position='end'>
                             {/* <></> */}
                             <AnalitycsIcon color='#AAA' size={24} width={2}/>
                         </ItemList>
-                        <ItemList label='Ejecutando la OP MOP3548' style={1} position='end'>
+                        <ItemList label={`Ejecutando la OP ${data.opActual||'No definida'}`} style={1} position='end'>
                             <OpIcon color='#AAA' size={24} width={2}/>
                             {/* <></> */}
                         </ItemList>
-                        <ItemList label='Ejecutando la talla XL' style={1} position='end'>
+                        <ItemList label={`Ejecutando la talla ${data.tallaActual}`} style={1} position='end'>
                             <></>
                         </ItemList>
                     </View>    

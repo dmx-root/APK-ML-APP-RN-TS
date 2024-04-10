@@ -48,13 +48,13 @@ export const useApiGetOcrAll = () : { state: ApiState } => {
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.OcrProductionGetAll(api_ml_production_ocr_get_all);
+            // const data=await apiQuery.OcrProductionGetAll(api_ml_production_ocr_get_all);
 
-            data?.statusCodeApi===1?
-            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
-            data?.statusCodeApi===0?
-            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null }):
-            dispatch({ type: actionTypes.FETCH_FAILURE});
+            // data?.statusCodeApi===1?
+            // dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
+            // data?.statusCodeApi===0?
+            // dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null }):
+            // dispatch({ type: actionTypes.FETCH_FAILURE});
             
         } catch (error) {
 

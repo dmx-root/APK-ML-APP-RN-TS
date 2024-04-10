@@ -1,8 +1,8 @@
-import { api_ml_production_ocr_get_by_modulo }        from '../../endpoints/ml_api/restApiMujerLatina';
-import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
-import { OcrProcessesInterface }    from '../../interfaces/services/ml_api/ocrInterfaces';
-import { OcrObjectRequest }         from '../../services/ml_api/request/ocrObjectRequest';
-import { useEffect, useReducer }    from 'react';
+import { api_ml_production_ocr_get_by_modulo }      from '../../endpoints/ml_api/restApiMujerLatina';
+import { statusApi}                                 from '../../interfaces/services/ml_api/apiResponse'
+import { OcrProcessesInterface }                    from '../../interfaces/services/ml_api/ocrInterfaces';
+import { InterfaceOCRRequest }                      from '../../services/ml_api/request/ocrObjectRequest';
+import { useEffect, useReducer }                    from 'react';
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -11,7 +11,7 @@ const actionTypes = {
 };
 
 interface ApiState {
-    data: Array<OcrProcessesInterface> | null;
+    data: OcrProcessesInterface[] | null;
     loading: boolean;
     error: statusApi | null;
 }
@@ -20,6 +20,14 @@ interface ApiAction {
     type: string;
     payload?: any;
 }
+
+interface FetchInterface {
+    url : string,
+    params? : {
+        [key : string] :any
+    }
+    token? : string,
+} 
 
 const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     switch (action.type) {
@@ -42,17 +50,19 @@ export const useApiGetOcrByModulo = (moduloId:string): { state: ApiState } => {
         error: null,
     });
 
-    async function fetchData():Promise<void>{
+    async function fetchData(params : FetchInterface) : Promise<void>{
         try {
-            const apiQuery = new OcrObjectRequest();
+            // const apiQuery = new OcrObjectRequest();
+            const fetch = new InterfaceOCRRequest();
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.OcrProductionGetByModulo(api_ml_production_ocr_get_by_modulo,moduloId);
+            // const data = await apiQuery.OcrProductionGetByModulo(api_ml_production_ocr_get_by_modulo,moduloId);
+            const response = await fetch.productionData(params);
 
-            data?.statusCodeApi===1?
-            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
-            data?.statusCodeApi===0?
+            response?.statusCodeApi===1?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }):
+            response?.statusCodeApi===0?
             dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null}):
             dispatch({ type: actionTypes.FETCH_FAILURE});
             
@@ -64,7 +74,10 @@ export const useApiGetOcrByModulo = (moduloId:string): { state: ApiState } => {
     };
 
     useEffect(()=>{
-        fetchData();
+        fetchData({
+            url:api_ml_production_ocr_get_by_modulo+moduloId,
+        });
+        console.log('success')
     },[]);
   
     return { state };

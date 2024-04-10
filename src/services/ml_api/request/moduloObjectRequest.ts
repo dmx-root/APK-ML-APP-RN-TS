@@ -1,5 +1,5 @@
 import { ModuloProcessInterface }       from "../../../interfaces/services/ml_api/moduloInterfaces";
-import { handlerAxiosError }            from '../../../utilities/handlerAxiosError'
+import { handlerAxiosError }            from '../../../utilities/handlerAxiosError';
 import { ConectionInterfaceRequest }    from "../conection/conectionObjectRequest";
 
 interface ParamsInterface{

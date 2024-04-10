@@ -135,46 +135,6 @@ export class OpObjectRequest extends ConectionObjectRequest{
             return response;
         }    
     }
-    async OpProductionGetAll(uri : string, token? : string) : Promise <any>{
-        try {
-            const response = (await this.getData(uri,null,token)).data;
-            if(response.apiCode === 1){
-                const dataClear :  OpInterface[] =response.data.map(( element : any )=>{
-                    return {
-                        op:                             element.op_id,
-                        referencia:                     element.referencia,
-                        ocrCantidad:                    element.ocr_cantidad,
-                        opLotePlaneado:                 element.cantidad_planeada,
-                        opLoteCompletado:               element.cantidad_ejecutada,
-                        opFechaAperturaProceso:         element.fecha_apertura_proceso,
-                        opFechaCierreProceso:           element.fecha_cierre_proceso,
-                        opFechaAperturaProcesoPlaneado: element.fecha_planeada_apertura_proceso,
-                        opFechaCierreProcesoPlaneado:   element.fecha_planeada_cierre_proceso,
-                        opEstado:                       element.estado,
-                    }
-                });
-                
-                const basicInfoOpInterface : allBasicOpResponseInterface = {
-                    statusCodeApi:response.apiCode,
-                    statusMessageApi:response.apiMessage,
-                    data:dataClear
-                }
-                // console.log(basicInfoOpInterface)
-
-                return basicInfoOpInterface;
-            }
-            
-            const basicInfoOpInterface:statusApi={
-                statusCodeApi:response.apiCode,
-                statusMessageApi:response.apiMessage,
-            }
-            return basicInfoOpInterface;
- 
-        } catch (error) {
-            const response = handlerAxiosError(error);
-            return response;
-        }
-    } 
 }
 
 interface ParamsInterface{

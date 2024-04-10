@@ -14,8 +14,6 @@ import { OcrProcessesInterface }                            from '../interfaces/
 import { ModalOcrInfo }                                     from '../modals/modalOcrInfo';
 import { InformationOcrEventsComponent }                    from '../components/informationOcrEventsComponent';
 import { InformationOcrCheckComponent }                     from '../components/informationOcrCheckComponent';
-import { InformationModuloScreenProps }                     from '../interfaces/screens/screensInterfaces';
-import { handlerOcrRenderList }                             from '../controllers/helpers/handlerOcrRenderList';
 import { useState }                                         from 'react';
 
 const {height,width}=Dimensions.get('screen');
@@ -31,7 +29,7 @@ export function InformationModulo({route,navigation}:any){
         {id:6,label:'Anormalidades'},
     ]
 
-    const moduloData:ModuloProcessInterface=route.params;
+    const moduloData : ModuloProcessInterface = route.params;
     
     const [itemState,setItemSelec]=useState<number|null>(1);
     const { state } = useApiGetOcrByModulo(moduloData.moduloId.toString());
@@ -80,7 +78,7 @@ export function InformationModulo({route,navigation}:any){
                     state.data===null?
                     <EmptyComponent label='EL módulo no cuenta con registros aún...'/>:
                     <>
-                        <InformationHeaderViewComponentModulo/>
+                        <InformationHeaderViewComponentModulo data={moduloData}/>
                         <FlatList 
                         renderItem={(item)=>
                             item.item.revisadoFecha?
@@ -132,8 +130,6 @@ export function InformationModulo({route,navigation}:any){
 }
 
 const currentColorMain='#44329C';   //azul oscuro
-const currentColorMain1='#C7CCEC';  //Azul claro
-const currentColorMain2='#e8e8e8';  //gris muy claro
 
 const StyleMainWindow=StyleSheet.create({
     headerBack:{
