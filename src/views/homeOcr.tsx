@@ -14,12 +14,13 @@ import { ItemResize }                                                   from '..
 import { useMainContext }                                               from '../contexts/mainContext';
 import { ModalOcrInfo }                                                 from '../modals/modalOcrInfo';
 import { Aside }                                                        from '../components/aside';
+import { useApiGetOcrAll }                                              from '../controllers/hooks/customHookGetAllOcrFilter'
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList}   from 'react-native';
 import { useState }                                                     from 'react';
 
 const {height,width}=Dimensions.get('screen');
 
-export function HomeOcr({navigation}:any){
+export function HomeOcr({navigation} : any){
 
     const contextStorage = useMainContext();
 
@@ -29,12 +30,14 @@ export function HomeOcr({navigation}:any){
 
     const [ modalInfoState,setModalInfoState ] =            useState<boolean>(false);
     const [ ocrProcessData, setOcrProcessData ] =           useState<OcrProcessesInterface|null>(null);
-    const [ itemSelect, setItemSelect ] =                   useState<number>(1);
     
     const currentOp = useLocalStorageGetData('currentOp');
 
-    const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
+    // const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
 
+    const { state, itemSelector, setItemSelector } = useApiGetOcrAll();
+
+    // console.log(state, 'jajaja')
     return<>
     <View style={{height,width}}>
         <View style={StyleMainWindow.backRoots}></View>
@@ -56,8 +59,8 @@ export function HomeOcr({navigation}:any){
                     <View style={StyleMainWindow.labels}>
                         {
                         contextStorage?.account?.home?.filter(icon=>icon.id===1)[0].filterList.map(element=>
-                            <ItemResize key={element.id} state={element.id===itemSelect?true:false} handlerClick={()=>{
-                                setItemSelect(element.id)
+                            <ItemResize key={element.id} state={element.id===itemSelector?true:false} handlerClick={()=>{
+                                setItemSelector(element.id)
                             }} label={element.label}/>)
                         }
                     </View>
@@ -82,7 +85,7 @@ export function HomeOcr({navigation}:any){
                         <LoadingComponent label='Cargando lista de registros...'/>:
                         state.error?
                         <EmptyComponent label='Hubo un error en la carga de datos'/>:
-                        state.data===0?
+                        state.data===null?
                         <EmptyComponent label='El usuario no cuenta con registros aún'/>:
                         <FlatList renderItem={(item)=>
                             <MainOcrComponent 

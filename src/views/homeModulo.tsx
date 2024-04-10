@@ -6,21 +6,23 @@ import { ItemResize }                                       from '../components/
 import { FilterIcon }                                       from '../public/icons/filterIcon';
 import { ItemNavigation }                                   from '../components/itemNavigation';
 import { MainModuloComponent }                              from '../components/mainModuloComponent';
-import { useState }                                         from 'react'
 import { useMainContext }                                   from '../contexts/mainContext';
-import { ModalRegisterOcr } from '../modals/ModalRegisterOcr';
-import { useApiGetModulos } from '../controllers/hooks/customHookGetModulos';
-import { LoadingComponent } from '../components/loadingComponent';
-import { EmptyComponent } from '../components/emptyComponent';
+import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
+import { useApiGetModulos }                                 from '../controllers/hooks/customHookGetModulos';
+import { LoadingComponent }                                 from '../components/loadingComponent';
+import { EmptyComponent }                                   from '../components/emptyComponent';
+import { useState }                                         from 'react'
+import { useApiGetModulosAll } from '../controllers/hooks/customHookGetModulosGetAllFilter'
 
 const {height,width}=Dimensions.get('screen');
 
 export function HomeModulos({navigation}:any){
 
-    const [itemState,setItemSelec]=useState<number|null>(1);
     const [newRegister,setNewRegister] = useState<boolean>(false);
-    const { state } = useApiGetModulos();
+    // const { state } = useApiGetModulos();
+    const {state, setItemSelector, itemSelector} = useApiGetModulosAll();
 
+    // console.log(state)
     const contextStorage = useMainContext();
 
     return<>
@@ -47,8 +49,8 @@ export function HomeModulos({navigation}:any){
                                 {contextStorage?.account?.home?.filter(icon=>icon.id===3)[0].filterList.map(element=>
                                 <ItemResize
                                     key={element.id} 
-                                    state={itemState===element.id?true:false} 
-                                    handlerClick={()=>{setItemSelec(element.id)}} 
+                                    state={itemSelector===element.id?true:false} 
+                                    handlerClick={()=>{setItemSelector(element.id)}} 
                                     label={element.label}/>)}
                             </View>
                             <View style={StyleMainWindow.labelsIcon}>

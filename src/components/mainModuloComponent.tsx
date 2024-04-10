@@ -1,9 +1,8 @@
 
-import { View, TouchableOpacity, Image, Text, Dimensions, StyleSheet, GestureResponderEvent} from 'react-native';
-import { CalendarIcon } from '../public/icons/calendarIcon';
-import { AnalitycsIcon } from '../public/icons/analitycsIcon';
-import { OcrIcon } from '../public/icons/ocrIcon';
-import { ModuloProcessInterface } from '../interfaces/services/ml_api/moduloInterfaces';
+import { View, TouchableOpacity, Image, Text, Dimensions, StyleSheet, GestureResponderEvent}    from 'react-native';
+import { AnalitycsIcon }                                                                        from '../public/icons/analitycsIcon';
+import { OcrIcon }                                                                              from '../public/icons/ocrIcon';
+import { ModuloProcessInterface }                                                               from '../interfaces/services/ml_api/moduloInterfaces';
 
 const {height}=Dimensions.get('window');
 

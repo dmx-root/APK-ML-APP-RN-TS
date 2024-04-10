@@ -2,11 +2,12 @@ import { FilterItem } from "../../interfaces/app/homeRoutes";
 
 export const FILTER_ITEMS_OCR_HOME : FilterItem[] = [
     {id:1,label:'Todos'},
-    {id:2,label:'Eventualidades'},
-    {id:3,label:'Revisados'},
-    {id:4,label:'Sin Revisar'},
-    {id:5,label:'MOP'},
-    {id:6,label:'MOB'}
+    {id:2,label:'Revisados'},
+    {id:3,label:'Sin Revisar'},
+    {id:4,label:'MOP'},
+    {id:5,label:'MOB'},
+    {id:6,label:'Pri.'},
+    {id:7,label:'Seg.'},
 ];
 
 export const FILTER_ITEMS_OP_HOME : FilterItem[] = [

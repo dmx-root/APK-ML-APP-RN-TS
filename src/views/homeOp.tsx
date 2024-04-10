@@ -1,3 +1,4 @@
+import { useApiGetOpFilter }                                from '../controllers/hooks/customHookGetAllOpFilter';
 import { LoadingComponent }                                 from '../components/loadingComponent';
 import { MainOpComponent }                                  from '../components/mainOpComponent';
 import { ItemNavigation }                                   from '../components/itemNavigation';
@@ -16,14 +17,14 @@ const {height,width}=Dimensions.get('screen');
 
 export function HomeOp({navigation}:any){
 
-    const contextStorage = useMainContext();
-    const [ itemState, setItemSelec ] = useState <number | null>(1);
-    const [ newRegister, setNewRegister ] = useState <boolean>(false);
+    const contextStorage                    = useMainContext();
+    const [ newRegister, setNewRegister ]   = useState <boolean>(false);
 
-    const { state } = contextStorage?.account?.home?.[1].mainFetch(contextStorage.currentUser?.documentoid)
-    console.log(state)
-    const [ detailOpListState, setDetailOpListState ] = useState <boolean>(false);
-    const [ opId,  setopId] = useState <string | null>(null);
+    // const { state } = contextStorage?.account?.home?.[1].mainFetch(contextStorage.currentUser?.documentoid)
+    const { state, setItemSelector, itemSelector }      = useApiGetOpFilter();
+
+    const [ detailOpListState, setDetailOpListState ]   = useState <boolean>(false);
+    const [ opId,  setopId]                             = useState <string | null>(null);
 
     return<>
      <View style={{height,width}}>
@@ -49,8 +50,8 @@ export function HomeOp({navigation}:any){
                                 {contextStorage?.account?.home?.filter(icon=>icon.id===2)[0].filterList.map(element=>
                                 <ItemResize
                                     key={element.id} 
-                                    state={itemState===element.id?true:false} 
-                                    handlerClick={()=>{setItemSelec(element.id)}} 
+                                    state={itemSelector===element.id?true:false} 
+                                    handlerClick={()=>{setItemSelector(element.id)}} 
                                     label={element.label}/>)}
                             </View>
                             <View style={StyleMainWindow.labelsIcon}>
@@ -73,7 +74,7 @@ export function HomeOp({navigation}:any){
                             <LoadingComponent label='Cargando lista de registros...'/>:
                             state.error?
                             <EmptyComponent label='Hubo un error en la carga de datos'/>:
-                            state.data===0?
+                            state.data===null?
                             <EmptyComponent label='El usuario no cuenta con registros aún'/>:
                             <FlatList 
                             renderItem={(item)=>

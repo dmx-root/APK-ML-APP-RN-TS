@@ -1,7 +1,7 @@
 import axios,{AxiosRequestConfig} from 'axios';
 
 interface Data {
-    [key:string]:string|number|boolean|Date
+    [key:string]:string|number|boolean|Date|null
 }
 
 export class ConectionObjectRequest{
@@ -21,4 +21,32 @@ export class ConectionObjectRequest{
    
     }
 
+}
+
+interface ParamsInterface{
+    [key : string] : any
+}
+
+interface PropertiesInterface{
+    url : string; 
+    params? : ParamsInterface; 
+    token? : string
+}
+
+export class ConectionInterfaceRequest{
+
+    async getData({url, params, token} : PropertiesInterface){
+
+        const data:AxiosRequestConfig={
+            method:"get",
+            url,
+            params: params || null,
+            headers:{
+                "Authenticate-Token":token || null
+            },
+            withCredentials:true
+        }
+    return await axios(data);
+   
+    }
 }

@@ -35,7 +35,7 @@ export const handlerAxiosError : ( error : unknown ) => ApiResponse  = ( error :
     else{          
         const authInterface : ApiResponse = {
             statusCodeApi:    -1,
-            statusMessageApi: "Error de método y consulta",
+            statusMessageApi: "Error de red",
             statusCode: 500,
 
         }
