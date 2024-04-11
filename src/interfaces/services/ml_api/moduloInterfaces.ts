@@ -20,14 +20,14 @@ export interface ModuloProcessInterface{
 }
 
 export interface EmployeerProcessInterface{
-    moduloId:number,
-    numeroOperarios:number,
-    moduloEtiqueta:string,
+    moduloId:number | null,
     operarioCodigo:string,
-    operarioNombre:string| null,
+    operarioNombre:string | null,
     operarioDescripcion:string,
-    creacionFecha:Date,
-    integracionModuloFecha:Date|null
+    documento:string,
+    creacionFecha:Date | string,
+    stado:boolean,
+    integracionModuloFecha:Date | null | string
 }
 
 export interface ModuloProcessesResponseInterface extends statusApi{

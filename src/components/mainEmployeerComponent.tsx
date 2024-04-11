@@ -1,9 +1,9 @@
 import { View, TouchableOpacity, Image, Text, Dimensions, StyleSheet} from 'react-native';
 import { ModuloIcon } from '../public/icons/moduloIcon';
-
+import { EmployeerProcessInterface } from '../interfaces/services/ml_api/moduloInterfaces';
 const {height}=Dimensions.get('window');
 
-export function MainEmployeerComponent(){
+export function MainEmployeerComponent({data}:{data:EmployeerProcessInterface}){
     return <View>
                 <TouchableOpacity style={employeerStyle.employeercontainer} onPress={()=>{}}>
                     <View style={employeerStyle.employeerIconContainer}>
@@ -14,17 +14,17 @@ export function MainEmployeerComponent(){
                     </View>
                     <View style={employeerStyle.body}>
                         <View style={employeerStyle.employeerNumber}>
-                            <Text style={employeerStyle.content}>{'David Esteban Morales'}</Text>
+                            <Text style={employeerStyle.content}>{data.operarioNombre}</Text>
                         </View>
                         <View style={employeerStyle.employeerCantidad}>
-                            <Text style={employeerStyle.content}>{'1146441925'}</Text>
+                            <Text style={employeerStyle.content}>{data.documento}</Text>
                         </View>
                         <View style={employeerStyle.employeerPositiveActions}>
-                            <Text style={employeerStyle.content}>{'320'}</Text>
+                            <Text style={employeerStyle.content}>{data.operarioCodigo}</Text>
                         </View>
                         <View style={employeerStyle.employeerNegativeActions}>
-                            <ModuloIcon color='#AAA' size={25} width={2}/>
-                            <Text style={employeerStyle.content}>{'MÓDULO-1'}</Text>
+                            {/* <ModuloIcon color='#AAA' size={25} width={2}/> */}
+                            <Text style={employeerStyle.content}>{data.operarioDescripcion.slice(0,25)+'...'}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -57,7 +57,7 @@ const employeerStyle=StyleSheet.create({
         height:'100%',
         width:'15%',
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
     },
     employeerIcon:{
         width:40,
@@ -74,21 +74,22 @@ const employeerStyle=StyleSheet.create({
         justifyContent:'center'
     },
     employeerCantidad:{
-        width:'25%',
+        width:'20%',
         // backgroundColor:'aqua',
         height:'100%',
         justifyContent:'center',
         alignItems:'center'
     },
     employeerPositiveActions:{
-        width:'15%',
+        width:'10%',
         height:'100%',
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-evenly'
     },
     employeerNegativeActions:{
-        width:'25%',
+        backgroundColor:'aqua',
+        width:'40%',
         height:'100%',
         // flex:1,
         // backgroundColor:'aqua',

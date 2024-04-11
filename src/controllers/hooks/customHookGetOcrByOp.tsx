@@ -1,7 +1,7 @@
-import { api_ml_production_ocr_get_by_op }        from '../../endpoints/ml_api/restApiMujerLatina';
-import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
-import { OcrProcessesInterface }    from '../../interfaces/services/ml_api/ocrInterfaces';
-import { OcrObjectRequest }         from '../../services/ml_api/request/ocrObjectRequest';
+import { api_ml_production_ocr_get_by_op }          from '../../endpoints/ml_api/restApiMujerLatina';
+import { statusApi}                                 from '../../interfaces/services/ml_api/apiResponse'
+import { OcrProcessesInterface }                    from '../../interfaces/services/ml_api/ocrInterfaces';
+import { OcrObjectRequest, InterfaceOCRRequest }    from '../../services/ml_api/request/ocrObjectRequest';
 import { useEffect, useReducer }    from 'react';
 
 const actionTypes = {
@@ -20,6 +20,14 @@ interface ApiAction {
     type: string;
     payload?: any;
 }
+
+interface FetchInterface {
+    url : string,
+    params? : {
+        [key : string] :any
+    }
+    token? : string,
+} 
 
 const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     switch (action.type) {
@@ -42,17 +50,18 @@ export const useApiGetOcrByOP = ({op,color,talla}:{op:string,color:string,talla:
         error: null,
     });
 
-    async function fetchData():Promise<void>{
+    async function fetchData(params : FetchInterface ) : Promise<void>{
         try {
-            const apiQuery = new OcrObjectRequest();
+
+            const fetch = new InterfaceOCRRequest();
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.OcrProductionGetByOP(api_ml_production_ocr_get_by_op,{op,color,talla});
-
-            data?.statusCodeApi===1?
-            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
-            data?.statusCodeApi===0?
+            const response = await fetch.productionData(params);
+            console.log(response)
+            response.statusCodeApi===1?
+            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }):
+            response?.statusCodeApi===0?
             dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null }):
             dispatch({ type: actionTypes.FETCH_FAILURE});
             
@@ -64,7 +73,14 @@ export const useApiGetOcrByOP = ({op,color,talla}:{op:string,color:string,talla:
     };
 
     useEffect(()=>{
-        fetchData();
+        fetchData({
+            url: api_ml_production_ocr_get_by_op,
+            params: {
+                op,
+                color,
+                talla
+            }
+        });
     },[]);
   
     return { state };

@@ -1,6 +1,4 @@
-import {View,StyleSheet, Dimensions, TouchableOpacity,Text} from 'react-native';
-import { MainOpComponent }                                  from '../components/mainOpComponent';
-import { PlusIcon }                                         from '../public/icons/plusIcon';
+import {View,StyleSheet, Dimensions, TouchableOpacity,Text, FlatList} from 'react-native';
 import { MenuIcon }                                         from '../public/icons/menuIcon';
 import { SearchIcon }                                       from '../public/icons/searchIcon';
 import { ItemResize }                                       from '../components/ItemResize';
@@ -8,8 +6,11 @@ import { FilterIcon }                                       from '../public/icon
 import { ItemNavigation }                                   from '../components/itemNavigation';
 import { MainEmployeerComponent }                           from '../components/mainEmployeerComponent';
 import { useMainContext }                                   from '../contexts/mainContext';
+import { useApiGetEmployees }                               from '../controllers/hooks/customHookGetAllEmployees'
 import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
 import { useState }                                         from 'react'
+import { LoadingComponent } from '../components/loadingComponent';
+import { EmptyComponent } from '../components/emptyComponent';
 
 
 const {height,width}=Dimensions.get('screen');
@@ -18,6 +19,8 @@ export function HomeEmployeer({navigation}:any){
 
     const [itemState,setItemSelec]=useState<number|null>(1);
     const [newRegister,setNewRegister] = useState<boolean>(false);
+
+    const {state } = useApiGetEmployees();
 
     const contextStorage= useMainContext();
 
@@ -63,10 +66,23 @@ export function HomeEmployeer({navigation}:any){
                         </View>
                         <View style={StyleMainWindow.root1}>
                             <View style={StyleMainWindow.frame1}>
-                                <MainEmployeerComponent/>
-                                <MainEmployeerComponent/>
-                                <MainEmployeerComponent/>
-                                <MainEmployeerComponent/>
+                                
+                                {
+                                    state.loading?
+                                    
+                                    <LoadingComponent label='Cargando lista de registros...'/>:
+                                    state.error?
+                                    <EmptyComponent label='Hubo un error en la carga de datos'/>:
+                                    state.data===null?
+                                    <EmptyComponent label='El usuario no cuenta con registros aún'/>:
+                                    <FlatList renderItem={(item)=>
+                                        <MainEmployeerComponent 
+                                        key={item.item.documento}
+                                        data={item.item}
+                                        />
+                                        } 
+                                    data={state?.data}/>
+                                }
                             </View>
                             {contextStorage?.account?.home?.filter(icon=>icon.id===4)[0].actionObject(()=>{
 

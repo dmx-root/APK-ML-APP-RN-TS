@@ -1,6 +1,6 @@
-import { api_ml_production_op_details_get }     from '../../endpoints/ml_api/restApiMujerLatina';
-import { OpDetail  }                            from '../../interfaces/services/ml_api/detailOpInteface';
-import { InterfaceDetailOPRequest }             from '../../services/ml_api/request/reques.interfaceDetailOp';
+import { api_ml_production_employees_list }     from '../../endpoints/ml_api/restApiMujerLatina';
+import { EmployeerProcessInterface }                            from '../../interfaces/services/ml_api/moduloInterfaces';
+import { InterfaceEmployeeRequest }             from '../../services/ml_api/request/request.interfaceEmployees';
 import { useEffect, useReducer }                from 'react';
 
 //  Doc 
@@ -16,7 +16,7 @@ const actionTypes = {
 };
 
 interface ApiState {
-    data: OpDetail[] | null;
+    data: EmployeerProcessInterface[] | null;
     loading: boolean;
     error: string | null;
 }
@@ -47,7 +47,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
   
-   export const useApiGetDetailsOp : ( op:string ) => { state: ApiState} = ( op:string ): { state: ApiState} => {
+export const useApiGetEmployees : () => { state: ApiState} = (): { state: ApiState} => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -55,10 +55,10 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         error: null,
     });
 
-    async function fetchDataDetailsOp( params : FetchInterface ) : Promise <void>{
+    async function fetchData( params : FetchInterface ) : Promise <void>{
         try {
             
-            const fetch = new InterfaceDetailOPRequest();
+            const fetch = new InterfaceEmployeeRequest();
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
@@ -76,8 +76,8 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         }
     };
     useEffect(()=>{
-        fetchDataDetailsOp({
-            url: api_ml_production_op_details_get+op
+        fetchData({
+            url: api_ml_production_employees_list
         });
     },[])
   

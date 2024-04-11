@@ -19,8 +19,7 @@ export function ModalDetailOpList({opId,handlerClick,navigation}:{
     handlerClick:(event : GestureResponderEvent) => void,
     navigation : any
 }){
-    const { state, fetchDataDetailsOp } = useApiGetDetailsOp();
-    useEffect(()=>{fetchDataDetailsOp(opId||'')},[]);
+    const { state } = useApiGetDetailsOp(opId || "");
 
     return <>
         {

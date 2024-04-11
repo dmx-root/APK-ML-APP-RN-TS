@@ -1,6 +1,5 @@
 import {uri} from './config';
 
-export const get_employeers_by_modulo =         `${uri}/api/ml/modulo/employee/get/`;
 export const post_ocr_data_process =            `${uri}/api/ml/ocr/register`;
 
 // nuevos endpoints
@@ -24,3 +23,4 @@ export const api_ml_production_op_get_by_type=          `${uri}/api/ml/productio
 export const api_ml_production_op_get_by_user =         `${uri}/api/ml/production/op/list-filter-by-user`;
 export const api_ml_production_op_get_by_state =        `${uri}/api/ml/production/op/list-filter-by-state`;
 export const api_ml_production_modulo_get_by_state =    `${uri}/api/ml/production/modulo/list-filter-by-state/`;
+export const api_ml_production_employees_list =         `${uri}/api/ml/production/modulo/list-all-employees`;

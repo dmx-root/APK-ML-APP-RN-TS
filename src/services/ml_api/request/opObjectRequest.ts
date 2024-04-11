@@ -1,8 +1,8 @@
-import { DetailProcessResponseInterface, OpDetail } from '../../../interfaces/services/ml_api/detailOpInteface';
-import { OpInterface, allBasicOpResponseInterface } from '../../../interfaces/services/ml_api/opInterfaces';
-import { statusApi }                                from '../../../interfaces/services/ml_api/apiResponse';
-import { handlerAxiosError }                        from '../../../utilities/handlerAxiosError';
-import { ConectionObjectRequest, ConectionInterfaceRequest }                   from '../conection/conectionObjectRequest';
+import { DetailProcessResponseInterface, OpDetail }             from '../../../interfaces/services/ml_api/detailOpInteface';
+import { OpInterface, allBasicOpResponseInterface }             from '../../../interfaces/services/ml_api/opInterfaces';
+import { statusApi }                                            from '../../../interfaces/services/ml_api/apiResponse';
+import { handlerAxiosError }                                    from '../../../utilities/handlerAxiosError';
+import { ConectionObjectRequest, ConectionInterfaceRequest }    from '../conection/conectionObjectRequest';
 
 //  Doc 
 //  Este componente tiene la finalidad de establecer la conexión entre nuestro front y un servicio(RES_API_ML)
@@ -51,50 +51,6 @@ export class OpObjectRequest extends ConectionObjectRequest{
             return response;
         }
         
-    }
-    async DetailOpGet(uri : string, op : string, token? : string) : Promise <any>{
-        try {
-            const response = (await this.getData((uri+op),null, token)).data;
-
-            if(response.apiCode===1){
-                const dataClear:Array<OpDetail>=response.data.map((element : any)=>{
-                    return {
-                        op:                             element.op_id,
-                        referencia:                     element.referencia,
-                        ocrCantidad:                    element.ocr_cantidad,
-                        colorEtiqueta:                  element.clr_etiqueta,
-                        colorCodigo:                    element.clr_id,
-                        talla:                          element.tll_etiqueta,
-                        tallaId:                        element.tll_id,
-                        ean:                            element.ean,
-                        opLotePlaneado:                 element.cantidad_planeada,
-                        opLoteCompletado:               element.cantidad_ejecutada,
-                        opLoteRestante:                 element.cantidad_restante,
-                        opFechaAperturaProceso:         element.especificaciones_op_fecha_apertura_proceso,
-                        opFechaCierreProceso:           element.especificaciones_op_fecha_cierre_proceso,
-                        opFechaAperturaProcesoPlaneado: element.especificaciones_op_fecha_planeada_apertura_proceso,
-                        opFechaCierreProcesoPlaneado:   element.especificaciones_op_fecha_planeada_cierre_proceso,
-                    }
-                });
-                // console.log(dataClear)
-                const basicInfoOpInterface:DetailProcessResponseInterface={
-                    statusCodeApi:response.apiCode,
-                    statusMessageApi:response.apiMessage,
-                    data:dataClear
-                }
-                return basicInfoOpInterface;
-            }
-            
-            const basicInfoOpInterface:statusApi={
-                statusCodeApi:response.apiCode,
-                statusMessageApi:response.apiCode,
-            }
-            return basicInfoOpInterface;
- 
-        } catch (error) {
-            const response = handlerAxiosError(error);
-            return response;
-        } 
     }
     async OpProductionGetByUser(uri : string, documentId : string, token? : string) : Promise <any>{
         try {
@@ -203,4 +159,6 @@ export class InterfaceOPRequest extends ConectionInterfaceRequest {
         }
     }
 }
+
+
 

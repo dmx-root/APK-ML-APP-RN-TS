@@ -36,7 +36,6 @@ export function InformationDetailOp({route,navigation}:any){
         talla:opDetailsData.tallaId,
         color:opDetailsData.colorCodigo
     });
-
     const [itemState,setItemSelec]=useState<number|null>(1);
     const [modalInfoState,setModalInfoState] = useState<boolean>(false);
     const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);
