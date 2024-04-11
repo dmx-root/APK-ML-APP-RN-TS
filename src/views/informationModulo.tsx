@@ -15,6 +15,7 @@ import { ModalOcrInfo }                                     from '../modals/moda
 import { InformationOcrEventsComponent }                    from '../components/informationOcrEventsComponent';
 import { InformationOcrCheckComponent }                     from '../components/informationOcrCheckComponent';
 import { useState }                                         from 'react';
+import { useApiGetEmployeesByModulo }                       from '../controllers/hooks/customHookGetAllEmployeesByModulo'
 
 const {height,width}=Dimensions.get('screen');
 
@@ -33,7 +34,7 @@ export function InformationModulo({route,navigation}:any){
     
     const [itemState,setItemSelec]=useState<number|null>(1);
     const { state } = useApiGetOcrByModulo(moduloData.moduloId.toString());
-
+    const data = useApiGetEmployeesByModulo(moduloData.moduloId.toString());
     const [modalInfoState,setModalInfoState] = useState<boolean>(false);
     const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);
 

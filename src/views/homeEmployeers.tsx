@@ -57,11 +57,11 @@ export function HomeEmployeer({navigation}:any){
                                 </View>
                             </View>
                             <View style={StyleMainWindow.fieldContainer}>
-                                <View style={{width:'13%',height:'100%'}}></View>
-                                <View style={{justifyContent:'center',alignItems:'center',width:'30%',height:'100%'}}><Text style={StyleMainWindow.textField}>NOMBRE DE OPERARIO</Text></View>
-                                <View style={{justifyContent:'center',alignItems:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>DOCUMENTO</Text></View>
-                                <View style={{justifyContent:'center',alignItems:'center',width:'20%',height:'100%'}}><Text style={StyleMainWindow.textField}>CÓDIGO</Text></View>
-                                <View style={{justifyContent:'center',alignItems:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>MODULO</Text></View>
+                                <View style={{width:'17%',height:'100%'}}></View>
+                                <View style={{justifyContent:'center',width:'25%',height:'100%'}}><Text style={StyleMainWindow.textField}>NOMBRE DE OPERARIO</Text></View>
+                                <View style={{justifyContent:'center',width:'16%',height:'100%'}}><Text style={StyleMainWindow.textField}>DOCUMENTO</Text></View>
+                                <View style={{justifyContent:'center',width:'18%',height:'100%'}}><Text style={StyleMainWindow.textField}>CÓDIGO</Text></View>
+                                <View style={{justifyContent:'center',width:'25%',height:'100%'}}><Text style={StyleMainWindow.textField}>DESCRIPCIÓN</Text></View>
                             </View> 
                         </View>
                         <View style={StyleMainWindow.root1}>

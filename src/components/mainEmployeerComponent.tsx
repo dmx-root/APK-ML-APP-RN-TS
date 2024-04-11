@@ -1,6 +1,6 @@
 import { View, TouchableOpacity, Image, Text, Dimensions, StyleSheet} from 'react-native';
-import { ModuloIcon } from '../public/icons/moduloIcon';
-import { EmployeerProcessInterface } from '../interfaces/services/ml_api/moduloInterfaces';
+import { EmployeerProcessInterface }        from '../interfaces/services/ml_api/moduloInterfaces';
+
 const {height}=Dimensions.get('window');
 
 export function MainEmployeerComponent({data}:{data:EmployeerProcessInterface}){
@@ -14,7 +14,7 @@ export function MainEmployeerComponent({data}:{data:EmployeerProcessInterface}){
                     </View>
                     <View style={employeerStyle.body}>
                         <View style={employeerStyle.employeerNumber}>
-                            <Text style={employeerStyle.content}>{data.operarioNombre}</Text>
+                            <Text style={employeerStyle.content}>{data.operarioNombre?.slice(0,15)+'...'}</Text>
                         </View>
                         <View style={employeerStyle.employeerCantidad}>
                             <Text style={employeerStyle.content}>{data.documento}</Text>
@@ -24,7 +24,7 @@ export function MainEmployeerComponent({data}:{data:EmployeerProcessInterface}){
                         </View>
                         <View style={employeerStyle.employeerNegativeActions}>
                             {/* <ModuloIcon color='#AAA' size={25} width={2}/> */}
-                            <Text style={employeerStyle.content}>{data.operarioDescripcion.slice(0,25)+'...'}</Text>
+                            <Text style={[employeerStyle.content,{color:'#AAA'}]}>{data.operarioDescripcion.slice(0,30).toLowerCase()+'...'}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -88,7 +88,7 @@ const employeerStyle=StyleSheet.create({
         justifyContent:'space-evenly'
     },
     employeerNegativeActions:{
-        backgroundColor:'aqua',
+        // backgroundColor:'aqua',
         width:'40%',
         height:'100%',
         // flex:1,
