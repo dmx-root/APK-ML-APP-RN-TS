@@ -1,5 +1,4 @@
 import { View, TouchableOpacity, Image, Text, Dimensions, StyleSheet, GestureResponderEvent} from 'react-native';
-import { CalendarIcon } from '../public/icons/calendarIcon';
 import { AnalitycsIcon } from '../public/icons/analitycsIcon';
 import { OpInterface } from '../interfaces/services/ml_api/opInterfaces';
 

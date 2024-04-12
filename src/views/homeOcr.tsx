@@ -17,6 +17,7 @@ import { Aside }                                                        from '..
 import { useApiGetOcrAll }                                              from '../controllers/hooks/customHookGetAllOcrFilter'
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList}   from 'react-native';
 import { useState }                                                     from 'react';
+import { ModalProductionSegundas } from '../modals/modalProductionSegundas';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -157,6 +158,9 @@ export function HomeOcr({navigation} : any){
             setOcrProcessData(null)
         }}/>:
         <></>
+    }
+    {
+        <ModalProductionSegundas handlerClick={()=>{}}/>
     }
 
     </>

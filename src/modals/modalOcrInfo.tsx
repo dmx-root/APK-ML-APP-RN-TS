@@ -53,7 +53,7 @@ export function ModalOcrInfo({data, handlerClick}:{
                         <InfoLineDouble title1='INICIO' content1={data?.inicioOperacion?.toLocaleString()||'No def'} title2='FIN' content2={data?.finOperacion?.toLocaleString()||'No def'}/>:
                         <></>
                     }
-                    <InfoLineDouble title1='TALLA' content1={data?.tallaId||'No def'} title2='CANTIDAD' content2={data?.cantidadUnidades.toString()||'No def'}/>
+                    <InfoLineDouble title1='TALLA' content1={data?.tallaId.toString()||'No def'} title2='CANTIDAD' content2={data?.cantidadUnidades.toString()||'No def'}/>
                     <InfoLine title='EAN' content={data?.ean||'No def'}/>
                 </ModalContainer>
                 

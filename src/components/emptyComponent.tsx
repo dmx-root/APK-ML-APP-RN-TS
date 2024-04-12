@@ -5,11 +5,12 @@ import { View, Text, StyleSheet } from "react-native";
 // Tiene como parámetros de entrada:
 // label: Mensaje que se quiere mostrar 
 
-export function EmptyComponent({label}:{
-    label:string
+export function EmptyComponent({label, color}:{
+    label:string,
+    color?:string
 }){
     return <View style={emptyComponentStyle.container}>
-                <Text style={emptyComponentStyle.content}>{label}</Text>
+                <Text style={[emptyComponentStyle.content,{color:color||'#777'}]}>{label}</Text>
             </View>
 }
 
@@ -21,7 +22,6 @@ const emptyComponentStyle = StyleSheet.create({
     },
     content:{
         fontSize:20,
-        color:'#777',
         fontWeight:'600',
     }
 })
