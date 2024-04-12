@@ -14,28 +14,26 @@ import { CheckBoxFill } from '../public/icons/checkBoxFill';
 
 const {width,height}=Dimensions.get('window');
 
-const currentColorMain='#1C46AF';   //azul oscuro
-
-export function InformationOcrCheckComponent({handlerClick,data}:{
+export function InformationOcrSegundaComponent({handlerClick,data}:{
     handlerClick:(event:GestureResponderEvent)=>void,
     data:OcrProcessesInterface
 }){
     return <TouchableOpacity style={ocrStyle.container} onPress={handlerClick}>
         <View style={ocrStyle.header1}>
             <View style={ocrStyle.iconContainer}>
-                <OcrIcon color='#1C46AF' size={50} width={1.3}/>
+                <OcrIcon color='green' size={50} width={1.3}/>
             </View>
             <View style={ocrStyle.iconCheckContainer}>
                 {
                     data.revisadoFecha?
-                    <CheckBoxFill color='#1C46AF' size={25} width={2}/>:
-                    <CheckBoxEmpty color='#1C46AF' size={25} width={2}/>
+                    <CheckBoxFill color='green' size={25} width={2}/>:
+                    <CheckBoxEmpty color='green' size={25} width={2}/>
                 }
             </View>
             <View style={ocrStyle.rowField}>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={ocrStyle.labelTitle}>{`Inicio a las ${data.inicioOperacion?.toLocaleString().slice(11,19)}`}</Text>
+                        <Text style={ocrStyle.labelTitle}>{`Hora de registro ${''}`}</Text>
                     </View>
                 </View>
                 <View style={ocrStyle.rowContente}>
@@ -50,21 +48,15 @@ export function InformationOcrCheckComponent({handlerClick,data}:{
                 </View>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{`Revisado el ${data.revisadoFecha?.toLocaleString().slice(0,10)}`}</Text>
-                        <CalendarIcon color='#1C46AF' size={20} width={1.5}/>
-                    </View>
-                </View>
-                <View style={ocrStyle.rowContente}>
-                    <View style={ocrStyle.fieldContainer}>
                         <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{`Registrado el ${data.registroFecha?.toLocaleString().slice(0,10)}`}</Text>
-                        <CalendarIcon color='#1C46AF' size={20} width={1.5}/>
+                        <CalendarIcon color='green' size={20} width={1.5}/>
                     </View>
                 </View>
             </View>
             <View style={ocrStyle.rowField}>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={ocrStyle.labelTitle}>{`Finalización a las ${data.finOperacion?.toLocaleString().slice(11,19)}`}</Text>
+                        <Text style={ocrStyle.labelTitle}></Text>
                         {/* <ClockIcon color='#777' size={20} width={2}/> */}
                     </View>
                 </View>
@@ -76,19 +68,14 @@ export function InformationOcrCheckComponent({handlerClick,data}:{
                 </View>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{data.anormalidadCodigo||`Sin Eventos`}</Text>
+                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>UNIDADES DE SEGUNDA</Text>
                     </View>
                 </View>
-                <View style={ocrStyle.rowContente}>
-                    <View style={ocrStyle.fieldContainer}>
-                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{`Revisado por ${data.revisadoPorId}`}</Text>
-                        <UserIcon color='#1C46AF' size={20} width={2}/>
-                    </View>
-                </View>
+
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
                         <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{`Registrado por ${data.registradoPorId}`}</Text>
-                        <UserIcon color='#1C46AF' size={20} width={2}/>
+                        <UserIcon color='green' size={20} width={2}/>
                     </View>
                 </View>
                 
@@ -100,11 +87,11 @@ export function InformationOcrCheckComponent({handlerClick,data}:{
 const ocrStyle=StyleSheet.create({
     container:{
         width:'100%',
-        height:height*0.12,
-        backgroundColor:'#CAD8F9',
+        height:height*0.09,
+        backgroundColor:'#D5F5E3',
         // borderRadius:10,
         marginBottom:1,
-        borderBottomColor:'#A3BDFE',
+        borderBottomColor:'#82E0AA',
         borderBottomWidth:3
     },
     body:{
@@ -174,7 +161,7 @@ const ocrStyle=StyleSheet.create({
     },
     rowContente:{
         width:'100%',
-        height:'18%',
+        height:'25%',
         flexDirection:'row',
     },
     fieldContainer:{
@@ -186,14 +173,14 @@ const ocrStyle=StyleSheet.create({
         paddingLeft:'8%'
     },
     labelTitle:{
-        color:currentColorMain,
+        color:'green',
         fontWeight:'bold',
         fontSize:15,
         paddingRight:20,
         // paddingLeft:20,
     },
     fieldontent:{
-        color:'#999',
+        color:'#EC7063',
         fontSize:height*0.015
     },
     icon:{

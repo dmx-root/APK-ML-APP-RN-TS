@@ -1,4 +1,4 @@
-import {View,StyleSheet, Dimensions, TouchableOpacity,Text, FlatList} from 'react-native';
+import { View,StyleSheet, Dimensions, TouchableOpacity,Text, FlatList} from 'react-native';
 import { MenuIcon }                                         from '../public/icons/menuIcon';
 import { SearchIcon }                                       from '../public/icons/searchIcon';
 import { ItemResize }                                       from '../components/ItemResize';
@@ -7,7 +7,6 @@ import { InformationOcrComponent }                          from '../components/
 import { RowLeftIcon }                                      from '../public/icons/rowLeftIcon';
 import { InformationHeaderViewComponentModulo }             from '../components/InformationHeaderViewComponentModulo';
 import { ModuloProcessInterface }                           from '../interfaces/services/ml_api/moduloInterfaces';
-import { useApiGetOcrByModulo }                             from '../controllers/hooks/customHookGetOcrByModulo';
 import { LoadingComponent }                                 from '../components/loadingComponent';
 import { EmptyComponent }                                   from '../components/emptyComponent';
 import { OcrProcessesInterface }                            from '../interfaces/services/ml_api/ocrInterfaces';
@@ -15,29 +14,28 @@ import { ModalOcrInfo }                                     from '../modals/moda
 import { InformationOcrEventsComponent }                    from '../components/informationOcrEventsComponent';
 import { InformationOcrCheckComponent }                     from '../components/informationOcrCheckComponent';
 import { useState }                                         from 'react';
-import { useApiGetEmployeesByModulo }                       from '../controllers/hooks/customHookGetAllEmployeesByModulo'
+import { useApiGetModuloElementsAll }                       from '../controllers/hooks/customHookGetAllModuloFilter';
+import { MainEmployeerComponent }                           from '../components/mainEmployeerComponent';
+import { EmployeerProcessInterface } from '../interfaces/services/ml_api/moduloInterfaces'
+import { InformationOcrSegundaComponent } from '../components/informationOcrSegundaComponent'
 
 const {height,width}=Dimensions.get('screen');
 
 export function InformationModulo({route,navigation}:any){
 
     const filterItems=[
-        {id:1,label:'Todas'},
-        {id:2,label:'OP Brasier'},
-        {id:3,label:'OP Panty'},
-        {id:4,label:'Revisados'},
-        {id:5,label:'Sin Revisar'},
-        {id:6,label:'Anormalidades'},
+        {id:1,label:'Registros del Módulo'},
+        {id:2,label:'Operarios del módulo'},
     ]
 
     const moduloData : ModuloProcessInterface = route.params;
-    
-    const [itemState,setItemSelec]=useState<number|null>(1);
-    const { state } = useApiGetOcrByModulo(moduloData.moduloId.toString());
-    const data = useApiGetEmployeesByModulo(moduloData.moduloId.toString());
-    const [modalInfoState,setModalInfoState] = useState<boolean>(false);
-    const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);
 
+    const {state, itemSelector, setItemSelector} =  useApiGetModuloElementsAll(moduloData.moduloId.toString())
+
+    const [modalInfoState, setModalInfoState ] =    useState<boolean>(false);
+    const [ocrProcessData, setOcrProcessData ] =    useState<OcrProcessesInterface|null>(null);
+
+    console.log(state.loading, state.data?.length)
     return<>
     <View style={{height,width}}>
         <View style={StyleMainWindow.backRoots}></View>
@@ -60,8 +58,10 @@ export function InformationModulo({route,navigation}:any){
                         {filterItems.map(element=>
                         <ItemResize
                             key={element.id} 
-                            state={itemState===element.id?true:false} 
-                            handlerClick={()=>{setItemSelec(element.id)}} 
+                            state={itemSelector === element.id} 
+                            handlerClick={()=>{
+                                setItemSelector(element.id)
+                            }} 
                             label={element.label}/>)}
                     </View>
                     <View style={StyleMainWindow.labelsIcon}>
@@ -71,15 +71,18 @@ export function InformationModulo({route,navigation}:any){
             </View>
             <View style={StyleMainWindow.root1}>
                 <View style={StyleMainWindow.frame1}>
+                <InformationHeaderViewComponentModulo data={moduloData}/>
+                    
                     {
-                    state.loading?
+                    state.loading ?
                     <LoadingComponent label='Cargando Información...'/>:
                     state.error?
                     <EmptyComponent label='Hubo un error al momento de cargar los datos, inténtelo más tarde'/>:
                     state.data===null?
                     <EmptyComponent label='EL módulo no cuenta con registros aún...'/>:
                     <>
-                        <InformationHeaderViewComponentModulo data={moduloData}/>
+                        {
+                        itemSelector===1 ?
                         <FlatList 
                         renderItem={(item)=>
                             item.item.revisadoFecha?
@@ -106,7 +109,13 @@ export function InformationModulo({route,navigation}:any){
                                 setOcrProcessData(item.item);
                             }}/>
                         }
+                        data={state.data}/>:
+                        <FlatList 
+                        renderItem={(item)=>
+                            <MainEmployeerComponent data={item.item}/>
+                        }
                         data={state.data}/>
+                        }
                     </>
                     }
                 </View>

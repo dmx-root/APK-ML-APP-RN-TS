@@ -47,7 +47,7 @@ export function InformationOcrComponent({handlerClick,data}:{
                 </View>
                 <View style={ocrStyle.rowContente}>
                     <View style={ocrStyle.fieldContainer}>
-                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{`Registrado el ${data.registroFecha.toLocaleString().slice(0,10)}`}</Text>
+                        <Text style={[ocrStyle.labelTitle,{fontWeight:'normal'}]}>{`Registrado el ${data.registroFecha?.toLocaleString().slice(0,10)}`}</Text>
                         <CalendarIcon color='#999' size={20} width={1.5}/>
                     </View>
                 </View>

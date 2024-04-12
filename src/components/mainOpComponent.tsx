@@ -13,7 +13,6 @@ export function MainOpComponent({data,handlerClick}:{
                 <TouchableOpacity style={StyleOp.Opcontainer} onPress={handlerClick}>
                     <View style={StyleOp.OpIconContainer}>
                         <View style={StyleOp.OpIcon}>
-                            {/* <CalendarIcon color='#AAA' width={2} size={40}/> */}
                             <Image  style={StyleOp.img} source={require('../public/img/base-de-datos.png')}/>
                         </View>
                     </View>
@@ -26,11 +25,11 @@ export function MainOpComponent({data,handlerClick}:{
                         </View>
                         <View style={StyleOp.OpPositiveActions}>
                             <AnalitycsIcon color='green' size={20} width={2}/>
-                            <Text style={StyleOp.content}>{`${((data.opLoteCompletado/data.opLotePlaneado)*100).toString().slice(0,5)}%`}</Text>
+                            <Text style={StyleOp.content}>{`${(data.opLoteCompletado).toString().slice(0,5)}`}</Text>
                         </View>
                         <View style={StyleOp.OpNegativeActions}>
                             <AnalitycsIcon color='red' size={20} width={2}/>
-                            <Text style={StyleOp.content}>{`${(((data.opLotePlaneado-data.opLoteCompletado)/data.opLotePlaneado)*100).toString().slice(0,5)}%`}</Text>
+                            <Text style={StyleOp.content}>{`${(data.opLotePlaneado-data.opLoteCompletado).toString().slice(0,5)}`}</Text>
                         </View>
                         <View style={StyleOp.OpRefrenecia}>
                             <Text style={[StyleOp.content,{color:'#BBB'}]}>{data.referencia}</Text>

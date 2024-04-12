@@ -24,7 +24,7 @@ export function MainEmployeerComponent({data}:{data:EmployeerProcessInterface}){
                         </View>
                         <View style={employeerStyle.employeerNegativeActions}>
                             {/* <ModuloIcon color='#AAA' size={25} width={2}/> */}
-                            <Text style={[employeerStyle.content,{color:'#AAA'}]}>{data.operarioDescripcion.slice(0,30).toLowerCase()+'...'}</Text>
+                            <Text style={[employeerStyle.content,{color:'#AAA'}]}>{data.operarioDescripcion?.slice(0,30).toLowerCase()+'...'}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
