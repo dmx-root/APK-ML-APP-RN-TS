@@ -5,6 +5,7 @@ import { statusApi}                     from '../../interfaces/services/ml_api/a
 import { authResponseInterface }        from '../../interfaces/services/ml_api/authInterfaces';
 import { handlerGetValueLocalStorage }  from '../helpers/handlerValueLocalStorage';
 import { useEffect, useReducer }        from 'react';
+import { Alert } from 'react-native';
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -23,7 +24,6 @@ interface ApiAction {
     payload?: any;
 }
 
-
 const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     switch (action.type) {
         case actionTypes.FETCH_INIT:
@@ -37,7 +37,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
   
-   export const useApiGetAuth = (): { state: ApiState } => {
+export const useApiGetAuth = (): { state: ApiState } => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -46,13 +46,24 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     });
 
     async function fetchDataAuth(token:string):Promise<void>{
-        const apiQuery=new AuthObjectRequest();
-        try {     
-            // const data=await apiQuery.authGet(get_auth,null,token);
+        try { 
+            
+            const apiQuery=new AuthObjectRequest();
+            
             const data = await apiQuery.authGetByToken(api_ml_local_auth_get_by_token,token);
-            // console.log(data)
+
             if(data?.apiCode===1){
-                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data });   
+
+                const nowInSeconds = Math.floor(Date.now() / 1000);
+                const expInSeconds = data.data.userDateTokenExp;
+                const timeRemaining = expInSeconds - nowInSeconds;
+
+                if(timeRemaining < 172800){
+                    dispatch({ type: actionTypes.FETCH_SUCCESS, payload: {...data, sesionState: true} });
+                }else{
+                    dispatch({ type: actionTypes.FETCH_SUCCESS, payload: {...data, sesionState: false} });
+                }
+
             }
             else{
                 dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});

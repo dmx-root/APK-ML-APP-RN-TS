@@ -24,7 +24,8 @@ export const inicialStateAuth:authInterface={
 
 export interface authResponseInterface extends statusApi{
     data:authInterface,
-    toke:string
+    toke:string,
+    sesionState?:boolean
 }
 
 

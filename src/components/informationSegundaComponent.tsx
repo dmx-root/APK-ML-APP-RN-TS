@@ -1,11 +1,6 @@
-import { TouchableOpacity,View, Text, StyleSheet, Dimensions, GestureResponderEvent,Image } from 'react-native'
+import { TouchableOpacity,View, Text, StyleSheet, Dimensions, GestureResponderEvent} from 'react-native'
 import { OcrIcon }                              from '../public/icons/ocrIcon';
-import { CheckBoxEmpty }                        from '../public/icons/checkBoxEmpty';
-import { UserIcon }                             from '../public/icons/userIcon';
-import { CalendarIcon }                         from '../public/icons/calendarIcon';
 import { OcrProcessesInterface } from '../interfaces/services/ml_api/ocrInterfaces';
-import { CheckBoxFill } from '../public/icons/checkBoxFill';
-import { ClockIcon } from '../public/icons/clockIcon';
 
 // Doc 
 // Este elemento tiene la finalidad de renderizar información más detallada de los registros
@@ -112,8 +107,7 @@ const ocrStyle=StyleSheet.create({
     rowField:{
         width:'41%',
         height:'100%',
-        justifyContent:'center',
-        alignItems:'center'
+        justifyContent:'center'
         // flexDirection:'row'
         // backgroundColor:'aqua'
     },

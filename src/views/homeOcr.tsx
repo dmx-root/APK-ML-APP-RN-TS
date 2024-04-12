@@ -160,7 +160,7 @@ export function HomeOcr({navigation} : any){
         <></>
     }
     {
-        <ModalProductionSegundas handlerClick={()=>{}}/>
+        // <ModalProductionSegundas handlerClick={()=>{}}/>
     }
 
     </>

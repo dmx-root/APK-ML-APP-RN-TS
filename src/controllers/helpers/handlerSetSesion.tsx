@@ -15,6 +15,7 @@ export const useSetSesion:()=> { setSesion:(data:authInterface)=>hookResponse} =
     const setSesion:(data:authInterface)=> hookResponse = (data:authInterface) => {
         
         const account = handlerGetSesion(data.userProfileId);
+        
         if(account.id!==0){ 
             contextStorage?.setAccount(account);
             contextStorage?.setCurrentUser({

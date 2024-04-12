@@ -16,7 +16,8 @@ interface UserAuthInterface{
     userCreteDate: string,
     userProfileId: number,
     userDocumentType: number,
-    userProfileLabel: string
+    userProfileLabel: string,
+    userDateTokenExp?:  any
 }
 
 interface ApiResponse{
@@ -77,7 +78,7 @@ export class AuthObjectRequest extends ConectionObjectRequest{
         try {
             
             const fetch : AxiosResponse = await this.getData(uri,null,token);
-
+            
             const response = fetch.data;
             const statusCode : number= fetch.status;
 
@@ -102,6 +103,7 @@ export class AuthObjectRequest extends ConectionObjectRequest{
                     userProfileLabel:   response.data.roleName,
                     userDescription:    response.data.userDescription,
                     userDocumentType:   response.data.userDocuementType,
+                    userDateTokenExp:   response.data.exp,
                     userCreteDate:      'No asignado'
                 }
             }

@@ -31,12 +31,12 @@ const currentColorDefault='#44329C';
 export function Login(){
 
     const { state, setDataAuth } =  useHandlerSesion();
-    const contextStorage =          useMainContext();
     const currentSesionValidator =  useApiGetAuth();
     const { setSesion } =           useSetSesion();
     
     const [ dataForm, setDataForm ] =        useState<form|null>(null);
     const [ alert, setAlert ] =              useState<boolean>(false);
+    const [ alertSesion, setAlertSesion ] =  useState<boolean>(true);
     const [ formState, setFormState ] =      useState<boolean>(false);
     const [ passworsSave, setPasswordSave] = useState<boolean>(false);
     const [ modal, setModal ] =              useState<modal>(newModal);
@@ -45,7 +45,7 @@ export function Login(){
         try {
             const query = new AuthObjectRequest();
             const response = await query.authGetByToken(api_ml_local_auth_get_by_token,'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMTQ2NDQxOTI1IiwidXNlck5hbWUiOiJEQVZJRCBFU1RFQkFOIE1PUkFMRVMgw5FVU1RFUyIsInVzZXJEZXNjcmlwdGlvbiI6IkRlc2Fycm9sbGFkb3IganVuaW9yIiwicm9sZUlkIjoxLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFET1IiLCJkb2N1bWVudFR5cGVJZCI6MSwiZG9jdWVtZW50VHlwZU5hbWUiOiJDRURVTEEgREUgQ0lVREFEQU5JQSIsImlhdCI6MTcxMjMzMDQ3NSwiZXhwIjoxNzE0OTYwMjc1fQ.tF9mlmd2XzAufiC5XWNwm4DzUZw-8Om81hAd8bafQPQw6Okz1yQpD6N4rkSFfLbFRbFy1Wg0dSqskkFnljtwqCzgjsLbJ58V8i67m7TnngAr7CMCTptnce0p4Q4CEEma4ChD1nPx5z1W56Ka9dpbH5yleQc6GePSJDtJ2Iv8c-MAWzByLfks6ULMJROgYbIQ734mSf9fzjJuusUp-N7Okltiz0DgN0z1zGcjXc3B8tNgYsSvbX8f4d1NYRgh39mJVhiv9Nd__HzpvZT70YMqQviJBbA4kkKtkTXzmRW36BR_zb3Ox9ObdaEwnk8qWlXOzIZ8BIsLCndjuIeTAzfwrQ')
-            // console.log(response)
+            console.log(response)
         } catch (error) {
             console.log(error)
         }
@@ -72,7 +72,7 @@ export function Login(){
                     }} 
                     handlerAcceder={()=>{
                         setSesion(currentSesionValidator.state.data?.data || inicialStateAuth);
-                        console.log('Accedió');
+                        
                     }} 
                     handlerChange={()=>{
                         setFormState(true);
@@ -124,7 +124,6 @@ export function Login(){
                             <AuthButton 
                                 label='Acceder' 
                                 handlerClick={()=>{
-                                    // load();
                                     dataForm?.['Password']&&dataForm?.['Document']?
                                     setDataAuth(dataForm?.['Document'], dataForm?.['Password'], passworsSave): 
                                     Alert.alert('Campos vacios','Asegúrese de llenar todos los campos') 
@@ -170,6 +169,19 @@ export function Login(){
         label='Datos Erroneos' 
         content={state.error.statusMessageApi} 
         handlerClick={()=>{setAlert(false)}}/>:
+        <></>
+    }
+    {
+        currentSesionValidator.state.data?.sesionState && alertSesion?
+        <ModalAlert 
+        label='La sesión ha expirado' 
+        content='Debe autenticarse de nuevo'
+        // buttonText='Autenticarse'
+        handlerClick={()=>{
+            setFormState(true);
+            setAlertSesion(false)
+            handlerRemoveValueLocalStorage('token');
+        }}/>:
         <></>
     }
     </>
