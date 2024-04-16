@@ -22,7 +22,7 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
     const [ dataForm, setDataForm ] =     useState<form|null>(null);
     const [ alertState, setAlertState ] = useState<boolean>(false);
     const { state, setDataOperation } =   useSetOperation();
-  console.log(state)
+//   console.log(state)
     return<>
         {
         state.loading?
@@ -90,7 +90,7 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                             registradoPor:      contextStorage?.currentUser?.documentoid||''
                         }
 
-                        setDataOperation(operationData.op,operationData,navigation);
+                        setDataOperation(operationData.op,contextStorage?.currentUser?.documentoid||'',operationData,navigation,);
                     }
                     else {
                       

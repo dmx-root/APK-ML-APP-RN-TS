@@ -2,7 +2,7 @@ import { DetailProcessResponseInterface, OpDetail }     from '../../interfaces/s
 import { statusApi }                                    from '../../interfaces/services/ml_api/apiResponse';
 import { OperationInterface }                           from '../../interfaces/view/production';
 import { handlerSaveObjectLocalStorage }                from '../helpers/handlerObjectLocalStorage';
-import { handlerGetDetailsOp }                          from '../helpers/handlerGetDetailsOp';
+import { handlerGetDetailsOp, handlerOpenOp }                          from '../helpers/handlerGetDetailsOp';
 import { useReducer }                                   from 'react';
 
 const actionTypes = {
@@ -12,7 +12,7 @@ const actionTypes = {
 };
 
 interface ApiState {
-    data: Array<OpDetail> | null;
+    data: OpDetail[] | null;
     loading: boolean;
     error: string | null;
 }
@@ -48,7 +48,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
 // op: la orden de produccion a la cual se le solicita cada uno de sus detalles 
 // operation: es la información relacionada con la operación en produccion 
 
-export const useSetOperation = (): { state: ApiState; setDataOperation: (op:string, operation:OperationInterface, navigation:any) => void } => {
+export const useSetOperation = (): { state: ApiState; setDataOperation: (op:string,usuario:string, operation:OperationInterface, navigation:any) => void } => {
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -56,19 +56,24 @@ export const useSetOperation = (): { state: ApiState; setDataOperation: (op:stri
         error: null,
     });
 
-    async function setDataOperation( op : string, operation : OperationInterface, navigation : any) : Promise <void>{
+    async function setDataOperation( op : string, usuario:string, operation : OperationInterface, navigation : any) : Promise <void>{
         try {
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const response : ControllerResponseInterface = await handlerGetDetailsOp(op);
+            const response : ControllerResponseInterface = await handlerOpenOp({
+                usuario:usuario,
+                op:op
+            });
+            // console.log(response,'gfffgfg')
 
+            // const response1 : ControllerResponseInterface = await handlerGetDetailsOp(op);
+            
             if(response.statusCodeApi===1){
 
                 await handlerSaveObjectLocalStorage('currentOp',response.data);
                 await handlerSaveObjectLocalStorage('currentModulo',operation.moduloId);
                 navigation.navigate('Production',operation);
-
                 dispatch({ type: actionTypes.FETCH_SUCCESS});
 
             }

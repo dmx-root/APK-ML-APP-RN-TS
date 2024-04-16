@@ -26,7 +26,7 @@ const {height,width}=Dimensions.get('screen');
 
 export function Production({route,navigation}:any){
 
-    const operation:OperationInterface=route.params;
+    const operation : OperationInterface = route.params;
     
     const contextStorage =  useMainContext();                   //información almacenada en el contexto de la información
     const opDetails =       useLocalStorageGetData('currentOp');//información almacenada en el local storage 
