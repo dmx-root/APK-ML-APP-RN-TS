@@ -1,14 +1,11 @@
-import {View,StyleSheet, Dimensions, TouchableOpacity,Text} from 'react-native';
-import { MenuIcon }                                         from '../public/icons/menuIcon';
-import { SearchIcon }                                       from '../public/icons/searchIcon';
-import { ItemResize }                                       from '../components/ItemResize';
-import { FilterIcon }                                       from '../public/icons/filterIcon';
-import { InformationHeaderViewComponentOp }                 from '../components/InformationHeaderViewComponentOp';
-import { InformationOcrComponent }                          from '../components/informationOcrComponent';
-import { RowLeftIcon }                                      from '../public/icons/rowLeftIcon';
-import { useState }                                         from 'react'
 import { InformationUserComponent }                         from '../components/informationUserComponent';
-import { InformationUserScreenProps }                       from '../interfaces/screens/screensInterfaces';
+import { RowLeftIcon }                                      from '../public/icons/rowLeftIcon';
+import { SearchIcon }                                       from '../public/icons/searchIcon';
+import { FilterIcon }                                       from '../public/icons/filterIcon';
+import { MenuIcon }                                         from '../public/icons/menuIcon';
+import { ItemResize }                                       from '../components/ItemResize';
+import { View,StyleSheet, Dimensions, TouchableOpacity,Text}from 'react-native';
+import { useState }                                         from 'react';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -18,11 +15,8 @@ export function InformationUser({navigation}:any){
         {id:1,label:'Todos'},
         {id:2,label:'Usuarios deshabilitados'},
         {id:3,label:'Usuarios de planta'},
-        {id:4,label:'Usuarios de bodega'},
-        // {id:4,label:'Revisados'},
-        // {id:5,label:'Sin Revisar'},
-        // {id:6,label:'Anormalidades'},
-    ]
+        {id:4,label:'Usuarios de bodega'}
+    ];
 
     const [itemState,setItemSelec]=useState<number|null>(1)
 
@@ -75,25 +69,6 @@ export function InformationUser({navigation}:any){
                             <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Regresar</Text>
                         </TouchableOpacity>
                     </View>
-                    {/* <View style={StyleMainWindow.root2}>
-                        <View style={StyleMainWindow.navigationContainer}>
-                            <ItemNavigation handlerClick={()=>{}} state={false}>
-                                <UserIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation state={false} handlerClick={()=>{}}>
-                                <ModuloIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation state={true} handlerClick={()=>{}}>
-                                <OpIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation state={false} handlerClick={()=>{}}>
-                                <OcrIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                            <ItemNavigation handlerClick={()=>{}} state={false}>
-                                <EmployeerIcon color='#777' size={35} width={2}/>
-                            </ItemNavigation>
-                        </View>
-                    </View> */}
                 </View>
             </View>
 }

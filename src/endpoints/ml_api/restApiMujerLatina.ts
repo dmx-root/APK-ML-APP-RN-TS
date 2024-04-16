@@ -1,10 +1,5 @@
 import {uri} from './config';
 
-export const post_ocr_data_process =            `${uri}/api/ml/ocr/register`;
-
-// nuevos endpoints
-//************************************************************************ */
-
 export const api_ml_local_auth_get =                `${uri}/api/ml/auth/local/login`;
 export const api_ml_local_auth_get_by_token =       `${uri}/api/ml/auth/local/auth-by-token/`;
 export const api_ml_production_ocr_get_all =        `${uri}/api/ml/production/ocr/list/`;
@@ -25,3 +20,4 @@ export const api_ml_production_op_get_by_state =        `${uri}/api/ml/productio
 export const api_ml_production_modulo_get_by_state =    `${uri}/api/ml/production/modulo/list-filter-by-state/`;
 export const api_ml_production_employees_list =         `${uri}/api/ml/production/modulo/list-all-employees`;
 export const api_ml_production_employees_by_modulo =    `${uri}/api/ml/production/modulo/list-filter-employee/`;
+export const api_ml_production_ocr_post =               `${uri}/api/ml/production/ocr/element/`;

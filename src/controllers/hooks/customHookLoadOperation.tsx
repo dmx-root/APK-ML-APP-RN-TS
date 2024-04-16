@@ -1,7 +1,7 @@
-import { post_ocr_data_process } from '../../endpoints/ml_api/restApiMujerLatina';
+import { api_ml_production_ocr_post } from '../../endpoints/ml_api/restApiMujerLatina';
 import {  OpDetail }                        from '../../interfaces/services/ml_api/detailOpInteface';
-import { OperationInterface }               from '../../interfaces/view/production';
-import { OcrObjectResponse } from '../../services/ml_api/response/OcrObJectResponse';
+import { OperationInterface } from '../../interfaces/view/production';
+import { InterfaceOcrDispatch } from '../../services/ml_api/dispatch/dispatch.ocrObject';
 import { handlerSaveObjectLocalStorage }    from '../helpers/handlerObjectLocalStorage';
 import { useReducer }                       from 'react';
 
@@ -23,6 +23,17 @@ interface ApiAction {
     payload?: any;
 }
 
+interface ProductionInterface{
+    op:     string,
+    color:  string,
+    talla:  number | string,
+    inicio: string | Date,
+    finalizacion:string | Date,
+    operarioId:string,
+    modulo:number,
+    unidades:number,
+    anormalidad: string | null
+}
 
 const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     switch (action.type) {
@@ -46,24 +57,29 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     });
 
     async function loadDataOperation(operation:OperationInterface , detailsOp:Array<OpDetail>, navigation:any):Promise<void>{
-        const apiQuery = new OcrObjectResponse();
         try {
+            const  fetch = new InterfaceOcrDispatch({
+                url:api_ml_production_ocr_post
+            });
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const response = await apiQuery.OcrLoadNewData(post_ocr_data_process,{
-                categoriaId:        1,
-                finOperacion:       new Date().toLocaleTimeString(),
-                registradoPorId:    operation.registradoPor,
-                inicioOperacion:    operation.inicioOperacion,
-                moduloId:           operation.moduloId,
-                cantidadUnidades:   operation.cantidad,
-                colorId:            operation.colorId,
-                tallaId:            operation.tallaId,
-                op:                 operation.op,
+
+            const response = await fetch.productionData({
+                finalizacion:       new Date().toLocaleTimeString().slice(0,8).trim(),
+                inicio:             operation.inicioOperacion.toLocaleString().slice(0,8).trim(),
+                operarioId:         operation.registradoPor,
+                modulo:             operation.moduloId,
+                unidades:           operation.cantidad,
+                color:              operation.colorId,
+                talla:              operation.tallaId,
+                op:                 operation.op, 
+                anormalidad:        operation.eventualidadId 
             });
 
-            // console.log(response)
+
+            console.log(response)
+
             if(response.statusCodeApi===1){
                 const modifyValue = detailsOp.map(element=>{
                     if (element.ean===operation.ean){
@@ -75,7 +91,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
                     }
                     return element;
                 });
-                // console.log('envión')
+
                 await handlerSaveObjectLocalStorage('currentOp', modifyValue); // alteramos la informacion del local estorage 
                 dispatch({ type: actionTypes.FETCH_SUCCESS});
                 navigation.navigate('HomeOcr')

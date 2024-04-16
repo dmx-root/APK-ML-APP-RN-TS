@@ -5,7 +5,6 @@ import { handlerSaveObjectLocalStorage }                from '../helpers/handler
 import { handlerGetDetailsOp }                          from '../helpers/handlerGetDetailsOp';
 import { useReducer }                                   from 'react';
 
-
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
     FETCH_SUCCESS: 'FETCH_SUCCESS',
@@ -23,6 +22,12 @@ interface ApiAction {
     payload?: any;
 }
 
+interface ControllerResponseInterface {
+    statusCodeApi : number,
+    statusMessageApi : string,
+    data? : DetailProcessResponseInterface[],
+    statusCode? : number
+}
 
 const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     switch (action.type) {
@@ -51,11 +56,12 @@ export const useSetOperation = (): { state: ApiState; setDataOperation: (op:stri
         error: null,
     });
 
-    async function setDataOperation(op:string, operation:OperationInterface, navigation:any):Promise<void>{
+    async function setDataOperation( op : string, operation : OperationInterface, navigation : any) : Promise <void>{
         try {
 
             dispatch({ type: actionTypes.FETCH_INIT });
-            const response:DetailProcessResponseInterface = await handlerGetDetailsOp(op);
+
+            const response : ControllerResponseInterface = await handlerGetDetailsOp(op);
 
             if(response.statusCodeApi===1){
 
@@ -65,14 +71,14 @@ export const useSetOperation = (): { state: ApiState; setDataOperation: (op:stri
 
                 dispatch({ type: actionTypes.FETCH_SUCCESS});
 
-            }else{
-                dispatch({ type: actionTypes.FETCH_FAILURE,payload:response});
             }
+            else {
+                dispatch({ type: actionTypes.FETCH_FAILURE,payload:response.statusMessageApi});
+            }
+            
 
         } catch (error) {
-            console.log(error)
             dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error de proceso'});
-
         }
     };
   

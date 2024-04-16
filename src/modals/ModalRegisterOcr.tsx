@@ -22,7 +22,7 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
     const [ dataForm, setDataForm ] =     useState<form|null>(null);
     const [ alertState, setAlertState ] = useState<boolean>(false);
     const { state, setDataOperation } =   useSetOperation();
-  
+  console.log(state)
     return<>
         {
         state.loading?
