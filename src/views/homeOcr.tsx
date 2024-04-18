@@ -17,7 +17,7 @@ import { Aside }                                                        from '..
 import { useApiGetOcrAll }                                              from '../controllers/hooks/customHookGetAllOcrFilter'
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList}   from 'react-native';
 import { useState }                                                     from 'react';
-import { ModalProductionSegundas } from '../modals/modalProductionSegundas';
+import { ModalSegundas }                                                from '../modals/modalSegundas';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -28,15 +28,16 @@ export function HomeOcr({navigation} : any){
     const [ asideState,setAsideState ] =                    useState<boolean>(false);
     const [ newRegister,setNewRegister ] =                  useState<boolean>(false);
     const [ newCurrentRegister,setNewCurrentRegister ] =    useState<boolean>(true);
-
     const [ modalInfoState,setModalInfoState ] =            useState<boolean>(false);
+    const [ modalSegundas,setModalSegundas ] =              useState<boolean>(false);
+
     const [ ocrProcessData, setOcrProcessData ] =           useState<OcrProcessesInterface|null>(null);
     
-    const currentOp = useLocalStorageGetData('currentOp');
+    const currentOp =                                   useLocalStorageGetData('currentOp');
+    const { state, itemSelector, setItemSelector } =    useApiGetOcrAll();
 
     // const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
 
-    const { state, itemSelector, setItemSelector } = useApiGetOcrAll();
 
     // console.log(state, 'jajaja')
     return<>
@@ -100,8 +101,9 @@ export function HomeOcr({navigation} : any){
                     }
                 </View>
                 {contextStorage?.account?.home?.filter(icon=>icon.id===1)[0].actionObject(()=>{
-                    setNewRegister(true);
-                    setNewCurrentRegister(true);
+                    // setNewRegister(true);
+                    // setNewCurrentRegister(true);
+                    setModalSegundas(true)
                 })||<></>}
             </View>
             <View style={StyleMainWindow.root2}>
@@ -160,7 +162,9 @@ export function HomeOcr({navigation} : any){
         <></>
     }
     {
-        // <ModalProductionSegundas handlerClick={()=>{}}/>
+        modalSegundas?
+        <ModalSegundas handlerClick={()=>{setModalSegundas(false)}}/>:
+        <></>
     }
 
     </>

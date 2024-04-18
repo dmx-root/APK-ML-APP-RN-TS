@@ -139,7 +139,7 @@ export const useApiGetOcrAll: () => {
                     url:api_ml_production_ocr_get_by_category,
                     params:{
                         // user:'1152460381',
-                        category:0
+                        category:2
                     }
                 })
                 break;

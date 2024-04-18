@@ -1,29 +1,94 @@
-import { ModalContainer }           from '../components/modalContainer';
-import { Modal }                    from '../components/modal';
-import { GestureResponderEvent, StyleSheet, View, Text }    from 'react-native';
-import { InfoLineDouble }           from '../components/infoLineDouble';
-import { FieldInfo }                from '../components/fieldInfo';
-import { OcrIcon }                  from '../public/icons/ocrIcon';
-import { EmptyComponent }           from '../components/emptyComponent';
-import { InformationSegundaComponent } from '../components/informationSegundaComponent'
+import { InformationSegundaComponent }                      from '../components/informationSegundaComponent'
+import { InfoLineDouble }                                   from '../components/infoLineDouble';
+import { ModalContainer }                                   from '../components/modalContainer';
+import { EmptyComponent }                                   from '../components/emptyComponent';
+import { FieldInfo }                                        from '../components/fieldInfo';
+import { OcrIcon }                                          from '../public/icons/ocrIcon';
+import { Modal }                                            from '../components/modal';
+import { useApiGetDetailsOp }                               from '../controllers/hooks/customHookGetDetailsOp';
+import { LoadingComponent }                                 from '../components/loadingComponent';
+import { useMainContext }                                   from '../contexts/mainContext';
+import { form }                                             from '../interfaces/view/login';
+import { ButtonFullWidth }                                  from '../components/buttonFullWidth';
+import { useDeviceReader }                                  from '../controllers/reducers/reducerDeviceReader';
+import { useLoadDataSegundasOperation }                     from '../controllers/hooks/customHookLoadSegundas';
+import { ModalLoading }                                     from './modalLoading';
+import { useEffect, useState }                              from 'react';
+import { GestureResponderEvent, StyleSheet, View, Text, TextInput,}    from 'react-native';
+
 
 export function ModalProductionSegundas({
     handlerClick, 
+    handlerNext,
+    formData,
 }:{
     handlerClick: (event:GestureResponderEvent)=>void,
+    handlerNext:  (event:GestureResponderEvent)=>void,
+    formData : form | null
 }){
-    const data : any = {}
-    return <Modal handlerClick={handlerClick}>
+    const { state } =           useApiGetDetailsOp((formData?.opType || '') + (formData?.op || ''));
+    
+    const device =              useDeviceReader();
+    const contextStorage =      useMainContext();
+    const loadData =            useLoadDataSegundasOperation();
+    
+    const [ value, setValue] =  useState<string> ('');
+
+    useEffect(()=>{
+        if(value.length>12){
+            device.deviceReader(state.data, value, parseInt(formData?.modulo||'0'))
+            setValue('');
+        }
+    },[value])
+
+    return <>
+            {loadData.state.loading?
+            <ModalLoading label='Cargando información...' handlerClick={()=>{}}/>:
+            loadData.state.data?
+            {
+                
+            }:           
+            <Modal handlerClick={handlerClick}>
                 <ModalContainer color='#C7CCEC'>
-                    <InfoLineDouble title1='FECHA' content1={'- - -  - - -  - - -'} title2='OPERARIO' content2={''}/>
-                    <InfoLineDouble title1='OP' content1={''} title2='MÓDULO' content2={''}/>
+                    <InfoLineDouble 
+                    title1='FECHA' 
+                    content1={new Date().toLocaleString().slice(0,9)} 
+                    title2='OPERARIO' 
+                    content2={contextStorage?.currentUser?.nombre.slice(0,12)+'...'||'No definido'}/>
+
+                    <InfoLineDouble title1='OP' content1={formData?.op||'No definido'} title2='MÓDULO' content2={formData?.modulo||'No definido'}/>
                     <FieldInfo label='Registro de segundas' color='#44329C'>
                         <OcrIcon color="#44329C" size={24} width={2}/>
                     </FieldInfo>
                     <View style={segundasModal.fieldArea}>
-                        {/* <EmptyComponent label='No se han registrado elementos...' color='#CCC'/> */}
-                        <InformationSegundaComponent handlerClick={()=>{}} data={data}/>
-                        <InformationSegundaComponent handlerClick={()=>{}} data={data}/>
+                        <View style={segundasModal.container}>
+                            <View style={[segundasModal.headerlabelContanier,{width:'15%'}]}>
+                                <Text style={segundasModal.title}>TALLA</Text>
+                            </View>
+                            <View style={[segundasModal.headerlabelContanier,{width:'34.5%'}]}>
+                                <Text style={segundasModal.title}>COLOR</Text>
+                            </View>
+                            <View style={[segundasModal.headerlabelContanier,{width:'34.5%'}]}>
+                                <Text style={segundasModal.title}>EAN</Text>
+                            </View>
+                            <View style={[segundasModal.headerlabelContanier,{width:'15.5%'}]}>
+                                <Text style={segundasModal.title}>CANT.</Text>
+                            </View>
+                        </View>
+                        {
+                            state.loading?
+                            <LoadingComponent label='Cargando elementos...'/>:
+                            state.error?
+                            <EmptyComponent label='Error al cargar los elementos' color='#CCC'/>:
+                            state.data?.map(element => 
+                            <InformationSegundaComponent 
+                            talla=  {element.talla} 
+                            color=  {element.colorEtiqueta} 
+                            ean=    {element.ean} 
+                            key=    {element.ean}
+                            backColor={device.state.data?.find(elm =>(elm.talla+elm.colorId)===(element.talla+element.colorCodigo))?'#D5F5E3':'#FFF'}
+                            cantidad={device.state.data?.find(elm =>(elm.talla+elm.colorId)===(element.talla+element.colorCodigo))?.unidades||0}/>)
+                        }
                     </View>
                     <FieldInfo label='Lectura para códigos de barras' color='#44329C'>
                         <></>
@@ -36,17 +101,40 @@ export function ModalProductionSegundas({
                             <Text style ={segundasModal.title}>7778874445545</Text>
                         </View>
                         <View style={segundasModal.labelContanier}>
-                            
+                            <TextInput onChangeText={(txt)=>{
+                                setValue(txt)
+                            }}
+                            keyboardType='numeric'
+                            value={value}
+                            // ref={input}
+                            />
                         </View>
+
                     </View>
+
+                    <ButtonFullWidth 
+                    color='#FFF' 
+                    fontColor='#44329C' 
+                    handlerClick={(e)=>{
+                        handlerNext(e);
+                        if(device.state.data)
+                            loadData.loadDataOperation(device.state.data)
+                    }} 
+                    label='Enviar...'/>
+
                 </ModalContainer>
             </Modal>
+            }
+    
+    </>
+    
 }
 
 const segundasModal=StyleSheet.create({
     fieldArea:{
         width:'100%',
-        height:300,
+        minHeight:200,
+        // height:200,
         backgroundColor: '#FFF',
         borderRadius: 5,
         marginBottom: 20,
@@ -70,5 +158,46 @@ const segundasModal=StyleSheet.create({
     title:{
         color:'#777',
         fontWeight:'bold'
+    },
+
+    container:{
+        flexDirection:'row',
+        width:'100%',
+        height:50,
+        alignContent:'center',
+        justifyContent:'space-between',
+        marginBottom:2,
+        marginTop:2
+    },
+    headerlabelContanier:{
+        width:'24.5%',
+        height:'100%',
+        justifyContent:'center',
+        alignContent:'center',
+        backgroundColor:'#FFF',
+        borderWidth:1,
+        borderColor:'#CCC',
+        paddingLeft:15,
+    },
+    contentContainer:{
+        width:'24.5%',
+        height:'100%',
+        justifyContent:'center',
+        paddingLeft:15,
+        alignContent:'center',
+        backgroundColor:'#FFF',
+        borderWidth:1,
+        borderColor:'#CCC'
+    },
+    headertitle:{
+        fontSize:15,
+        color:'#777',
+        fontWeight:'bold'
+    },
+    content:{
+        fontSize:15,
+        color:'#777',
+        // fontWeight:'bold'
+
     }
 })

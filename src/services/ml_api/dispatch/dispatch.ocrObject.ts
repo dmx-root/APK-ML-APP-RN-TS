@@ -24,6 +24,15 @@ interface OperationInterface{
     anormalidad: string | null
 }
 
+interface OperationSegundasInterface{
+    op:string,
+    colorId:string,
+    talla:string,
+    operarioId:string,
+    moduloId:number,
+    unidades:number
+}
+
 interface ApiResponse {
     apiCode : -1 | 0 | 1,
     apiMessage : string,
@@ -64,4 +73,28 @@ export class InterfaceOcrDispatch extends ConectionInterfaceDispatch{
             return response
         }
     }
+    async productionData2(operation:OperationSegundasInterface[]){
+        try {
+            // console.log("se ejecutó")
+            const response : ApiResponse = (await this.postData({elements:operation})).data;
+            // console.log(response)
+            const controllerResponse : ControllerResponseInterface = {
+                statusCodeApi : response.apiCode,
+                statusMessageApi : response.apiMessage,
+                statusCode : 200,
+            }
+            return controllerResponse;
+
+        } catch (error) {
+            const err = handlerAxiosError(error);
+            // console.log(err)
+            const response : ControllerResponseInterface = {
+                statusCodeApi : err.statusCodeApi,
+                statusMessageApi: err.statusMessageApi,
+                statusCode : err.statusCode
+            }
+            return response
+        }
+    }
+
 }

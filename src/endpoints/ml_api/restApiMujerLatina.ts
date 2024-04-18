@@ -20,4 +20,5 @@ export const api_ml_production_modulo_get_by_state =    `${uri}/api/ml/productio
 export const api_ml_production_employees_list =         `${uri}/api/ml/production/modulo/list-all-employees`;
 export const api_ml_production_employees_by_modulo =    `${uri}/api/ml/production/modulo/list-filter-employee/`;
 export const api_ml_production_ocr_post =               `${uri}/api/ml/production/ocr/element/`;
+export const api_ml_production_ocr_segundas_post =      `${uri}/api/ml/production/ocr/segundas/`;
 export const api_ml_production_op_open =                `${uri}/api/ml/production/op/element/`;
