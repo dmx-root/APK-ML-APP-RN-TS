@@ -2,6 +2,8 @@ import {View, TouchableOpacity, Image, Text, StyleSheet, GestureResponderEvent} 
 import { OpIcon } from '../public/icons/opIcon';
 import { ModuloIcon } from '../public/icons/moduloIcon';
 import { OcrProcessesInterface } from '../interfaces/services/ml_api/ocrInterfaces';
+import { CalendarIcon } from '../public/icons/calendarIcon';
+import { CheckIcon } from '../public/icons/CheckIcon';
 import { CheckBoxEmpty } from '../public/icons/checkBoxEmpty';
 import { CheckBoxFill } from '../public/icons/checkBoxFill';
 
@@ -12,16 +14,17 @@ import { CheckBoxFill } from '../public/icons/checkBoxFill';
 // handlerClick: nos permite pasar un manejador de eventos por medio de este parámeto, para el evento "click"
 // data: es la interfaz que define la información que será renderizada en el elemento
 
-export function MainOcrComponent({data,handlerClick}:{
+export function MainOcrSegundasComponent({data,handlerClick}:{
     data:OcrProcessesInterface,
     handlerClick:(event:GestureResponderEvent)=>void
 }){
+    // console.log(data.revisadoPorId)
     return <View>
     <TouchableOpacity style={ocrStyle.ocrcontainer} onPress={handlerClick}>
         <View style={ocrStyle.ocrIconContainer}>
+            
             <View style={ocrStyle.ocrIcon}>
-                {/* <CalendarIcon color='#AAA' width={2} size={40}/> */}
-                <Image  style={ocrStyle.img} source={require('../public/img/ocr-img-2.png')}/>
+                <Image  style={ocrStyle.img} source={require('../public/img/ocr-img-4.png')}/>
             </View>
         </View>
         <View style={ocrStyle.body}>
@@ -35,23 +38,22 @@ export function MainOcrComponent({data,handlerClick}:{
                 <Text style={ocrStyle.content}>{data.tallaId}</Text>
             </View>
             <View style={ocrStyle.modulo}>
-                <ModuloIcon color='#AAA' size={20} width={2}/>
+                <ModuloIcon color='green' size={20} width={2.5}/>
                 <Text style={ocrStyle.content}>{`MOD-${data.moduloId}`}</Text>
             </View>
             <View style={ocrStyle.ocrNegativeActions}>
-                <OpIcon color='#AAA' size={20} width={2}/>
+                <OpIcon color='green' size={20} width={2.5}/>
                 <Text style={ocrStyle.content}>{data.op}</Text>
             </View>
             <View style={ocrStyle.ocrRefrenecia}>
-                
                 <View style={{width:'100%', height:'35%', justifyContent:'center', alignItems:'flex-end', paddingRight:'5%'}}>
                     {
                         data.revisadoPorId?
-                        <CheckBoxFill color='#AAA' size={15} width={2.5}/>:
-                        <CheckBoxEmpty color='#AAA' size={15} width={2.5}/>
+                        <CheckBoxFill color='green' size={15} width={2.5}/>:
+                        <CheckBoxEmpty color='green' size={15} width={2.5}/>
                     }
                 </View>
-                <Text style={[ocrStyle.content,{color:'#BBB'}]}>{data.referencia}</Text>
+                <Text style={[ocrStyle.content,{color:'#52BE80'}]}>{data.referencia}</Text>
             </View>
         </View>
     </TouchableOpacity>
@@ -62,12 +64,10 @@ const ocrStyle=StyleSheet.create({
     ocrcontainer:{
         flexDirection:'row',
         height:100,
-        // marginBottom:2,
-        
         margin:'auto',
         maxWidth:'100%',
         borderColor:"#CCC",
-        backgroundColor:'#FFF',
+        backgroundColor:'#EAFAF1',
         borderBottomWidth:2,
         borderRadius:10,
     
@@ -86,11 +86,12 @@ const ocrStyle=StyleSheet.create({
         alignItems:'center'
     },
     ocrIcon:{
-        width:25,
+        width:'100%',
         height:25,
+        // backgroundColor:'aqua',
         alignItems:'center',
         justifyContent:'center',
-        overflow:'hidden'
+        overflow:'hidden',
     },
     ocrNumber:{
         height:'100%',
@@ -137,7 +138,7 @@ const ocrStyle=StyleSheet.create({
     content:{
         fontSize:16,
         fontWeight:'bold',
-        color:"#777",
+        color:"green",
         // color:'#999'
     },
     createIconContainer:{

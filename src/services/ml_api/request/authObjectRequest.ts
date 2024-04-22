@@ -4,6 +4,7 @@ import { handlerAxiosError }                            from '../../../utilities
 import { ConectionObjectRequest }                       from '../conection/conectionObjectRequest';
 import { AxiosResponse }                                from 'axios';
 
+
 //  Doc 
 //  Este componente tiene la finalidad de establecer la conexión entre nuestro front y un servicio(RES_API_ML)
 //  Por lo tanto el componente establece una interfaz intermedia que permite definir los parámetros entre la interacción del front y el servicio al cual solo se le solicitará información 

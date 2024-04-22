@@ -1,5 +1,6 @@
 import { useLocalStorageGetData }                                       from '../controllers/hooks/customHookGetDataLocalStorage';
 import { handlerRemoveSavedObjectLocalStorage }                         from '../controllers/helpers/handlerObjectLocalStorage';
+import { useApiGetOcrAll }                                              from '../controllers/hooks/customHookGetAllOcrFilter';
 import { OcrProcessesInterface }                                        from '../interfaces/services/ml_api/ocrInterfaces';
 import { ModalRegisterOcrCurrentOp }                                    from '../modals/modalRegisterOcrCurrentOp';
 import { LoadingComponent }                                             from '../components/loadingComponent';
@@ -11,13 +12,14 @@ import { SearchIcon }                                                   from '..
 import { ModalRegisterOcr }                                             from '../modals/ModalRegisterOcr';
 import { MenuIcon }                                                     from '../public/icons/menuIcon';
 import { ItemResize }                                                   from '../components/ItemResize';
+import { ModalSegundas }                                                from '../modals/modalSegundas';
 import { useMainContext }                                               from '../contexts/mainContext';
 import { ModalOcrInfo }                                                 from '../modals/modalOcrInfo';
 import { Aside }                                                        from '../components/aside';
-import { useApiGetOcrAll }                                              from '../controllers/hooks/customHookGetAllOcrFilter'
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList}   from 'react-native';
 import { useState }                                                     from 'react';
-import { ModalSegundas }                                                from '../modals/modalSegundas';
+import { MainOcrAnomalyComponent } from '../components/mainOcrAnomalyComponent';
+import { MainOcrSegundasComponent } from '../components/mainOcrSegundasComponent';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -38,8 +40,6 @@ export function HomeOcr({navigation} : any){
 
     // const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
 
-
-    // console.log(state, 'jajaja')
     return<>
     <View style={{height,width}}>
         <View style={StyleMainWindow.backRoots}></View>
@@ -90,13 +90,30 @@ export function HomeOcr({navigation} : any){
                         state.data===null?
                         <EmptyComponent label='El usuario no cuenta con registros aún'/>:
                         <FlatList renderItem={(item)=>
-                            <MainOcrComponent 
+                            item.item.anormalidadCodigo?
+                            <MainOcrAnomalyComponent
                             key={item.item.ocrId} 
                             data={item.item} 
                             handlerClick={() => {
                                 setOcrProcessData(item.item);
                                 setModalInfoState(true);
-                            }}/>} 
+                            }}/>:
+                            item.item.categoriaId===2?
+                            <MainOcrSegundasComponent
+                            key={item.item.ocrId} 
+                            data={item.item} 
+                            handlerClick={() => {
+                                setOcrProcessData(item.item);
+                                setModalInfoState(true);
+                            }}/>:
+                            <MainOcrComponent
+                            key={item.item.ocrId} 
+                            data={item.item} 
+                            handlerClick={() => {
+                                setOcrProcessData(item.item);
+                                setModalInfoState(true);
+                            }}/>
+                        } 
                         data={state?.data}/>
                     }
                 </View>
