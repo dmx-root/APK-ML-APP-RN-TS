@@ -10,7 +10,10 @@ import { Input }                            from "../components/input";
 import { Modal }                            from "../components/modal";
 import { ModalLoading }                     from "./modalLoading";
 import { ModalAlert }                       from "./modalAlert";
-import { Alert, GestureResponderEvent }     from 'react-native';
+import { Alert, FlatList, GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View }     from 'react-native';
+import { ModalListSelect }                  from "./modalListSelect";
+import { ModalItemList }                    from "../components/modalItemList";
+import { useApiGetModulos }                 from "../controllers/hooks/customHookGetModulos";
 import { useState }                         from "react";
 
 export function ModalRegisterOcr({handlerClick,navigation}:{
@@ -18,11 +21,14 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
     navigation:any,
 }){
 
-    const contextStorage =                useMainContext();
-    const [ dataForm, setDataForm ] =     useState<form|null>(null);
-    const [ alertState, setAlertState ] = useState<boolean>(false);
-    const { state, setDataOperation } =   useSetOperation();
-//   console.log(state)
+    const contextStorage =                              useMainContext();
+    const [ dataForm, setDataForm ] =                   useState<form|null>(null);
+    const [ alertState, setAlertState ] =               useState<boolean>(false);
+    const [ modalModulosState, setModalModulosState ] = useState(false);
+    const [ modalTypeOpState, setModalTypeOpState ] =   useState(false);
+    const { state, setDataOperation } =                 useSetOperation();
+    const modulos =                                     useApiGetModulos();
+
     return<>
         {
         state.loading?
@@ -50,25 +56,29 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                 placeholder="X-X-X-X" 
                 value={dataForm?.['op']?dataForm?.['op']:''}/>
 
-                <Input 
-                color='#44329C' 
-                label='TIPO OP' 
-                handlerInput={(text)=>{
-                    setDataForm({...dataForm,opType:text.toUpperCase()})
-                }} 
-                textType='default' 
-                placeholder="MOP/MOB" 
-                value={dataForm?.['opType']?dataForm?.['opType']:''}/>
+                <View style={inputStyle.container}>
+                    <View style={inputStyle.frame}>
+                        <View style={inputStyle.labelContainer}>
+                            <Text style={[inputStyle.content,{color:'#44329C'}]}>TIPO DE OP</Text>
+                        </View>
+                        <TouchableOpacity style={inputStyle.inputContainer} onPress={()=>{setModalTypeOpState(true)}}>
+                            <Text style={inputStyle.input}>{dataForm?.['opType']?dataForm?.['opType']:''}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
 
-                <Input 
-                color='#44329C' 
-                label='MODULO' 
-                handlerInput={(text)=>{
-                    setDataForm({...dataForm,modulo:text})
-                }} 
-                textType="numeric" 
-                placeholder="##" 
-                value={dataForm?.['modulo']?dataForm?.['modulo']:''}/>
+                <View style={inputStyle.container}>
+                    <View style={inputStyle.frame}>
+                        <View style={inputStyle.labelContainer}>
+                            <Text style={[inputStyle.content,{color:'#44329C'}]}>MÓDULO</Text>
+                        </View>
+                        <TouchableOpacity 
+                        style={inputStyle.inputContainer}
+                        onPress={()=>{setModalModulosState(true)}}>
+                            <Text style={inputStyle.input}>{dataForm?.['modulo']?dataForm?.['modulo']:''}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
 
                 <FieldInfo label='Asegurese de llenar todos los campos' color={alertState?'red':'#44329C'}>
                     <InfoIcon color={alertState?'red':'#44329C'} size={24} width={2}/>
@@ -103,6 +113,60 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
             </ModalContainer>
         </Modal>
         }
+        {
+        modalModulosState?
+        <ModalListSelect handlerClose={()=>{setModalModulosState(false)}}>
+            <FlatList renderItem={(item)=>
+                <ModalItemList handlerClick={()=>{setDataForm({...dataForm,modulo:item.item.moduloId.toString()}); setModalModulosState(false)}} label={item.item.moduloEtiqueta} position='center'/>
+            } data={modulos.state?.data}/>
+        </ModalListSelect>:
+        <></>
+        }
+        {
+        modalTypeOpState?
+        <ModalListSelect handlerClose={()=>{setModalTypeOpState(false)}}>
+            <ModalItemList handlerClick={()=>{setDataForm({...dataForm,opType:'MOB'}); setModalTypeOpState(false)}} label='BRASIER' position='center'/>
+            <ModalItemList handlerClick={()=>{setDataForm({...dataForm,opType:'MOP'}); setModalTypeOpState(false)}} label='PANTY' position='center'/>
+        </ModalListSelect>:
+        <></>
+        }
+
     </>
 }
 
+
+const inputStyle=StyleSheet.create({
+    container:{
+        width:'100%',
+        height:80,
+        justifyContent:'center'
+    },
+    frame:{
+        width:'100%',
+        height:'70%',
+        flexDirection:'row',
+        
+    },
+    labelContainer:{
+        height:'100%',
+        width:'40%',
+        justifyContent:'center'
+    },
+    inputContainer:{
+        height:'100%',
+        width:'60%',
+        // alignItems:'center',
+        justifyContent:'center',
+        backgroundColor:'#FFF'
+    },
+    content:{
+        fontSize:18,
+        fontWeight:'700',
+    },
+    input:{
+        paddingLeft:20,
+        fontSize:20,
+        color:'#999',
+        fontWeight:'600'
+    }
+})

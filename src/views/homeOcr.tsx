@@ -2,6 +2,8 @@ import { useLocalStorageGetData }                                       from '..
 import { handlerRemoveSavedObjectLocalStorage }                         from '../controllers/helpers/handlerObjectLocalStorage';
 import { useApiGetOcrAll }                                              from '../controllers/hooks/customHookGetAllOcrFilter';
 import { OcrProcessesInterface }                                        from '../interfaces/services/ml_api/ocrInterfaces';
+import { MainOcrSegundasComponent }                                     from '../components/mainOcrSegundasComponent';
+import { MainOcrAnomalyComponent }                                      from '../components/mainOcrAnomalyComponent';
 import { ModalRegisterOcrCurrentOp }                                    from '../modals/modalRegisterOcrCurrentOp';
 import { LoadingComponent }                                             from '../components/loadingComponent';
 import { MainOcrComponent }                                             from '../components/mainOcrComponent';
@@ -18,8 +20,6 @@ import { ModalOcrInfo }                                                 from '..
 import { Aside }                                                        from '../components/aside';
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList}   from 'react-native';
 import { useState }                                                     from 'react';
-import { MainOcrAnomalyComponent } from '../components/mainOcrAnomalyComponent';
-import { MainOcrSegundasComponent } from '../components/mainOcrSegundasComponent';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -35,8 +35,11 @@ export function HomeOcr({navigation} : any){
 
     const [ ocrProcessData, setOcrProcessData ] =           useState<OcrProcessesInterface|null>(null);
     
-    const currentOp =                                   useLocalStorageGetData('currentOp');
+    const currentOp =   useLocalStorageGetData('currentOp');
+
     const { state, itemSelector, setItemSelector } =    useApiGetOcrAll();
+    // const data = useApiGetAnomalyList();
+    // console.log(data.state.data)
 
     // const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
 
@@ -89,6 +92,7 @@ export function HomeOcr({navigation} : any){
                         <EmptyComponent label='Hubo un error en la carga de datos'/>:
                         state.data===null?
                         <EmptyComponent label='El usuario no cuenta con registros aún'/>:
+                        state.data?
                         <FlatList renderItem={(item)=>
                             item.item.anormalidadCodigo?
                             <MainOcrAnomalyComponent
@@ -114,13 +118,14 @@ export function HomeOcr({navigation} : any){
                                 setModalInfoState(true);
                             }}/>
                         } 
-                        data={state?.data}/>
+                        data={state?.data}/>:
+                        <></>
                     }
                 </View>
                 {contextStorage?.account?.home?.filter(icon=>icon.id===1)[0].actionObject(()=>{
-                    // setNewRegister(true);
-                    // setNewCurrentRegister(true);
-                    setModalSegundas(true)
+                    setNewRegister(true);
+                    setNewCurrentRegister(true);
+                    // setModalSegundas(true)
                 })||<></>}
             </View>
             <View style={StyleMainWindow.root2}>
@@ -188,7 +193,6 @@ export function HomeOcr({navigation} : any){
 }
 
 const currentColorMain='#44329C';   //azul oscuro
-const currentColorMain1='#C7CCEC';  //Azul claro
 const currentColorMain2='#e8e8e8';  //gris muy claro
 
 const StyleMainWindow=StyleSheet.create({

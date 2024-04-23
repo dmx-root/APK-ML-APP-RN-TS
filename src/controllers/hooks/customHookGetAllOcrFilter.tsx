@@ -80,7 +80,7 @@ export const useApiGetOcrAll: () => {
                 setFilterData(response.data!)
 
             }else if(response?.statusCodeApi === 0){
-                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null }) 
+                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: []}) 
             }else{
                 dispatch({ type: actionTypes.FETCH_FAILURE });
             }

@@ -1,6 +1,6 @@
 import { api_ml_production_op_details_get }     from '../../endpoints/ml_api/restApiMujerLatina';
 import { OpDetail  }                            from '../../interfaces/services/ml_api/detailOpInteface';
-import { InterfaceDetailOPRequest }             from '../../services/ml_api/request/reques.interfaceDetailOp';
+import { InterfaceDetailOPRequest }             from '../../services/ml_api/request/request.interfaceDetailOp';
 import { useEffect, useReducer }                from 'react';
 
 //  Doc 

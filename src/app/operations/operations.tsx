@@ -16,81 +16,6 @@ interface operationInterface{
     [key:number]:any
 }
 
-export const OPERATIONS_ITEMS:operationInterface={
-    3:{
-        icon:<LogoutIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Cerrar Sesión",
-        handlerClick:() => {
-            handlerRemoveValueLocalStorage('token').then().catch();
-        }
-    },
-    1:{
-        icon:<UserIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Ver Perfil",
-        handlerClick:(navigation:any) => {
-            navigation.navigate('Profile');
-        }
-    },
-    16:{
-        icon:<CreateOcrIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Crear OCR", 
-        handlerClick:() => {}
-    },
-    19:{
-        icon:<OcrIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Mostrar OCR",
-        handlerClick:() => {}
-    },
-    20:{
-        icon:<OpIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Abrir OP",  
-        handlerClick:() => {}
-    },
-    21:{
-        icon:<CalendarIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Asignar Fecha de Ejecucion de OP",
-        handlerClick:() => {}
-    },
-    22:{
-        icon:<CalendarIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Asignar Fecha de Ejecucion de Detalle OP",
-        handlerClick:() => {}
-    },
-    25:{
-        icon:<OpIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Ver OP's",
-        handlerClick:() => {}
-    },
-    26:{
-        icon:<ModuloIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Asignar op al módulo",
-        handlerClick:() => {}
-    },
-    
-    27:{
-        icon:<EmployeerIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Administrar Operarios",
-        handlerClick:() => {}
-    },
-    31:{
-        icon:<ModuloIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Mostrar Módulos",
-        handlerClick:(navigation:any) => {
-            navigation.navigate('HomeModulos')
-        }
-    },
-    28:{
-        icon:<EmployeerIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Remover Operario",  
-        handlerClick:() => {}
-    },
-    30:{
-        icon:<EmployeerIcon color='#FFF' size={35} width={2}/>,
-        operation_label: "Mostrar Operarios", 
-        handlerClick:() => {}
-    }
-}
-
 export const useOperationHandler  = ():{ OPERATIONS_ITEMS:operationInterface } =>{
 
     const contextStorage = useMainContext();
@@ -128,6 +53,13 @@ export const useOperationHandler  = ():{ OPERATIONS_ITEMS:operationInterface } =
         16:{
             icon:<CreateOcrIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Crear OCR", 
+            handlerClick:(navigation:any) => {
+                // navigation.navigate('Profile');
+            }
+        },
+        33:{
+            icon:<CreateOcrIcon color='#FFF' size={35} width={2}/>,
+            operation_label: "Crear OCR de segundas", 
             handlerClick:(navigation:any) => {
                 // navigation.navigate('Profile');
             }

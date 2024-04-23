@@ -3,6 +3,7 @@ import {uri} from './config';
 export const api_ml_local_auth_get =                    `${uri}/api/ml/auth/local/login`;
 export const api_ml_local_auth_get_by_token =           `${uri}/api/ml/auth/local/auth-by-token/`;
 export const api_ml_sesion_mobile_get_operations =      `${uri}/api/ml/sesion/mobile/operation/`;
+export const api_ml_sesion_mobile_get_anomaly =         `${uri}/api/ml/sesion/mobile/anomaly/list`;
 export const api_ml_production_ocr_get_all =            `${uri}/api/ml/production/ocr/list/`;
 export const api_ml_production_op_get_all =             `${uri}/api/ml/production/op/list/`;
 export const api_ml_production_modulo_get_all =         `${uri}/api/ml/production/modulo/list/`;

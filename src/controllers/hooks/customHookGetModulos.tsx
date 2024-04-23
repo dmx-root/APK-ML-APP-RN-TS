@@ -3,7 +3,7 @@ import { api_ml_production_modulo_get_all }                 from '../../endpoint
 import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
 import { useEffect, useReducer }               from 'react';
 import { ModuloProcessInterface } from '../../interfaces/services/ml_api/moduloInterfaces';
-import { ModuloObjectRequest } from '../../services/ml_api/request/moduloObjectRequest';
+import { InterfaceModuloRequest } from '../../services/ml_api/request/moduloObjectRequest'
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -47,11 +47,13 @@ export const useApiGetModulos = (): { state: ApiState } => {
 
     async function fetchData():Promise<void>{
         try {
-            const apiQuery = new ModuloObjectRequest()
+            const fetch = new InterfaceModuloRequest();
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.ModuloProcessGet(api_ml_production_modulo_get_all);
+            const data=await fetch.productionData({
+                url:api_ml_production_modulo_get_all
+            })
 
             data?.statusCodeApi===1?
             dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):

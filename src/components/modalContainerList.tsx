@@ -11,14 +11,16 @@ export function ModalContainerList({children}:{
     children:React.ReactNode
 }){
     return <View style={modalContainerListStyle.container}>
-        {children}
-    </View>
+            {children}
+        </View>
 }
 
 const modalContainerListStyle=StyleSheet.create({
     container:{
-        width:width*0.8,
-        height:700,
+        width:width*0.7,
+        // height:700,
+        // minHeight:300,
+        maxHeight:600,
         alignItems:'center',
         // backgroundColor:'aqua',
         marginBottom:30
