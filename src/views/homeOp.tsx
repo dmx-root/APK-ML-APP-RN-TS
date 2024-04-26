@@ -10,7 +10,9 @@ import { ModalRegisterOcr }                                 from '../modals/Moda
 import { MenuIcon }                                         from '../public/icons/menuIcon';
 import { ItemResize }                                       from '../components/ItemResize';
 import { useMainContext }                                   from '../contexts/mainContext';
-import { View,StyleSheet, Dimensions, Text, FlatList}       from 'react-native';
+import { ModalSegundas }                                    from '../modals/modalSegundas';
+import { Aside }                                            from '../components/aside';
+import { View,StyleSheet, Dimensions, Text, FlatList, TouchableOpacity }      from 'react-native';
 import { useState }                                         from 'react'
 
 const {height,width}=Dimensions.get('screen');
@@ -18,13 +20,17 @@ const {height,width}=Dimensions.get('screen');
 export function HomeOp({navigation}:any){
 
     const contextStorage                    = useMainContext();
-    const [ newRegister, setNewRegister ]   = useState <boolean>(false);
+    const [ asideState,setAsideState ] =                    useState<boolean>(false);
+    const [ newRegister,setNewRegister ] =                  useState<boolean>(false);
+    const [ modalSegundas,setModalSegundas ] =              useState<boolean>(false);
 
     // const { state } = contextStorage?.account?.home?.[1].mainFetch(contextStorage.currentUser?.documentoid)
     const { state, setItemSelector, itemSelector }      = useApiGetOpFilter();
 
     const [ detailOpListState, setDetailOpListState ]   = useState <boolean>(false);
     const [ opId,  setopId]                             = useState <string | null>(null);
+
+
 
     return<>
      <View style={{height,width}}>
@@ -35,9 +41,9 @@ export function HomeOp({navigation}:any){
                     <View style={StyleMainWindow.header}>
                         <View style={StyleMainWindow.filterContainer}>
                             <View style={StyleMainWindow.action}>
-                                <View  style={StyleMainWindow.menuIcon}>
+                                <TouchableOpacity  style={StyleMainWindow.menuIcon} onPress={()=>{setAsideState(true)}}>
                                     <MenuIcon color='#999' size={40} width={2}/>
-                                </View>
+                                </TouchableOpacity>
                                 <View style={StyleMainWindow.bar}>
                                 </View>
                                 <View style={StyleMainWindow.searchIcon}>
@@ -89,7 +95,7 @@ export function HomeOp({navigation}:any){
                         }         
                         </View>
                         {contextStorage?.account?.home?.filter(icon=>icon.id===2)[0].actionObject(()=>{
-
+                            setNewRegister(true);
                         })||<></>}
                     </View>
                     <View style={StyleMainWindow.root2}>
@@ -109,13 +115,33 @@ export function HomeOp({navigation}:any){
                 </View>
             </View>
     {
-        newRegister?
-        <ModalRegisterOcr handlerClick={()=>setNewRegister(false)} navigation={navigation}/>:
+        asideState?    
+        <Aside 
+        navigation={navigation} 
+        setActions={{
+            setAsideState,
+            setNewRegister,
+            setModalSegundas
+        }}
+        handlerClick={()=>{setAsideState(false)}}/>:
         <></>
     }
     {
         detailOpListState?
         <ModalDetailOpList handlerClick={()=>{setDetailOpListState(false)}} navigation={navigation} opId={opId}/>:
+        <></>
+    }
+    {
+        
+        newRegister?
+        <ModalRegisterOcr 
+        handlerClick={()=>setNewRegister(false)} 
+        navigation={navigation}/>:
+        <></>
+    }
+    {
+        modalSegundas?
+        <ModalSegundas handlerClick={()=>{setModalSegundas(false)}}/>:
         <></>
     }
     

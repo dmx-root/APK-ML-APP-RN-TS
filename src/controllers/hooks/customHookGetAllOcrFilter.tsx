@@ -7,7 +7,8 @@ import {
     api_ml_production_ocr_get_all,
     api_ml_production_ocr_get_by_revise,
     api_ml_production_ocr_get_by_op_type,
-    api_ml_production_ocr_get_by_category
+    api_ml_production_ocr_get_by_category,
+    api_ml_production_ocr_get_by_anomaly
 } from '../../endpoints/ml_api/restApiMujerLatina';
 
 const actionTypes = {
@@ -50,9 +51,6 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
 
 export const useApiGetOcrAll: () => {
     state: ApiState;
-    setValueFilter: React.Dispatch<React.SetStateAction<string>>;
-    filterData: OcrProcessesInterface[] | null;
-    valueFilter: string;
     setItemSelector: React.Dispatch<React.SetStateAction<number>>;
     itemSelector: number
 } = () => {
@@ -63,8 +61,6 @@ export const useApiGetOcrAll: () => {
         error: null,
     });
     const [itemSelector, setItemSelector] = useState<number>(1);
-    const [valueFilter, setValueFilter] = useState<string>('');
-    const [filterData, setFilterData] = useState<OcrProcessesInterface[] | null>(null)
 
     async function fetchData(params: FetchInterface): Promise<void> {
         try {
@@ -77,7 +73,6 @@ export const useApiGetOcrAll: () => {
             if(response?.statusCodeApi === 1){
 
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data });
-                setFilterData(response.data!)
 
             }else if(response?.statusCodeApi === 0){
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: []}) 
@@ -153,18 +148,19 @@ export const useApiGetOcrAll: () => {
                     }
                 })
                 break;
+            case 8:
+                fetchData({
+                    url: api_ml_production_ocr_get_by_anomaly,
+                    params: {
+                        // user:'1152460381',
+                        // event: 2
+                    }
+                })
+                break;
 
         }
     }, [itemSelector]);
 
-    useEffect(() => {
-        if(filterData){
-            const newData = state.data?.filter(element => element.registroFecha.toString().includes(valueFilter));
-            newData?
-            setFilterData(newData):
-            setFilterData([]);
-        }
-    }, [valueFilter])
 
-    return { state, setItemSelector, itemSelector,valueFilter, setValueFilter,filterData };
+    return { state, setItemSelector, itemSelector};
 };

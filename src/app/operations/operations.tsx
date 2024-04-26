@@ -16,15 +16,23 @@ interface operationInterface{
     [key:number]:any
 }
 
-export const useOperationHandler  = ():{ OPERATIONS_ITEMS:operationInterface } =>{
+interface SetStateDsipatchInterface{
+    [key:string]:React.Dispatch<React.SetStateAction<boolean>>
+} 
 
-    const contextStorage = useMainContext();
+export const useOperationHandler  = ({
+    navigation,
+    setStateActions
+}:{
+    navigation: any;
+    setStateActions: SetStateDsipatchInterface
+}):{ OPERATIONS_ITEMS:operationInterface } =>{
 
     const OPERATIONS_ITEMS:operationInterface={
         3:{
             icon:<LogoutIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Cerrar Sesión",
-            handlerClick:(navigation:any) => {
+            handlerClick:() => {
                 Alert.alert('Se cerrará la sesión', '¿Está seguro de cerrar la sesión?',
                 [
                     {text: 'OK', onPress:()=>{
@@ -33,7 +41,7 @@ export const useOperationHandler  = ():{ OPERATIONS_ITEMS:operationInterface } =
                             if(element)handlerRemoveValueLocalStorage('token').catch(err=>console.log(err));
                         }).
                         catch(err=>console.log(err));
-                        navigation.navigate('Login');
+                        // navigation.navigate('Login');
 
                     }, style: 'cancel'},
                     {text: 'CANCEL', onPress: () =>{
@@ -46,22 +54,27 @@ export const useOperationHandler  = ():{ OPERATIONS_ITEMS:operationInterface } =
         1:{
             icon:<UserIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Ver Perfil",
-            handlerClick:(navigation:any) => {
+            handlerClick:() => {
                 navigation.navigate('Profile');
+                setStateActions.setAsideState(false);
             }
         },
         16:{
             icon:<CreateOcrIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Crear OCR", 
-            handlerClick:(navigation:any) => {
+            handlerClick:() => {
                 // navigation.navigate('Profile');
+                setStateActions.setAsideState(false);
+                setStateActions.setNewRegister(true);
             }
         },
         33:{
             icon:<CreateOcrIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Crear OCR de segundas", 
-            handlerClick:(navigation:any) => {
+            handlerClick:() => {
                 // navigation.navigate('Profile');
+                setStateActions.setAsideState(false);
+                setStateActions.setModalSegundas(true);
             }
         },
         19:{
@@ -72,14 +85,18 @@ export const useOperationHandler  = ():{ OPERATIONS_ITEMS:operationInterface } =
         20:{
             icon:<OcrIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Mostrar OCR's",
-            handlerClick:(navigation:any) => {
+            handlerClick:() => {
+                setStateActions.setAsideState(false);
                 navigation.navigate('HomeOcr');
             }
         },
         21:{
             icon:<OpIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Abrir OP",  
-            handlerClick:() => {}
+            handlerClick:() => {
+                setStateActions.setAsideState(false);
+                setStateActions.setNewRegister(true);                
+            }
         },
         22:{
             icon:<CalendarIcon color='#FFF' size={35} width={2}/>,
@@ -94,32 +111,44 @@ export const useOperationHandler  = ():{ OPERATIONS_ITEMS:operationInterface } =
         26:{
             icon:<OpIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Ver OP's",
-            handlerClick:(navigation:any) => {
+            handlerClick:() => {
+                setStateActions.setAsideState(false);
                 navigation.navigate('HomeOp')
             }
         },
         27:{
             icon:<ModuloIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Asignar op al módulo",
-            handlerClick:() => {}
+            handlerClick:() => {
+                setStateActions.setAsideState(false);
+
+            }
         },
         
         28:{
             icon:<EmployeerIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Administrar Operarios",
-            handlerClick:() => {}
+            handlerClick:() => {
+                setStateActions.setAsideState(false);
+                navigation.navigate('HomeEmployeers')
+                
+            }
         },
         32:{
             icon:<ModuloIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Mostrar Módulos",
-            handlerClick:(navigation:any) => {
+            handlerClick:() => {
+                setStateActions.setAsideState(false);
                 navigation.navigate('HomeModulos')
             }
         },
         31:{
             icon:<EmployeerIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Mostrar Operarios", 
-            handlerClick:() => {}
+            handlerClick:() => {
+                setStateActions.setAsideState(false);
+                navigation.navigate('HomeEmployeers')
+            }
         }
     }
 

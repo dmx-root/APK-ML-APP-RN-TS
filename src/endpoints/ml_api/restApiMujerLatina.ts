@@ -14,6 +14,7 @@ export const get_ml_production_ocr_get_by_user =        `${uri}/api/ml/productio
 export const api_ml_production_ocr_get_by_revise =      `${uri}/api/ml/production/ocr/list-filter-by-revise`;
 export const api_ml_production_ocr_get_by_op_type =     `${uri}/api/ml/production/ocr/list-filter-by-op-type`;
 export const api_ml_production_ocr_get_by_category =    `${uri}/api/ml/production/ocr/list-filter-by-category`;
+export const api_ml_production_ocr_get_by_anomaly =     `${uri}/api/ml/production/ocr/list-filter-by-event/`;
 export const api_ml_production_op_get_by_type=          `${uri}/api/ml/production/op/list-filter-by-type`;
 export const api_ml_production_op_get_by_user =         `${uri}/api/ml/production/op/list-filter-by-user`;
 export const api_ml_production_op_get_by_state =        `${uri}/api/ml/production/op/list-filter-by-state`;

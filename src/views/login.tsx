@@ -3,26 +3,19 @@ import { inicialStateAuth }                             from '../interfaces/serv
 import { useHandlerSesion }                             from '../controllers/hooks/customHookSetSesion';
 import { AuthCheckRemenberPassword }                    from '../components/authCheckRemenberPassword';
 import { useSetSesion }                                 from '../controllers/helpers/handlerSetSesion';
-import { LoginScreenProps }                             from '../interfaces/screens/screensInterfaces';
 import { useApiGetAuth }                                from '../controllers/hooks/customHookGetAuth';
-import { accountNavigators }                            from '../app/navigators/accountNavigators';
 import { AuthStoredLogin }                              from '../components/authStoredLogin';
 import { UserIcon }                                     from '../public/icons/userIcon';
 import { LockIcon }                                     from '../public/icons/lockIcon';
 import { AuthButton }                                   from '../components/authButton';
 import { modal, form, newModal }                        from '../interfaces/view/login';
 import { InputAuth }                                    from '../components/inputAuth';
-import { useMainContext }                               from '../contexts/mainContext';
 import { ModalLoading }                                 from '../modals/modalLoading';
 import { ModalInput }                                   from '../modals/modalInput';
 import { ModalAlert }                                   from '../modals/modalAlert';
 import { View, StyleSheet, Dimensions, Text, Alert }    from 'react-native';
-import { ImageBackground }                              from 'react-native';
-import * as Font                                        from 'expo-font';
+import { ImageBackground,Image }                              from 'react-native';
 import { useEffect, useState }                          from 'react';
-
-import { AuthObjectRequest } from '../services/ml_api/request/authObjectRequest'
-import {api_ml_local_auth_get_by_token } from '../endpoints/ml_api/restApiMujerLatina'
 
 const {height,width}=Dimensions.get('screen');
 
@@ -41,16 +34,6 @@ export function Login(){
     const [ passworsSave, setPasswordSave] = useState<boolean>(false);
     const [ modal, setModal ] =              useState<modal>(newModal);
 
-    async function load(){
-        try {
-            const query = new AuthObjectRequest();
-            const response = await query.authGetByToken(api_ml_local_auth_get_by_token,'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMTQ2NDQxOTI1IiwidXNlck5hbWUiOiJEQVZJRCBFU1RFQkFOIE1PUkFMRVMgw5FVU1RFUyIsInVzZXJEZXNjcmlwdGlvbiI6IkRlc2Fycm9sbGFkb3IganVuaW9yIiwicm9sZUlkIjoxLCJyb2xlTmFtZSI6IkFETUlOSVNUUkFET1IiLCJkb2N1bWVudFR5cGVJZCI6MSwiZG9jdWVtZW50VHlwZU5hbWUiOiJDRURVTEEgREUgQ0lVREFEQU5JQSIsImlhdCI6MTcxMjMzMDQ3NSwiZXhwIjoxNzE0OTYwMjc1fQ.tF9mlmd2XzAufiC5XWNwm4DzUZw-8Om81hAd8bafQPQw6Okz1yQpD6N4rkSFfLbFRbFy1Wg0dSqskkFnljtwqCzgjsLbJ58V8i67m7TnngAr7CMCTptnce0p4Q4CEEma4ChD1nPx5z1W56Ka9dpbH5yleQc6GePSJDtJ2Iv8c-MAWzByLfks6ULMJROgYbIQ734mSf9fzjJuusUp-N7Okltiz0DgN0z1zGcjXc3B8tNgYsSvbX8f4d1NYRgh39mJVhiv9Nd__HzpvZT70YMqQviJBbA4kkKtkTXzmRW36BR_zb3Ox9ObdaEwnk8qWlXOzIZ8BIsLCndjuIeTAzfwrQ')
-            console.log(response)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
     return<>
             <View style={loginStyle.backGround}>
                     <ImageBackground
@@ -59,7 +42,9 @@ export function Login(){
                         imageStyle={loginStyle.imageStyle}
                         blurRadius={3}>
                     <View style={loginStyle.logoContainer}>
-                        {/* <Image source={require('../public/img/transparentLogo.png')} style={loginStyle.logo}/> */}
+                        <View style={loginStyle.frame}>
+                            <Image source={require('../public/img/transparentLogo.png')} style={loginStyle.logo}/>
+                        </View>
                     </View>
                     {
                     currentSesionValidator.state.loading?
@@ -80,7 +65,7 @@ export function Login(){
                     }}/>:
                     <>
                         <View style={loginStyle.titleContainer}>
-                            {/* <Text style={loginStyle.title}>Iniciar Sesión</Text> */}
+                            <Text style={loginStyle.title}>Iniciar Sesión</Text>
                         </View>
                         <View style={loginStyle.form}>
                             <InputAuth 
@@ -195,12 +180,13 @@ export function Login(){
 //     }
 // });
 
+
 const loginStyle=StyleSheet.create({
 
     backGround:{
         flex:1,
         backgroundColor:currentColorDefault,
-        display:'flex',
+        // display:'flex',
         width,
         height
     },
@@ -209,22 +195,34 @@ const loginStyle=StyleSheet.create({
         alignItems: 'center',
     },
     imageStyle: {
-        width: '100%',
-        height: '100%',
+        height,
+        width,
         opacity: 0.35, 
     },
     logoContainer:{
         width:'100%',
-        height:'18%',
+        height:200,
+        marginTop:'5%',
+        alignItems:'center',
+        marginBottom:100
+    },
+    frame:{
+        width:'100%',
+        height:180,
         marginTop:'10%',
-        alignItems:'center'
+        // backgroundColor:'aqua',
+        // justifyContent:'center'
+        alignItems:'center',
+
     },
     logo:{
+        opacity:0.95,
         resizeMode:'contain',
         flex:1,
     },
     titleContainer:{
-        height:'15%',
+        // backgroundColor:'aqua',
+        height:150,
         width:'100%',
         display:'flex',
         alignItems:'center',
@@ -233,7 +231,7 @@ const loginStyle=StyleSheet.create({
     title:{
         fontSize:80,
         color:'#FFF',
-        fontFamily:'Roboto-Thin',
+        fontFamily:'sans-serif-thin',
     },
     form:{
         marginTop:'5%',

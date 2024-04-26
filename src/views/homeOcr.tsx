@@ -18,8 +18,9 @@ import { ModalSegundas }                                                from '..
 import { useMainContext }                                               from '../contexts/mainContext';
 import { ModalOcrInfo }                                                 from '../modals/modalOcrInfo';
 import { Aside }                                                        from '../components/aside';
-import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList}   from 'react-native';
+import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList, TextInput}   from 'react-native';
 import { useState }                                                     from 'react';
+import { useFilterData } from '../controllers/hooks/customHookFilter';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -37,8 +38,13 @@ export function HomeOcr({navigation} : any){
     
     const currentOp =   useLocalStorageGetData('currentOp');
 
-    const { state, itemSelector, setItemSelector } =    useApiGetOcrAll();
-    // const data = useApiGetAnomalyList();
+    const { state, itemSelector, setItemSelector } = useApiGetOcrAll();
+    const { setValue, value, elements} = useFilterData({
+        data: state,
+        ref: 'referencia'
+    });
+
+    // console.log(elements)
     // console.log(data.state.data)
 
     // const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
@@ -53,8 +59,11 @@ export function HomeOcr({navigation} : any){
                         <TouchableOpacity  style={StyleMainWindow.menuIcon} onPress={()=>{setAsideState(true)}}>
                             <MenuIcon color='#999' size={40} width={2}/>
                         </TouchableOpacity>
-                        <View style={StyleMainWindow.bar}>
-                        </View>
+                        {/* <View style={StyleMainWindow.bar}> */}
+                            <TextInput value={value}  style={StyleMainWindow.bar} onChangeText={(txt)=>{
+                                setValue(txt)
+                            }}/>
+                        {/* </View> */}
                         <View style={StyleMainWindow.searchIcon}>
                             <SearchIcon color='#999' size={40} width={2}/>
                         </View>
@@ -146,7 +155,16 @@ export function HomeOcr({navigation} : any){
     </View>
     {
         asideState?
-        <Aside navigation={navigation} handlerClick={()=>{setAsideState(false)}}/>:
+        <Aside 
+        navigation={navigation} 
+        setActions={{
+            setAsideState,
+            setNewRegister,
+            setNewCurrentRegister,
+            setModalInfoState,
+            setModalSegundas
+        }}
+        handlerClick={()=>{setAsideState(false)}}/>:
         <></>
     }
     {

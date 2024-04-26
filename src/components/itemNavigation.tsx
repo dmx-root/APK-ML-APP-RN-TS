@@ -24,7 +24,6 @@ const itemNavigationStyle=StyleSheet.create({
         width:70,
         height:70,
         borderRadius:40,
-        // backgroundColor:'#DDD',
         alignItems:'center',
         justifyContent:'center'
     },

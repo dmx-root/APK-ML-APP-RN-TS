@@ -44,10 +44,11 @@ export function ModalInput({
                     <View style={modalInputStyle.inputContainer}>
                         <TextInput 
                             style={modalInputStyle.input}
-                            value={value}
                             onChangeText={handlerValue}
-                            keyboardType={keyboard}
                             placeholder={placeHolder}
+                            placeholderTextColor={'#CCC'}
+                            keyboardType={keyboard}
+                            value={value}
                         // onChangeText={(text)=>{setNewOp(text)} }
                         />
                     </View>
@@ -93,12 +94,16 @@ const modalInputStyle=StyleSheet.create({
     input:{
         height:'70%',
         width:'100%',
-        // backgroundColor:'aqua',
         borderWidth:2,
         borderColor:'#CCC',
         borderRadius:4,
-        padding:20,
-        // fontFamily:18,
+        padding:10,
+        fontSize:20,
+        textAlign:'center',
+        fontWeight:'500',
+        color:'#777',
+        
+        // backgroundColor:'aqua'
         // color:'#AAA'
     },
     button:{

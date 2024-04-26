@@ -8,6 +8,7 @@ export const FILTER_ITEMS_OCR_HOME : FilterItem[] = [
     {id:5,label:'MOB'},
     {id:6,label:'Pri.'},
     {id:7,label:'Seg.'},
+    {id:8,label:'Anorm.'},
 ];
 
 export const FILTER_ITEMS_OP_HOME : FilterItem[] = [

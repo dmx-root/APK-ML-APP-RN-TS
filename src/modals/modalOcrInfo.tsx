@@ -22,12 +22,12 @@ export function ModalOcrInfo({data, handlerClick}:{
                 <ModalContainer color='#C7CCEC'>
                     <InfoLine title='TIPO DE REGISTRO' content={data?.categoriaEtiqueta||'No def'}/>
                     <InfoLine title='REGISTRADO POR' content={data?.registradoPorId||'No def'}/>
-                    <InfoLine title='FECHA DE REGISTRO' content={data?.registroFecha.toLocaleString()||'No def'}/>
+                    <InfoLine title='FECHA DE REGISTRO' content={data?.registroFecha.toLocaleString().slice(0,10)||'No def'}/>
                     {   
                         data?.revisadoFecha?
                         <>
                         <InfoLine title='REVISADO POR' content={data?.revisadoPorId||'No def'}/>
-                        <InfoLine title='FECHA DE REVISIÓN' content={data?.revisadoFecha?.toLocaleString()||'No def'}/>
+                        <InfoLine title='FECHA DE REVISIÓN' content={data?.revisadoFecha?.toLocaleString().slice(0,10)||'No def'}/>
                         </>:
                         <></>
                     }
@@ -50,7 +50,7 @@ export function ModalOcrInfo({data, handlerClick}:{
                     <InfoLineDouble title1='COLOR' content1={data?.colorEtiqueta||'No def'} title2='COD-COLOR' content2={data?.colorId||'No def'}/>
                     {
                         data?.categoriaId===1?
-                        <InfoLineDouble title1='INICIO' content1={data?.inicioOperacion?.toLocaleString()||'No def'} title2='FIN' content2={data?.finOperacion?.toLocaleString()||'No def'}/>:
+                        <InfoLineDouble title1='INICIO' content1={data?.inicioOperacion?.toLocaleString().slice(11,19)||'No def'} title2='FIN' content2={data?.finOperacion?.toLocaleString().slice(11,19)||'No def'}/>:
                         <></>
                     }
                     <InfoLineDouble title1='TALLA' content1={data?.tallaId.toString()||'No def'} title2='CANTIDAD' content2={data?.cantidadUnidades.toString()||'No def'}/>

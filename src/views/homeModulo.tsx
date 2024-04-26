@@ -1,4 +1,4 @@
-import {View,StyleSheet, Dimensions, Text, FlatList}        from 'react-native';
+import {View,StyleSheet, Dimensions, Text, FlatList, TouchableOpacity}        from 'react-native';
 import { MenuIcon }                                         from '../public/icons/menuIcon';
 import { SearchIcon }                                       from '../public/icons/searchIcon';
 import { ItemResize }                                       from '../components/ItemResize';
@@ -11,12 +11,17 @@ import { useApiGetModulosAll }                              from '../controllers
 import { LoadingComponent }                                 from '../components/loadingComponent';
 import { EmptyComponent }                                   from '../components/emptyComponent';
 import { useState }                                         from 'react'
+import { Aside } from '../components/aside';
+import { ModalSegundas } from '../modals/modalSegundas';
 
 const {height,width}=Dimensions.get('screen');
 
 export function HomeModulos({navigation}:any){
 
-    const [newRegister,setNewRegister] = useState<boolean>(false);
+    const [ asideState,setAsideState ] =                    useState<boolean>(false);
+    const [ newRegister,setNewRegister ] =                  useState<boolean>(false);
+    const [ modalSegundas,setModalSegundas ] =              useState<boolean>(false);
+
     // const { state } = useApiGetModulos();
     const {state, setItemSelector, itemSelector} = useApiGetModulosAll();
 
@@ -32,9 +37,9 @@ export function HomeModulos({navigation}:any){
                     <View style={StyleMainWindow.header}>
                         <View style={StyleMainWindow.filterContainer}>
                             <View style={StyleMainWindow.action}>
-                                <View  style={StyleMainWindow.menuIcon}>
+                                <TouchableOpacity  style={StyleMainWindow.menuIcon} onPress={()=>{setAsideState(true)}}>
                                     <MenuIcon color='#999' size={40} width={2}/>
-                                </View>
+                                </TouchableOpacity>
                                 <View style={StyleMainWindow.bar}>
                                 </View>
                                 <View style={StyleMainWindow.searchIcon}>
@@ -85,8 +90,8 @@ export function HomeModulos({navigation}:any){
                             data={state?.data}/>
                         }
                         </View>
-                        {contextStorage?.account?.home?.filter(icon=>icon.id===3)[0].actionObject(()=>{
-                            })||<></>}
+                        {/* {contextStorage?.account?.home?.filter(icon=>icon.id===3)[0].actionObject(()=>{
+                            })||<></>} */}
                     </View>
                     <View style={StyleMainWindow.root2}>
                         <View style={StyleMainWindow.navigationContainer}>
@@ -106,10 +111,31 @@ export function HomeModulos({navigation}:any){
                 </View>
             </View>
     {
-        newRegister?
-        <ModalRegisterOcr handlerClick={()=>setNewRegister(false)} navigation={navigation}/>:
+        asideState?  
+          
+        <Aside 
+        navigation={navigation} 
+        setActions={{
+            setAsideState,
+            setNewRegister,
+            setModalSegundas
+        }}
+        handlerClick={()=>{setAsideState(false)}}/>:
         <></>
     }
+    {
+        newRegister?
+        <ModalRegisterOcr 
+        handlerClick={()=>setNewRegister(false)} 
+        navigation={navigation}/>:
+        <></>
+    }
+    {
+        modalSegundas?
+        <ModalSegundas handlerClick={()=>{setModalSegundas(false)}}/>:
+        <></>
+    }
+    
     </>
 }
 
