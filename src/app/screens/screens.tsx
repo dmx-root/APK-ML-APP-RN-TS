@@ -4,6 +4,7 @@ import { HomeOcr }                  from '../../views/homeOcr'
 import { HomeOp }                   from '../../views/homeOp'
 import { InformationDetailOp }      from '../../views/informationDetailOp'
 import { InformationModulo }        from '../../views/informationModulo'
+import { InformationModuloRevise}   from '../../views/informationModuloRevise'
 import { InformationUser }          from '../../views/informationUser'
 import { Login }                    from '../../views/login'
 import { Production }               from '../../views/production'
@@ -17,7 +18,7 @@ export const SCREENS={
     [ADMIN_ROUTES.HOME_EMPLOYEER_LIST]:HomeEmployeer,
     [ADMIN_ROUTES.HOME_MODULO_LIST]:HomeModulos,
     [ADMIN_ROUTES.INFO_DETAILS_OP]:InformationDetailOp,
-    [ADMIN_ROUTES.INFO_MODULO]:InformationModulo,
+    [ADMIN_ROUTES.INFO_MODULO]:InformationModuloRevise,
     [ADMIN_ROUTES.INFO_USERS]:InformationUser,
     [ADMIN_ROUTES.PRODUCTION]:Production,
     [ADMIN_ROUTES.PROFILE]:Profile,

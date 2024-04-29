@@ -1,11 +1,8 @@
-import { TouchableOpacity,View, Text, StyleSheet, Dimensions, GestureResponderEvent,Image } from 'react-native'
-import { OcrIcon }                              from '../public/icons/ocrIcon';
-import { CheckBoxEmpty }                        from '../public/icons/checkBoxEmpty';
-import { UserIcon }                             from '../public/icons/userIcon';
+import { TouchableOpacity,View, Text, StyleSheet,
+         Dimensions, GestureResponderEvent, Image } from 'react-native'
 import { CalendarIcon }                         from '../public/icons/calendarIcon';
-import { ModuloIcon }                           from '../public/icons/moduloIcon';
-import { OpIcon } from '../public/icons/opIcon';
-import { OpDetail } from '../interfaces/services/ml_api/detailOpInteface';
+import { OpIcon }                               from '../public/icons/opIcon';
+import { OpDetail }                             from '../interfaces/services/ml_api/detailOpInteface';
 
 // Doc 
 // Este elemento tiene la finalidad de renderizar información más detallada de los registros
@@ -76,24 +73,6 @@ export function InformationDetOpComponent({handlerClick, data}:{
                 
             </View>
         </View>
-        {/* <View style={ocrStyle.extends}>
-            <View style={ocrStyle.icon2Container}>
-                <View style={{borderRadius:40, backgroundColor:'#EEE', width:40, height:40, justifyContent:'center', alignItems:'center'}}>
-                    <UserIcon color='#999' size={25} width={1.5}/>
-                </View>
-            </View>
-            <View style={ocrStyle.infoUser}>
-                <Text style={{fontSize:15, color:'#777', fontWeight:'500'}}>Registrado por 1146441925</Text>
-            </View>
-            <View style={[ocrStyle.icon2Container,{width:'10%'}]}>
-                <View style={{borderRadius:40, backgroundColor:'#EEE', width:40, height:40, justifyContent:'center', alignItems:'center'}}>
-                    <CalendarIcon color='#999' size={25} width={1.5}/>
-                </View>
-            </View>
-            <View style={[ocrStyle.infoUser,{width:'30%'}]}>
-                <Text style={{fontSize:15, color:'#777', fontWeight:'500'}}>Registrado el 12/22/2023</Text>
-            </View>
-        </View> */}
     </ TouchableOpacity>
 }
 
@@ -123,10 +102,6 @@ const ocrStyle=StyleSheet.create({
         width:'98%',
         alignSelf:'center',
         flexDirection:'row',
-        // backgroundColor:currentColorMain4,
-        // borderRadius:height*0.004,
-        // marginTop:'0.5%',
-        // marginBottom:'0.5%',
         borderBottomWidth:1,
         borderBottomColor:'#EEE'
     },
@@ -146,8 +121,6 @@ const ocrStyle=StyleSheet.create({
         width:'41%',
         height:'100%',
         justifyContent:'center'
-        // flexDirection:'row'
-        // backgroundColor:'aqua'
     },
     iconContainer:{
         height:'100%',
@@ -160,10 +133,7 @@ const ocrStyle=StyleSheet.create({
         height:'100%',
         width:'18%',
         justifyContent:'center',
-        alignItems:'center',
-        // backgroundColor:'aqua',
-        
-        // backgroundColor:currentColorMain1
+        alignItems:'center'
     },
     iconCheckContainer:{
         position:'absolute',
@@ -201,7 +171,6 @@ const ocrStyle=StyleSheet.create({
     infoUser:{
         width:'40%',
         height:'100%',
-        // backgroundColor:'aqua',
         justifyContent:'center',
         padding:'2%'
     }
