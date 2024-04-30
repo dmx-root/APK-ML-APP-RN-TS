@@ -8,6 +8,10 @@ import { TouchableWithoutFeedback, View}                    from 'react-native'
 import { ImageBackground, GestureResponderEvent, FlatList } from 'react-native'
 import { StyleSheet, Dimensions }                           from 'react-native'
 
+// Doc
+// Aside es un tipo de modal que permite desplegar todas las operaciones del aplicativo (Para cada sesión)
+// Este elemento tiene como parámetros de entrada:
+
 const { width, height } = Dimensions.get('window');
 const currentColorMain = '#44329C';   //azul oscuro
 

@@ -33,7 +33,7 @@ export function InformationHeaderViewComponentRevise({data,info}:{data: ModuloPr
                         </ItemList>
                     </View>
                     <View style={headComponentStyle.column}>
-                        <ItemList label={`Referencia... ${data.referenciaActual|| 'No definido'}`||'200 Unidades Planeadas'} style={2} position='end'>
+                        <ItemList label={`Referencia actual... ${data.referenciaActual|| 'No definido'}`||'200 Unidades Planeadas'} style={2} position='end'>
                             {/* <></> */}
                             <AnalitycsIcon color='#AAA' size={24} width={2}/>
                         </ItemList>
@@ -59,8 +59,6 @@ const headComponentStyle= StyleSheet.create({
         borderTopColor:'#DDD',
         borderTopWidth:1,
         flexDirection:'row',
-        // borderRadius:10,
-        // marginTop:5,
         marginBottom:5
     },
     img:{
@@ -73,7 +71,6 @@ const headComponentStyle= StyleSheet.create({
     iconContainer:{
         height:'100%',
         width:'18%',
-        // backgroundColor:'aqua',
         justifyContent:'center',
         alignItems:'center'
     },
@@ -84,15 +81,11 @@ const headComponentStyle= StyleSheet.create({
     },
     row:{
         flexDirection:'row',
-        // backgroundColor:'aqua',
         height:40
     },
     column:{
         height:'100%',
         width:'50%',
         justifyContent:'center'
-        // flexDirection:'row'
-        // display:'flex'
-        // backgroundColor:'aqua'
     }
 })

@@ -4,7 +4,7 @@ import { AnalitycsIcon }                        from '../public/icons/analitycsI
 import { OpIcon }                               from '../public/icons/opIcon';
 import { EmployeerIcon }                        from '../public/icons/employeerIcon';
 import { UserIcon }                             from '../public/icons/userIcon';
-import { ModuloProcessInterface } from '../interfaces/services/ml_api/moduloInterfaces'
+import { ModuloProcessInterface }               from '../interfaces/services/ml_api/moduloInterfaces'
 
 const {height} = Dimensions.get('window');
 
@@ -24,16 +24,13 @@ export function InformationHeaderViewComponentModulo({data}:{data: ModuloProcess
                         <ItemList label={`Revisor ${data.revisorActualNombre?.slice(0,10)+'...'||'No definido'}`} style={1} position='start'>
                             <UserIcon color='#AAA' size={24} width={2}/>
                         </ItemList>
-                        
                     </View>
                     <View style={headComponentStyle.column}>
                         <ItemList label={`Referencia... ${data.referenciaActual|| 'No definido'}`||'200 Unidades Planeadas'} style={2} position='end'>
-                            {/* <></> */}
                             <AnalitycsIcon color='#AAA' size={24} width={2}/>
                         </ItemList>
                         <ItemList label={`Ejecutando la OP ${data.opActual||'No definida'}`} style={1} position='end'>
                             <OpIcon color='#AAA' size={24} width={2}/>
-                            {/* <></> */}
                         </ItemList>
                         <ItemList label={`Ejecutando la talla ${data.tallaActual}`} style={1} position='end'>
                             <></>

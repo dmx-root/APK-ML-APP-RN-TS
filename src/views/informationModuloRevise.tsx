@@ -123,7 +123,7 @@ export function InformationModuloRevise({route,navigation}:any){
                     </>
                     }
                 </View>
-                <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{navigation.navigate('HomeModulos')}}>
+                <TouchableOpacity style={StyleMainWindow.buttonOCR} onPress={()=>{navigation.navigate('HomeRevise')}}>
                     <RowLeftIcon color="#777" size={40} width={1.5}/>
                     <Text style={{color:'#777',fontSize:15,fontWeight:'500'}}>Regresar</Text>
                 </TouchableOpacity>

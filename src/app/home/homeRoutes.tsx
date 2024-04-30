@@ -16,6 +16,10 @@ import { OcrIcon }                                  from '../../public/icons/ocr
 import { OpIcon }                                   from '../../public/icons/opIcon';
 import { GestureResponderEvent }                    from 'react-native';
 import React                                        from 'react';
+import { EditICon } from '../../public/icons/editIcon';
+
+// Doc
+//
 
 export const ADMIN_HOME_ROUTES: Item[] = [
     {
@@ -87,6 +91,19 @@ export const ADMIN_HOME_ROUTES: Item[] = [
             return useApiGetModulos();
         },
         filterList: FILTER_ITEMS_EMPLOYEERS_HOME
+    },
+    {
+        id:5,
+        item:'HomeRevise',
+        NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
+        icon: <EditICon color='#777' size={35} width={2} />,
+        actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
+            return <></>
+        },
+        mainFetch: (documentId?: string) => {
+            return useApiGetModulos();
+        },
+        filterList: FILTER_ITEMS_MODULOS_HOME
     }
 ];
 
@@ -151,6 +168,19 @@ export const PROCESSES_HOME_ROUTES: Item[] = [
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
+    {
+        id: 5,
+        item:'HomeRevise',
+        NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
+        icon: <EditICon color='#777' size={35} width={2} />,
+        actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
+            return <></>
+        },
+        mainFetch: (documentId?: string) => {
+            return useApiGetModulos();
+        },
+        filterList: FILTER_ITEMS_MODULOS_HOME
+    }
 ];
 
 export const PLANTA_HOME_ROUTES: Item[] = [
@@ -230,16 +260,16 @@ export const FACTURACION_HOME_ROUTES: Item[] = [
     },
     {
         id: 3,
-        item: 'HomeModulos',
+        item:'HomeRevise',
         NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
-        icon: <ModuloIcon color='#777' size={35} width={2} />,
+        icon: <EditICon color='#777' size={35} width={2} />,
         actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
             return <></>
         },
         mainFetch: (documentId?: string) => {
             return useApiGetModulos();
         },
-        filterList: FILTER_ITEMS_OCR_HOME
+        filterList: FILTER_ITEMS_MODULOS_HOME
     }
 ];
 

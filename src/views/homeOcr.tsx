@@ -21,6 +21,7 @@ import { Aside }                                                        from '..
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList, TextInput}   from 'react-native';
 import { useState }                                                     from 'react';
 import { useFilterData } from '../controllers/hooks/customHookFilter';
+import { ModalModulosList } from '../modals/modalModulosList';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -131,7 +132,9 @@ export function HomeOcr({navigation} : any){
                         <></>
                     }
                 </View>
-                {contextStorage?.account?.home?.filter(icon=>icon.id===1)[0].actionObject(()=>{
+                {
+                
+                contextStorage?.account?.home?.filter(icon=>icon.id===1)[0].actionObject(()=>{
                     setNewRegister(true);
                     setNewCurrentRegister(true);
                     // setModalSegundas(true)
@@ -206,6 +209,14 @@ export function HomeOcr({navigation} : any){
         <ModalSegundas handlerClick={()=>{setModalSegundas(false)}}/>:
         <></>
     }
+    {/* {
+        <ModalModulosList
+        handlerClick={()=>{
+
+        }}
+        navigation={navigation}
+        />
+    } */}
 
     </>
 }

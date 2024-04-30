@@ -12,6 +12,16 @@ import { UserIcon }                     from "../../public/icons/userIcon";
 import { EditICon }                     from '../../public/icons/editIcon'
 import { Alert }                        from "react-native";
 
+//Doc 
+// Este módulo permite listar todas las operaciones posibles del aplicativo 
+// Cada item consta de:
+// icon: el ícono que reprensenta la operación (En caso de ser necesario para ser renderizado)
+// operation_label: el nombre de cada operación, este nos permite identificar la operación (No se renderiza)
+// handler_click: es la acción que deberá ejecuatar el item al ser seleccionado 
+// En cada inicio de sesión se accede a las funcionalidades u operaciones permitidas por medio del ID de la operación
+// Esta diseñado de manera que el ID del item coincida con el ID de la operación solicitada de la base de datos, de esta manera puede ser accedido
+
+
 interface operationInterface{
     [key:number]:any
 }
