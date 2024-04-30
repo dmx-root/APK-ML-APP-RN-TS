@@ -22,6 +22,7 @@ import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList, TextInput}
 import { useState }                                                     from 'react';
 import { useFilterData } from '../controllers/hooks/customHookFilter';
 import { ModalModulosList } from '../modals/modalModulosList';
+import { ModalOcrInformationRevise } from '../modals/modalOcrInfoRevise';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -217,6 +218,7 @@ export function HomeOcr({navigation} : any){
         navigation={navigation}
         />
     } */}
+
 
     </>
 }

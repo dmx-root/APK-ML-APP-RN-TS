@@ -1,4 +1,5 @@
 import { GestureResponderEvent } from "react-native";
+import { InfoLineButton }   from "../components/InfoLineButton";
 import { FieldInfo }        from "../components/fieldInfo";
 import { InfoLine }         from "../components/infoLine";
 import { InfoLineDouble }   from "../components/infoLineDouble";
@@ -8,12 +9,13 @@ import { OcrProcessesInterface } from "../interfaces/services/ml_api/ocrInterfac
 import { CheckIcon }        from "../public/icons/CheckIcon";
 import { AlertIcon }        from "../public/icons/alertIcon";
 import { InfoIcon }         from "../public/icons/infoIcon";
+import { InfoLineButton2 }  from "../components/InfoLineButton2";
 
 // Doc 
 // ESte componente tiene la finalidad de exponer la información de los registros 
 // 
 
-export function ModalOcrInfo({ data, handlerClick }: {
+export function ModalOcrInformationRevise({ data, handlerClick }: {
     data: OcrProcessesInterface | null,
     handlerClick: (event: GestureResponderEvent) => void
 }) {
@@ -34,16 +36,6 @@ export function ModalOcrInfo({ data, handlerClick }: {
             {/* <InfoLineButton handlerClick={()=>{}} title='Cantidad' content='10' colorBtn='#44329C' fontBtn='#FFF' labelBtn='Editar...'/> */}
         </ModalContainer>
         <ModalContainer color='#C7CCEC'>
-
-            {
-                data?.revisadoFecha ?
-                    <FieldInfo label='Elemento Revisado' color='#44329C'>
-                        <CheckIcon color="#44329C" size={24} width={2} />
-                    </FieldInfo> :
-                    <FieldInfo label='Elemento sin revisar ' color='#44329C'>
-                        <InfoIcon color="#44329C" size={24} width={2} />
-                    </FieldInfo>
-            }
 
             <InfoLineDouble title1='REFERENCIA' content1={data?.referencia || 'No def'} title2='OP' content2={data?.op || 'No def'} />
             <InfoLineDouble title1='COLOR' content1={data?.colorEtiqueta || 'No def'} title2='COD-COLOR' content2={data?.colorId || 'No def'} />
@@ -68,6 +60,20 @@ export function ModalOcrInfo({ data, handlerClick }: {
                 </ModalContainer> :
                 <></>
         }
+        <ModalContainer color='#C7CCEC'>
+            
+            {
+                data?.revisadoFecha?
+                <FieldInfo label='El elemento ya ha sido revisado' color='#44329C'>
+                    <CheckIcon color="#44329C" size={24} width={2} />
+                </FieldInfo>:
+                <>
+                    <InfoLineButton colorBtn='#44329C' fontBtn='#FFF' labelBtn='Nuevo...' title='Evento' content={'Sin eventos...'} handlerClick={() => {}} />
+                    <InfoLineButton2 colorBtn='#44329C' fontBtn='#FFF' labelBtn='Establecer revisión' title='Revisar elemento' handlerClick={() => {}} />
+                </>
+            }
+
+        </ModalContainer>
 
     </Modal>
 }
