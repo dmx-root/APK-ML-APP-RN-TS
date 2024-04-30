@@ -1,4 +1,4 @@
-import { AxiosResponse, AxiosRequestConfig } from  'axios';
+import { AxiosResponse, AxiosRequestConfig, AxiosHeaders } from  'axios';
 import axios from 'axios';
 
 interface ObjectInterface{
@@ -8,31 +8,30 @@ interface ObjectInterface{
 interface PropertiesInterface{
     url : string; 
     params? : ObjectInterface; 
-    token? : string;
+    headers? : AxiosHeaders;
 }
 
 export class ConectionInterfaceDispatch{
 
     private url;
     private params;
-    private token;
+    private headers;
 
-    constructor({url,params,token}:PropertiesInterface){
+    constructor({url,params,headers}:PropertiesInterface){
         this.url =      url;
         this.params =   params || null;
-        this.token =    token || null;
+        this.headers=   headers;
     }
 
     async postData(data?:any){
 
         const axiosData : AxiosRequestConfig = {
-            method:"post",
+            method:     "post",
             url:        this.url,
             data:       data||null,
             params:     this.params,
-            headers: {
-                "Authenticate-Token": this.token
-            }
+            headers:    this.headers
+            
         }
         return await axios(axiosData);
     }

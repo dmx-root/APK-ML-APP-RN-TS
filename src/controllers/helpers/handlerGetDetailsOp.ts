@@ -1,4 +1,4 @@
-import { InterfaceDetailOPRequest }             from '../../services/ml_api/request/request.interfaceDetailOp';
+import { InterfaceDetailOPRequest }             from '../../services/ml_api/request/request.interface.detailOp';
 import { api_ml_production_op_details_get }     from "../../endpoints/ml_api/restApiMujerLatina";
 import { api_ml_production_op_open }            from '../../endpoints/ml_api/restApiMujerLatina';
 import { DetailProcessResponseInterface }       from '../../interfaces/services/ml_api/detailOpInteface';

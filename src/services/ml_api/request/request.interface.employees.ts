@@ -1,6 +1,8 @@
-import { handlerAxiosError }                        from '../../../utilities/handlerAxiosError';
-import { ConectionInterfaceRequest }                from '../conection/conectionObjectRequest';
-import { EmployeerProcessInterface }           from '../../../interfaces/services/ml_api/moduloInterfaces';
+import { EmployeerProcessInterface }    from '../../../interfaces/services/ml_api/moduloInterfaces';
+import { ApiConnectionInterface }       from '../../../interfaces/services/ml_api/apiConnection';
+import { handlerAxiosError }            from '../../../utilities/handlerAxiosError';
+import { ConectionRequestInterface }    from '../conection/request.connection';
+import { AxiosHeaders }                 from 'axios';
 
 interface ParamsInterface{
     [key : string] : any
@@ -9,7 +11,7 @@ interface ParamsInterface{
 interface PropertiesInterface{
     url : string; 
     params? : ParamsInterface; 
-    token? : string
+    headers? : AxiosHeaders
 }
 
 interface ApiResponse {
@@ -25,14 +27,17 @@ interface ControllerResponseInterface {
     statusCode? : number
 }
 
-export class InterfaceEmployeeRequest extends ConectionInterfaceRequest {
+export class EmployeeRequestInterface extends ConectionRequestInterface implements ApiConnectionInterface { 
+    constructor(properties : PropertiesInterface){
+        super(properties);
+    }
     // este controlador permite modelar los datos que son recibidos de la APi
     // Esto con la finalidad de normalizar la información que será consumida en toda la aplicación
     // De manera que si el nombre de algún campo cambia, solo se tendrá que hacer el cambio en esta interface
-    async productionData (properties : PropertiesInterface) : Promise<ControllerResponseInterface>{
+    async productionData () : Promise<ControllerResponseInterface>{
         // Este metódo permite obtener la información relacionada al proceso
         try {
-            const response : ApiResponse = (await this.getData(properties)).data;
+            const response : ApiResponse = (await this.getData()).data;
 
             const dataClear : EmployeerProcessInterface[] = response.data.map((element:any)=>{
 

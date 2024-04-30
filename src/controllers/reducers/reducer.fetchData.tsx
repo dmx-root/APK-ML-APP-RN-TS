@@ -1,7 +1,6 @@
-import { ApiConnectionInterface } from '../../interfaces/services/ml_api/apiConnection';
-import { statusApi } from '../../interfaces/services/ml_api/apiResponse';
-import { useEffect, useReducer, useState } from 'react';
-
+import { ApiConnectionInterface }   from '../../interfaces/services/ml_api/apiConnection';
+import { statusApi }                from '../../interfaces/services/ml_api/apiResponse';
+import { useEffect, useReducer }    from 'react';
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -19,7 +18,6 @@ interface ApiAction {
     type: string;
     payload?: any;
 }
-
 
 const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     switch (action.type) {
@@ -50,7 +48,7 @@ export const useApiGetData: (apiConnection: ApiConnectionInterface) => {
             dispatch({ type: actionTypes.FETCH_INIT });
 
             const response = await apiConnection.productionData();
-            
+
             response?.statusCodeApi === 1 ?
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }) :
                 response?.statusCodeApi === 0 ?

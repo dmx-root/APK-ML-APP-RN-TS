@@ -1,4 +1,4 @@
-import axios,{AxiosRequestConfig} from 'axios';
+import axios,{AxiosRequestConfig, AxiosHeaders} from 'axios';
 
 interface ParamsInterface{
     [key : string] : any
@@ -7,19 +7,19 @@ interface ParamsInterface{
 interface PropertiesInterface{
     url : string; 
     params? : ParamsInterface; 
-    token? : string
+    headers?: AxiosHeaders
 }
 
 export class ConectionRequestInterface{
 
     private url;
     private params;
-    private token;
+    private headers;
 
-    constructor({url,params,token}:PropertiesInterface){
+    constructor({url,params,headers}:PropertiesInterface){
         this.url =      url;
         this.params =   params || null;
-        this.token =    token || null;
+        this.headers=   headers;
     }
 
     async getData(){
@@ -28,9 +28,7 @@ export class ConectionRequestInterface{
             method:"get",
             url:this.url,
             params: this.params || null,
-            headers:{
-                "Authenticate-Token":this.token || null
-            },
+            headers: this.headers,
             withCredentials:true
         }
     return await axios(data);

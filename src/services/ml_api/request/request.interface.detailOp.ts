@@ -1,41 +1,46 @@
-import { handlerAxiosError }                        from '../../../utilities/handlerAxiosError';
-import { ConectionInterfaceRequest }                from '../conection/conectionObjectRequest';
-import { DetailProcessResponseInterface }           from '../../../interfaces/services/ml_api/detailOpInteface';
+import { handlerAxiosError }                from '../../../utilities/handlerAxiosError';
+import { DetailProcessResponseInterface }   from '../../../interfaces/services/ml_api/detailOpInteface';
+import { ApiConnectionInterface }           from '../../../interfaces/services/ml_api/apiConnection'
+import { ConectionRequestInterface }        from '../conection/request.connection';
+import { AxiosHeaders }                     from 'axios';
 
-
-interface ParamsInterface{
-    [key : string] : any
+interface ParamsInterface {
+    [key: string]: any
 }
 
-interface PropertiesInterface{
-    url : string; 
-    params? : ParamsInterface; 
-    token? : string
+interface PropertiesInterface {
+    url: string;
+    params?: ParamsInterface;
+    headers?: AxiosHeaders
 }
 
 interface ApiResponse {
-    apiCode : -1 | 0 | 1,
-    apiMessage : string,
-    data? : any
+    apiCode: -1 | 0 | 1,
+    apiMessage: string,
+    data?: any
 }
 
 interface ControllerResponseInterface {
-    statusCodeApi : number,
-    statusMessageApi : string,
-    data? : DetailProcessResponseInterface[],
-    statusCode? : number
+    statusCodeApi: number,
+    statusMessageApi: string,
+    data?: DetailProcessResponseInterface[],
+    statusCode?: number
 }
 
-export class InterfaceDetailOPRequest extends ConectionInterfaceRequest {
+export class DetailOPRequestInterface extends ConectionRequestInterface implements ApiConnectionInterface {
     // este controlador permite modelar los datos que son recibidos de la APi
     // Esto con la finalidad de normalizar la información que será consumida en toda la aplicación
     // De manera que si el nombre de algún campo cambia, solo se tendrá que hacer el cambio en esta interface
-    async productionData (properties : PropertiesInterface) : Promise<ControllerResponseInterface>{
+    constructor(properties: PropertiesInterface) {
+        super(properties);
+    }
+
+    async productionData(): Promise<ControllerResponseInterface> {
         // Este metódo permite obtener la información relacionada al proceso
         try {
-            const response : ApiResponse = (await this.getData(properties)).data;
+            const response: ApiResponse = (await this.getData()).data;
 
-            const dataClear : DetailProcessResponseInterface[] = response.data.map((element:any)=>{
+            const dataClear: DetailProcessResponseInterface[] = response.data.map((element: any) => {
                 return {
                     op:                             element.op_id,
                     referencia:                     element.referencia,
@@ -54,21 +59,21 @@ export class InterfaceDetailOPRequest extends ConectionInterfaceRequest {
                     opFechaCierreProcesoPlaneado:   element.especificaciones_op_fecha_planeada_cierre_proceso,
                 }
             })
-            
-            const controllerResponse : ControllerResponseInterface = {
-                statusCodeApi : response.apiCode,
-                statusMessageApi : response.apiMessage,
-                statusCode : 200,
-                data : dataClear
+
+            const controllerResponse: ControllerResponseInterface = {
+                statusCodeApi: response.apiCode,
+                statusMessageApi: response.apiMessage,
+                statusCode: 200,
+                data: dataClear
             }
             return controllerResponse;
-            
+
         } catch (error) {
             const err = handlerAxiosError(error);
-            const response : ControllerResponseInterface = {
-                statusCodeApi : err.statusCodeApi,
+            const response: ControllerResponseInterface = {
+                statusCodeApi: err.statusCodeApi,
                 statusMessageApi: err.statusMessageApi,
-                statusCode : err.statusCode
+                statusCode: err.statusCode
             }
             return response
         }

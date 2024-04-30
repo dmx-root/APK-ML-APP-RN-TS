@@ -1,6 +1,6 @@
 import { api_ml_production_employees_list }     from '../../endpoints/ml_api/restApiMujerLatina';
 import { EmployeerProcessInterface }                            from '../../interfaces/services/ml_api/moduloInterfaces';
-import { InterfaceEmployeeRequest }             from '../../services/ml_api/request/request.interfaceEmployees';
+import { EmployeeRequestInterface }             from '../../services/ml_api/request/request.interface.employees';
 import { useEffect, useReducer }                from 'react';
 
 //  Doc 
@@ -55,14 +55,16 @@ export const useApiGetEmployees : () => { state: ApiState} = (): { state: ApiSta
         error: null,
     });
 
-    async function fetchData( params : FetchInterface ) : Promise <void>{
+    async function fetchData() : Promise <void>{
         try {
             
-            const fetch = new InterfaceEmployeeRequest();
+            const fetch = new EmployeeRequestInterface({
+                url: api_ml_production_employees_list
+            });
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const response = await fetch.productionData(params);
+            const response = await fetch.productionData();
             
             response?.statusCodeApi===1?
             dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }):
@@ -76,9 +78,7 @@ export const useApiGetEmployees : () => { state: ApiState} = (): { state: ApiSta
         }
     };
     useEffect(()=>{
-        fetchData({
-            url: api_ml_production_employees_list
-        });
+        fetchData();
     },[])
   
     return { state };

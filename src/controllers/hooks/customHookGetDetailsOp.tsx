@@ -1,6 +1,6 @@
 import { api_ml_production_op_details_get }     from '../../endpoints/ml_api/restApiMujerLatina';
 import { OpDetail  }                            from '../../interfaces/services/ml_api/detailOpInteface';
-import { InterfaceDetailOPRequest }             from '../../services/ml_api/request/request.interfaceDetailOp';
+import { DetailOPRequestInterface }             from '../../services/ml_api/request/request.interface.detailOp';
 import { useEffect, useReducer }                from 'react';
 
 //  Doc 
@@ -55,14 +55,16 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         error: null,
     });
 
-    async function fetchDataDetailsOp( params : FetchInterface ) : Promise <void>{
+    async function fetchDataDetailsOp() : Promise <void>{
         try {
             
-            const fetch = new InterfaceDetailOPRequest();
+            const fetch = new DetailOPRequestInterface({
+                url: api_ml_production_op_details_get+op
+            });
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const response = await fetch.productionData(params);
+            const response = await fetch.productionData();
             
             response?.statusCodeApi===1?
             dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }):
@@ -76,9 +78,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         }
     };
     useEffect(()=>{
-        fetchDataDetailsOp({
-            url: api_ml_production_op_details_get+op
-        });
+        fetchDataDetailsOp();
     },[])
   
     return { state };

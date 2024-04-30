@@ -1,7 +1,7 @@
 import { api_ml_production_employees_by_modulo }      from '../../endpoints/ml_api/restApiMujerLatina';
 import { statusApi}                                 from '../../interfaces/services/ml_api/apiResponse'
 import { useEffect, useReducer }                    from 'react';
-import { InterfaceEmployeeRequest } from '../../services/ml_api/request/request.interfaceEmployees';
+import { EmployeeRequestInterface } from '../../services/ml_api/request/request.interface.employees';
 import { EmployeerProcessInterface } from '../../interfaces/services/ml_api/moduloInterfaces'
 
 const actionTypes = {
@@ -50,13 +50,15 @@ export const useApiGetEmployeesByModulo = (moduloId:string): { state: ApiState }
         error: null,
     });
 
-    async function fetchData(params : FetchInterface) : Promise<void>{
+    async function fetchData() : Promise<void>{
         try {
-            const fetch = new InterfaceEmployeeRequest();
+            const fetch = new EmployeeRequestInterface({
+                url:api_ml_production_employees_by_modulo+moduloId,
+            });
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const response = await fetch.productionData(params);
+            const response = await fetch.productionData();
 
             response?.statusCodeApi===1?
             dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }):
@@ -72,10 +74,7 @@ export const useApiGetEmployeesByModulo = (moduloId:string): { state: ApiState }
     };
 
     useEffect(()=>{
-        fetchData({
-            url:api_ml_production_employees_by_modulo+moduloId,
-        });
-        console.log('success')
+        fetchData();
     },[]);
   
     return { state };

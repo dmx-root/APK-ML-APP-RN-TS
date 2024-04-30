@@ -50,11 +50,11 @@ export const useApiGetAnomalyList = (): { state: ApiState } => {
     async function loaddata():Promise<void>{
         
         try {
-            const fetch = new SesionAnomalyRequestInterface();
-
-            const response = await fetch.productionData({
+            const fetch = new SesionAnomalyRequestInterface({
                 url: api_ml_sesion_mobile_get_anomaly
             });
+
+            const response = await fetch.productionData();
 
             dispatch({ type: actionTypes.FETCH_INIT });
 

@@ -1,7 +1,7 @@
 import { OcrProcessesInterface }                from '../../interfaces/services/ml_api/ocrInterfaces';
 import { EmployeerProcessInterface } from '../../interfaces/services/ml_api/moduloInterfaces'
-import { InterfaceOCRRequest }                  from '../../services/ml_api/request/ocrObjectRequest';
-import { InterfaceEmployeeRequest }             from '../../services/ml_api/request/request.interfaceEmployees';
+import { OcrRequestInterface }                  from '../../services/ml_api/request/request.interface.ocr';
+import { EmployeeRequestInterface }             from '../../services/ml_api/request/request.interface.employees';
 import { statusApi}                             from '../../interfaces/services/ml_api/apiResponse';
 import { useEffect, useReducer, useState }      from 'react';
 import {    api_ml_production_employees_by_modulo,
@@ -59,13 +59,15 @@ export const useApiGetModuloElementsAll: (moduloId:string) => {
     });
     const [ itemSelector, setItemSelector ] = useState<number>(1);
 
-    async function fetchData1(params: FetchInterface) : Promise <void> {
+    async function fetchData1() : Promise <void> {
         try {
-            const fetch = new InterfaceOCRRequest();
+            const fetch = new OcrRequestInterface({
+                url:api_ml_production_ocr_get_by_modulo+moduloId
+            });
 
             dispatch({ type: actionTypes.FETCH_INIT });
     
-            const response =await fetch.productionData(params);
+            const response =await fetch.productionData();
     
             response?.statusCodeApi===1?
             dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }):
@@ -79,13 +81,15 @@ export const useApiGetModuloElementsAll: (moduloId:string) => {
     
         }
     };
-    async function fetchData2(params: FetchInterface) : Promise <void> {
+    async function fetchData2() : Promise <void> {
         try {
-            const fetch = new InterfaceEmployeeRequest();
+            const fetch = new EmployeeRequestInterface({
+                url:api_ml_production_employees_by_modulo+moduloId
+            });
 
             dispatch({ type: actionTypes.FETCH_INIT });
     
-            const response =await fetch.productionData(params);
+            const response =await fetch.productionData();
     
             response?.statusCodeApi===1?
             dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }):
@@ -103,14 +107,10 @@ export const useApiGetModuloElementsAll: (moduloId:string) => {
     useEffect(()=>{
         switch(itemSelector){
             case 1:
-                fetchData1({
-                    url:api_ml_production_ocr_get_by_modulo+moduloId
-                });
+                fetchData1();
                 break;
             case 2:
-                fetchData2({
-                    url:api_ml_production_employees_by_modulo+moduloId
-                });
+                fetchData2();
                 break;
         }
     },[itemSelector]);

@@ -1,12 +1,4 @@
-interface ParamsInterface{
-    [key : string] : any
-}
 
-interface PropertiesInterface{
-    url : string; 
-    params? : ParamsInterface; 
-    token? : string
-}
 interface ControllerResponseInterface {
     statusCodeApi : number,
     statusMessageApi : string,
