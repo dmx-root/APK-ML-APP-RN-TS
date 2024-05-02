@@ -21,7 +21,6 @@ import { Alert }                        from "react-native";
 // En cada inicio de sesión se accede a las funcionalidades u operaciones permitidas por medio del ID de la operación
 // Esta diseñado de manera que el ID del item coincida con el ID de la operación solicitada de la base de datos, de esta manera puede ser accedido
 
-
 interface operationInterface{
     [key:number]:any
 }

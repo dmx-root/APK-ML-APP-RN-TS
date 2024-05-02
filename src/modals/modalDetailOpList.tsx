@@ -2,10 +2,12 @@ import { InformationDetOpComponent }    from "../components/informationDetOpComp
 import { ModalContainerList }           from "../components/modalContainerList"
 import { Modal }                        from "../components/modal"
 import { LoadingComponent }             from "../components/loadingComponent"
-import { useApiGetDetailsOp }           from "../controllers/hooks/customHookGetDetailsOp"
 import { EmptyComponent }               from "../components/emptyComponent"
 import { GestureResponderEvent, View, Dimensions, StyleSheet}  from "react-native"
 import { useEffect }                    from "react"
+import { DetailOPRequestInterface } from '../services/ml_api/request/request.interface.detailOp';
+import { useApiGetData } from '../controllers/reducers/reducer.fetchData';
+import { ROUTES } from "../endpoints/ml_api/ep.ml.api"
 
 //  Doc 
 //  Este componente tiene la finalidad de renderizar la lista de detalles de cada OP
@@ -19,8 +21,12 @@ export function ModalDetailOpList({opId,handlerClick,navigation}:{
     handlerClick:(event : GestureResponderEvent) => void,
     navigation : any
 }){
-    const { state } = useApiGetDetailsOp(opId || "");
 
+    const fetch = new DetailOPRequestInterface({
+        url:ROUTES.api_ml_production_op_details_get+opId
+    })
+
+    const { state } = useApiGetData(fetch);
     return <>
         {
         <Modal handlerClick={handlerClick} >

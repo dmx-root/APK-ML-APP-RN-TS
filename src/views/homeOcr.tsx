@@ -197,7 +197,7 @@ export function HomeOcr({navigation} : any){
 
     {
         modalInfoState?
-        <ModalOcrInformationRevise 
+        <ModalOcrInfo
         data={ocrProcessData} 
         handlerClick={()=>{
             setModalInfoState(false);
