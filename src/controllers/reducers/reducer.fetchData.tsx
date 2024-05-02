@@ -32,7 +32,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
 
-export const useApiGetInitialData: (apiConnection: ApiConnectionInterface) => {
+export const useApiGetData: (apiConnection: ApiConnectionInterface) => {
     state: ApiState;
 } = (apiConnection: ApiConnectionInterface) => {
 

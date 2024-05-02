@@ -2,6 +2,7 @@ import { handlerAxiosError }            from '../../../utilities/handlerAxiosErr
 import { ApiConnectionInterface }       from '../../../interfaces/services/ml_api/apiConnection'
 import { ConectionRequestInterface }    from '../conection/request.connection';
 import { AxiosHeaders }                 from 'axios';
+import { OperationsInterfaces } from '../../../interfaces/services/ml_api/operations';
 
 interface ParamsInterface{
     [key : string] : any
@@ -22,7 +23,7 @@ interface ApiResponse {
 interface ControllerResponseInterface {
     statusCodeApi : number,
     statusMessageApi : string,
-    data? : AnomalyInterface[],
+    data? : any[],
     statusCode? : number
 }
 
@@ -69,6 +70,41 @@ export class SesionAnomalyRequestInterface extends ConectionRequestInterface imp
                 statusCode : err.statusCode
             }
             return response
+        }
+    }
+}
+
+export class SesionOperationsRequestInterface extends ConectionRequestInterface implements ApiConnectionInterface{
+    
+    constructor(propierties:PropertiesInterface){
+        super(propierties);
+    }
+    
+    async productionData(): Promise<ControllerResponseInterface> {
+        try {
+
+            const response = (await this.getData()).data;
+
+            
+                const dataClear : OperationsInterfaces[] = response.data.map((element:any)=>{
+                    return {
+                        entornoId:          element.entorno_id,
+                        profileId:          element.perfil_id,
+                        operacionEtiqueta:  element.operacion,
+                        operacionId:        element.operacion_id
+                    }
+                });
+
+                const ocrProcessInterface:ControllerResponseInterface={
+                    statusCodeApi:response.apiCode,
+                    statusMessageApi:response.apiMessage,
+                    data:dataClear
+                }
+                return ocrProcessInterface;
+           
+        } catch (error) {
+            const response = handlerAxiosError(error);
+            return response;
         }
     }
 }

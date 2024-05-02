@@ -1,5 +1,5 @@
 import { useOperationHandler }                              from '../app/operations/operations';
-import { useApiGetAuthOperations }                          from '../controllers/hooks/customHookGetAuthOperations';
+// import { useApiGetAuthOperations }                          from '../controllers/hooks/customHookGetAuthOperations';
 import { useMainContext }                                   from '../contexts/mainContext';
 import { AsideItem }                                        from './asideItem';
 import { LoadingComponent }                                 from './loadingComponent';
@@ -7,7 +7,9 @@ import { EmptyComponent }                                   from './emptyCompone
 import { TouchableWithoutFeedback, View}                    from 'react-native'
 import { ImageBackground, GestureResponderEvent, FlatList } from 'react-native'
 import { StyleSheet, Dimensions }                           from 'react-native'
-
+import { SesionOperationsRequestInterface }                 from '../services/ml_api/request/request.interface.sesion';
+import { useApiGetData } from '../controllers/reducers/reducer.fetchData';
+import { ROUTES } from '../endpoints/ml_api/ep.ml.api';
 // Doc
 // Aside es un tipo de modal que permite desplegar todas las operaciones del aplicativo (Para cada sesión)
 // Este elemento tiene como parámetros de entrada:
@@ -26,12 +28,17 @@ export function Aside({ navigation, handlerClick, setActions }: {
 }) {
 
     const contextStorage = useMainContext();
-    const { state } = useApiGetAuthOperations(contextStorage?.currentUser?.rolId || '');
 
+    const fetch = new SesionOperationsRequestInterface({
+        url: ROUTES.api_ml_sesion_mobile_get_operations+contextStorage?.currentUser?.rolId.toString(),
+    })
     const { OPERATIONS_ITEMS } = useOperationHandler({
         navigation,
         setStateActions: setActions
     });
+    
+    const { state} = useApiGetData(fetch);    
+
 
     return <TouchableWithoutFeedback onPress={handlerClick}>
         <View style={StyleAside.courtain}>
