@@ -52,11 +52,11 @@ export function Login(){
                     currentSesionValidator.state.data&&!formState?
                     <AuthStoredLogin 
                     data={{
-                        nombre: currentSesionValidator.state.data.data.userName, 
-                        rol:    currentSesionValidator.state.data.data.userProfileLAbel
+                        nombre: currentSesionValidator.state.data.data[0].userName, 
+                        rol:    currentSesionValidator.state.data.data[0].userProfileLAbel
                     }} 
                     handlerAcceder={()=>{
-                        setSesion(currentSesionValidator.state.data?.data || inicialStateAuth);
+                        setSesion(currentSesionValidator.state.data?.data[0] || inicialStateAuth);
                         
                     }} 
                     handlerChange={()=>{

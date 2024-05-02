@@ -1,11 +1,11 @@
-import { useMainContext }               from '../../contexts/mainContext';
 import { api_ml_local_auth_get_by_token }                     from '../../endpoints/ml_api/restApiMujerLatina';
 import { AuthObjectRequest }            from '../../services/ml_api/request/authObjectRequest';
 import { statusApi}                     from '../../interfaces/services/ml_api/apiResponse'
 import { authResponseInterface }        from '../../interfaces/services/ml_api/authInterfaces';
 import { handlerGetValueLocalStorage }  from '../helpers/handlerValueLocalStorage';
 import { useEffect, useReducer }        from 'react';
-import { Alert } from 'react-native';
+import { AuthRequestInterface } from '../../services/ml_api/request/request.interface.auth';
+import { ROUTES } from '../../endpoints/ml_api/ep.ml.api';
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -14,7 +14,7 @@ const actionTypes = {
 };
 
 interface ApiState {
-    data: authResponseInterface | null;
+    data: any;
     loading: boolean;
     error: statusApi | null;
 }
@@ -48,16 +48,21 @@ export const useApiGetAuth = (): { state: ApiState } => {
     async function fetchDataAuth(token:string):Promise<void>{
         try { 
             
-            const apiQuery=new AuthObjectRequest();
+            const fetch = new AuthRequestInterface({
+                url: ROUTES.api_ml_local_auth_get_by_token,
+                headers:{
+                    'Authenticate-Token':token
+                }
+            });
             
-            const data = await apiQuery.authGetByToken(api_ml_local_auth_get_by_token,token);
-
-            if(data?.apiCode===1){
-
+            const data = await fetch.authByToken();
+            if(data.statusCodeApi===1 && data.data){
+                
                 const nowInSeconds = Math.floor(Date.now() / 1000);
-                const expInSeconds = data.data.userDateTokenExp;
+                const expInSeconds = data.data[0].userDateTokenExp;
                 const timeRemaining = expInSeconds - nowInSeconds;
-
+                
+                // console.log(data)
                 if(timeRemaining < 172800){
                     dispatch({ type: actionTypes.FETCH_SUCCESS, payload: {...data, sesionState: true} });
                 }else{

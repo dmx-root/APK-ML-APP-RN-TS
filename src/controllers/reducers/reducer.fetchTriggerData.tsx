@@ -1,6 +1,6 @@
 import { ApiConnectionInterface }   from '../../interfaces/services/ml_api/apiConnection';
 import { statusApi }                from '../../interfaces/services/ml_api/apiResponse';
-import { useEffect, useReducer }    from 'react';
+import { useReducer }               from 'react';
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -32,9 +32,10 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
 
-export const useApiGetData: (apiConnection: ApiConnectionInterface) => {
+export const useApiGetTriggerData: () => {
     state: ApiState;
-} = (apiConnection: ApiConnectionInterface) => {
+    fetchData: (apiConnection: ApiConnectionInterface) => Promise<void> 
+} = () => {
 
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -42,7 +43,7 @@ export const useApiGetData: (apiConnection: ApiConnectionInterface) => {
         error: null,
     });
 
-    async function fetchData(): Promise<void> {
+    async function fetchData(apiConnection: ApiConnectionInterface): Promise<void> {
         try {
 
             dispatch({ type: actionTypes.FETCH_INIT });
@@ -51,18 +52,11 @@ export const useApiGetData: (apiConnection: ApiConnectionInterface) => {
 
             response?.statusCodeApi === 1 ?
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }) :
-                response?.statusCodeApi === 0 ?
-                    dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null }) :
-                    dispatch({ type: actionTypes.FETCH_FAILURE });
+                dispatch({ type: actionTypes.FETCH_FAILURE, payload: response });
 
         } catch (error) {
             dispatch({ type: actionTypes.FETCH_FAILURE, payload: 'Error' })
         }
     };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    return { state };
+    return { state, fetchData };
 };

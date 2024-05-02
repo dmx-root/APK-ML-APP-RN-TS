@@ -7,7 +7,7 @@ interface ParamsInterface{
 interface PropertiesInterface{
     url : string; 
     params? : ParamsInterface; 
-    headers?: AxiosHeaders
+    headers?: ParamsInterface
 }
 
 export class ConectionRequestInterface{

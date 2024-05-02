@@ -49,16 +49,14 @@ export const useHandlerSesion = (): { state: sesionState; setDataAuth: (document
             dispatch({ type: actionTypes.FETCH_INIT });
 
             const data = await handlerGetAuth(documentId, password);
-            // console.log(data)
 
-            if(data.apiCode===1){
+            console.log(data)
 
-                const response=setSesion(data.data);
+            if(data.statusCodeApi===1){
 
+                const response=setSesion(data.data[0]);
                 if(response.statusCode===1){
                     if(passwordSaveSate){
-
-                        console.log(data.token)
 
                         await handlerSaveValueLocalStorage("token",data.token);
                         dispatch({ type: actionTypes.FETCH_SUCCESS,payload:{
@@ -82,6 +80,7 @@ export const useHandlerSesion = (): { state: sesionState; setDataAuth: (document
                         statusMessageApi: response.statusMessage
                     }});
                 }
+                
                 // const account = handlerGetSesion(data.data.userProfileId);
                 // if(account.id!==0){ 
                 //     contextStorage?.setAccount(account);
@@ -106,7 +105,7 @@ export const useHandlerSesion = (): { state: sesionState; setDataAuth: (document
                 // }
             }
             else{
-                dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
+                // dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
             }
         } catch (error) {
             dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error de proceso'});
