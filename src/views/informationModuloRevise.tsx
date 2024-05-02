@@ -1,11 +1,9 @@
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text, FlatList} from 'react-native';
 import { MenuIcon }                                         from '../public/icons/menuIcon';
 import { SearchIcon }                                       from '../public/icons/searchIcon';
-import { ItemResize }                                       from '../components/ItemResize';
 import { FilterIcon }                                       from '../public/icons/filterIcon';
 import { InformationOcrComponent }                          from '../components/informationOcrComponent';
 import { RowLeftIcon }                                      from '../public/icons/rowLeftIcon';
-// import { InformationHeaderViewComponentModulo }             from '../components/InformationHeaderViewComponentModulo';
 import { InformationHeaderViewComponentRevise }             from '../components/InformationHeaderViewComponentRevise';
 import { ModuloProcessInterface }                           from '../interfaces/services/ml_api/moduloInterfaces';
 import { LoadingComponent }                                 from '../components/loadingComponent';
@@ -14,13 +12,10 @@ import { OcrProcessesInterface }                            from '../interfaces/
 import { ModalOcrInfo }                                     from '../modals/modalOcrInfo';
 import { InformationOcrEventsComponent }                    from '../components/informationOcrEventsComponent';
 import { InformationOcrCheckComponent }                     from '../components/informationOcrCheckComponent';
+import { useApiGetData }                                    from '../controllers/reducers/reducer.fetchData';
+import { OcrRequestInterface }                              from '../services/ml_api/request/request.interface.ocr'
+import { ROUTES }                                           from '../endpoints/ml_api/ep.ml.api';
 import { useState }                                         from 'react';
-import { useApiGetModuloElementsAll }                       from '../controllers/hooks/customHookGetAllModuloFilter';
-import { MainEmployeerComponent }                           from '../components/mainEmployeerComponent';
-import { EmployeerProcessInterface } from '../interfaces/services/ml_api/moduloInterfaces'
-import { InformationOcrSegundaComponent } from '../components/informationOcrSegundaComponent'
-import { useApiGetOcrByModulo } from '../controllers/hooks/customHookGetOcrByModulo';
-// import {} from '../interfaces/services/ml_api/'
 
 const {height,width}=Dimensions.get('screen');
 
@@ -33,14 +28,15 @@ export function InformationModuloRevise({route,navigation}:any){
 
     const moduloData : ModuloProcessInterface = route.params;
 
-    const { state } = useApiGetOcrByModulo(moduloData.moduloId.toString());
+    const fetch = new OcrRequestInterface({
+        url: ROUTES.api_ml_production_ocr_get_by_modulo+moduloData.moduloId.toString()
+    });
 
-    // const {state, itemSelector, setItemSelector} =  useApiGetModuloElementsAll(moduloData.moduloId.toString())
+    const { state } = useApiGetData(fetch);
 
     const [modalInfoState, setModalInfoState ] =    useState<boolean>(false);
     const [ocrProcessData, setOcrProcessData ] =    useState<OcrProcessesInterface|null>(null);
 
-    // console.log(state.loading, state.data?.length)
     return<>
     <View style={{height,width}}>
         <View style={StyleMainWindow.backRoots}></View>

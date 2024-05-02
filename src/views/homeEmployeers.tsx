@@ -1,4 +1,3 @@
-import { useApiGetEmployees }                               from '../controllers/hooks/customHookGetAllEmployees'
 import { MainEmployeerComponent }                           from '../components/mainEmployeerComponent';
 import { LoadingComponent }                                 from '../components/loadingComponent';
 import { ItemNavigation }                                   from '../components/itemNavigation';
@@ -13,6 +12,9 @@ import { ModalSegundas }                                    from '../modals/moda
 import { Aside }                                            from '../components/aside';
 import { View,StyleSheet, Dimensions, Text, FlatList, TouchableOpacity} from 'react-native';
 import { useState }                                         from 'react'
+import { EmployeeRequestInterface }                         from '../services/ml_api/request/request.interface.employees';
+import { useApiGetData }                                    from '../controllers/reducers/reducer.fetchData';
+import { ROUTES }                                           from '../endpoints/ml_api/ep.ml.api';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -23,7 +25,11 @@ export function HomeEmployeer({ navigation }: any) {
     const [ newRegister,setNewRegister ] =     useState<boolean>(false);
     const [ modalSegundas,setModalSegundas ] = useState<boolean>(false);
 
-    const { state } = useApiGetEmployees();
+    const fetch = new EmployeeRequestInterface({
+        url: ROUTES.api_ml_production_employees_list
+    });
+
+    const {state} = useApiGetData(fetch);
 
     const contextStorage = useMainContext();
 

@@ -2,11 +2,12 @@ import { FILTER_ITEMS_EMPLOYEERS_HOME,
         FILTER_ITEMS_MODULOS_HOME, 
         FILTER_ITEMS_OCR_HOME, 
         FILTER_ITEMS_OP_HOME }                      from './homeFilter';
-import { useApiGetOcrByUser }                       from '../../controllers/hooks/customHookGetOcrByUser';
+import { EditICon }                                 from '../../public/icons/editIcon';
+import { ModuloRequestInterface }                   from '../../services/ml_api/request/request.interface.modulo';
+import { ROUTES }                                   from '../../endpoints/ml_api/ep.ml.api';
+import { useApiGetData }                            from '../../controllers/reducers/reducer.fetchData';
+import { OcrRequestInterface }                      from '../../services/ml_api/request/request.interface.ocr';
 import { useApiGetOpByUser }                        from '../../controllers/hooks/customHookGetOpByUser';
-import { useApiGetModulos }                         from '../../controllers/hooks/customHookGetModulos';
-import { useApiGetOcrAll }                          from '../../controllers/hooks/customHookGetAllOcr';
-import { useApiGetOpAll }                           from '../../controllers/hooks/customHookGetAllOp'
 import { EmployeerIcon }                            from '../../public/icons/employeerIcon';
 import { Item }                                     from '../../interfaces/app/homeRoutes';
 import { ModuloIcon }                               from '../../public/icons/moduloIcon';
@@ -16,7 +17,7 @@ import { OcrIcon }                                  from '../../public/icons/ocr
 import { OpIcon }                                   from '../../public/icons/opIcon';
 import { GestureResponderEvent }                    from 'react-native';
 import React                                        from 'react';
-import { EditICon } from '../../public/icons/editIcon';
+import { OpRequestInterface } from '../../services/ml_api/request/request.interface.op';
 
 // Doc
 //
@@ -40,7 +41,11 @@ export const ADMIN_HOME_ROUTES: Item[] = [
         },
 
         mainFetch: (documentId?: string) => {
-            return useApiGetOcrAll();
+            const fetch = new OcrRequestInterface({
+                url:ROUTES.api_ml_production_ocr_get_all
+            })
+
+            return useApiGetData(fetch);
         },
 
         filterList: FILTER_ITEMS_OCR_HOME
@@ -58,7 +63,11 @@ export const ADMIN_HOME_ROUTES: Item[] = [
             </ButtonHome>
         },
         mainFetch: () => {
-            return useApiGetOpAll();
+            const fetch = new OpRequestInterface({
+                url:ROUTES.api_ml_production_op_get_all
+            });
+            
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OP_HOME
     },
@@ -73,7 +82,11 @@ export const ADMIN_HOME_ROUTES: Item[] = [
             </ButtonHome>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetModulos();
+            const fetch = new ModuloRequestInterface({
+                url: ROUTES.api_ml_production_modulo_get_all
+            });
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_MODULOS_HOME
     },
@@ -88,7 +101,11 @@ export const ADMIN_HOME_ROUTES: Item[] = [
             </ButtonHome>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetModulos();
+            const fetch = new ModuloRequestInterface({
+                url: ROUTES.api_ml_production_modulo_get_all
+            });
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_EMPLOYEERS_HOME
     },
@@ -101,7 +118,11 @@ export const ADMIN_HOME_ROUTES: Item[] = [
             return <></>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetModulos();
+            const fetch = new ModuloRequestInterface({
+                url: ROUTES.api_ml_production_modulo_get_all
+            });
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_MODULOS_HOME
     }
@@ -119,7 +140,11 @@ export const PROCESSES_HOME_ROUTES: Item[] = [
             </ButtonHome>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetOcrAll();
+            const fetch = new OcrRequestInterface({
+                url:ROUTES.api_ml_production_ocr_get_all
+            })
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -133,8 +158,12 @@ export const PROCESSES_HOME_ROUTES: Item[] = [
                 <PlusIcon color="#777" size={70} width={1} />
             </ButtonHome>
         },
-        mainFetch: (documentId?: string) => {
-            return useApiGetOpAll();
+        mainFetch: () => {
+            const fetch = new OpRequestInterface({
+                url:ROUTES.api_ml_production_op_get_all
+            });
+            
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -149,7 +178,11 @@ export const PROCESSES_HOME_ROUTES: Item[] = [
             </ButtonHome>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetModulos();
+            const fetch = new ModuloRequestInterface({
+                url: ROUTES.api_ml_production_modulo_get_all
+            });
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -164,7 +197,11 @@ export const PROCESSES_HOME_ROUTES: Item[] = [
             </ButtonHome>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetModulos();
+            const fetch = new ModuloRequestInterface({
+                url: ROUTES.api_ml_production_modulo_get_all
+            });
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -177,7 +214,11 @@ export const PROCESSES_HOME_ROUTES: Item[] = [
             return <></>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetModulos();
+            const fetch = new ModuloRequestInterface({
+                url: ROUTES.api_ml_production_modulo_get_all
+            });
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_MODULOS_HOME
     }
@@ -195,7 +236,11 @@ export const PLANTA_HOME_ROUTES: Item[] = [
             </ButtonHome>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetOcrByUser(documentId || '');// Id del usuario 
+            const fetch = new OcrRequestInterface({
+                url:ROUTES.api_ml_production_ocr_get_all+documentId,
+            })
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -225,7 +270,11 @@ export const PLANTA_HOME_ROUTES: Item[] = [
             return <></>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetModulos();
+            const fetch = new ModuloRequestInterface({
+                url: ROUTES.api_ml_production_modulo_get_all
+            });
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     }
@@ -241,7 +290,11 @@ export const FACTURACION_HOME_ROUTES: Item[] = [
             return <></>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetOcrAll();
+            const fetch = new OcrRequestInterface({
+                url:ROUTES.api_ml_production_ocr_get_all
+            })
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -253,8 +306,12 @@ export const FACTURACION_HOME_ROUTES: Item[] = [
         actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
             return <></>
         },
-        mainFetch: (documentId?: string) => {
-            return useApiGetOpAll();
+        mainFetch: () => {
+            const fetch = new OpRequestInterface({
+                url:ROUTES.api_ml_production_op_get_all
+            });
+            
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -267,7 +324,11 @@ export const FACTURACION_HOME_ROUTES: Item[] = [
             return <></>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetModulos();
+            const fetch = new ModuloRequestInterface({
+                url: ROUTES.api_ml_production_modulo_get_all
+            });
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_MODULOS_HOME
     }
@@ -283,7 +344,11 @@ export const GUEST_HOME_ROUTES: Item[] = [
             return <></>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetOcrAll();
+            const fetch = new OcrRequestInterface({
+                url:ROUTES.api_ml_production_ocr_get_all
+            })
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -295,8 +360,12 @@ export const GUEST_HOME_ROUTES: Item[] = [
         actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
             return <></>
         },
-        mainFetch: (documentId?: string) => {
-            return useApiGetOpAll();
+        mainFetch: () => {
+            const fetch = new OpRequestInterface({
+                url:ROUTES.api_ml_production_op_get_all
+            });
+            
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -309,7 +378,11 @@ export const GUEST_HOME_ROUTES: Item[] = [
             return <></>
         },
         mainFetch: (documentId?: string) => {
-            return useApiGetModulos();
+            const fetch = new ModuloRequestInterface({
+                url: ROUTES.api_ml_production_modulo_get_all
+            });
+
+            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     }

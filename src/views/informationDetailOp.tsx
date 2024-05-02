@@ -6,16 +6,17 @@ import { InformationHeaderViewComponentOp }                 from '../components/
 import { InformationOcrComponent }                          from '../components/informationOcrComponent';
 import { RowLeftIcon }                                      from '../public/icons/rowLeftIcon';
 import { OpDetail }                                         from '../interfaces/services/ml_api/detailOpInteface';
-import { useApiGetOcrByOP }                                 from '../controllers/hooks/customHookGetOcrByOp';
 import { LoadingComponent }                                 from '../components/loadingComponent';
 import { EmptyComponent }                                   from '../components/emptyComponent';
 import { ModalOcrInfo }                                     from '../modals/modalOcrInfo';
 import { OcrProcessesInterface }                            from '../interfaces/services/ml_api/ocrInterfaces';
 import { InformationOcrEventsComponent }                    from '../components/informationOcrEventsComponent';
 import { InformationOcrCheckComponent }                     from '../components/informationOcrCheckComponent';
-import { InformationDetailOpScreenProps }                   from '../interfaces/screens/screensInterfaces';
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text, FlatList} from 'react-native';
 import { useState }                                         from 'react'
+import { useApiGetData }                                    from '../controllers/reducers/reducer.fetchData';
+import { OcrRequestInterface }                              from '../services/ml_api/request/request.interface.ocr';
+import { ROUTES }                                           from '../endpoints/ml_api/ep.ml.api';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -31,11 +32,17 @@ export function InformationDetailOp({route,navigation}:any){
     ];
     const opDetailsData:OpDetail=route.params;
 
-    const { state } = useApiGetOcrByOP({
-        op:opDetailsData.op,
-        talla:opDetailsData.tallaId,
-        color:opDetailsData.colorCodigo
+    const fetch = new OcrRequestInterface({
+        url:ROUTES.api_ml_production_ocr_get_by_op,
+        params:{
+            op:opDetailsData.op,
+            talla:opDetailsData.tallaId,
+            color:opDetailsData.colorCodigo
+        }
     });
+
+    const { state } = useApiGetData(fetch);
+
     const [itemState,setItemSelec]=useState<number|null>(1);
     const [modalInfoState,setModalInfoState] = useState<boolean>(false);
     const [ocrProcessData, setOcrProcessData ] = useState<OcrProcessesInterface|null>(null);

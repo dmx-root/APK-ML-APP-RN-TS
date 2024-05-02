@@ -5,7 +5,6 @@ import { EmptyComponent }                                   from '../components/
 import { FieldInfo }                                        from '../components/fieldInfo';
 import { OcrIcon }                                          from '../public/icons/ocrIcon';
 import { Modal }                                            from '../components/modal';
-import { useApiGetDetailsOp }                               from '../controllers/hooks/customHookGetDetailsOp';
 import { LoadingComponent }                                 from '../components/loadingComponent';
 import { useMainContext }                                   from '../contexts/mainContext';
 import { form }                                             from '../interfaces/view/login';
@@ -15,7 +14,9 @@ import { useLoadDataSegundasOperation }                     from '../controllers
 import { ModalLoading }                                     from './modalLoading';
 import { useEffect, useState }                              from 'react';
 import { GestureResponderEvent, StyleSheet, View, Text, TextInput,}    from 'react-native';
-
+import { DetailOPRequestInterface }                         from '../services/ml_api/request/request.interface.detailOp';
+import { useApiGetData }                                    from '../controllers/reducers/reducer.fetchData';
+import { ROUTES }                                           from '../endpoints/ml_api/ep.ml.api';
 
 export function ModalProductionSegundas({
     handlerClick, 
@@ -26,8 +27,12 @@ export function ModalProductionSegundas({
     handlerNext:  (event:GestureResponderEvent)=>void,
     formData : form | null
 }){
-    const { state } =           useApiGetDetailsOp((formData?.opType || '') + (formData?.op || ''));
-    
+    const fetch = new DetailOPRequestInterface({
+        url: ROUTES.api_ml_production_op_details_get+(formData?.opType || '') + (formData?.op || '')
+    });
+
+    const { state } = useApiGetData(fetch);
+
     const device =              useDeviceReader();
     const contextStorage =      useMainContext();
     const loadData =            useLoadDataSegundasOperation();

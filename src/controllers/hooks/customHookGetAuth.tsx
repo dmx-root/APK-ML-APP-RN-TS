@@ -1,11 +1,8 @@
-import { api_ml_local_auth_get_by_token }                     from '../../endpoints/ml_api/restApiMujerLatina';
-import { AuthObjectRequest }            from '../../services/ml_api/request/authObjectRequest';
 import { statusApi}                     from '../../interfaces/services/ml_api/apiResponse'
-import { authResponseInterface }        from '../../interfaces/services/ml_api/authInterfaces';
 import { handlerGetValueLocalStorage }  from '../helpers/handlerValueLocalStorage';
 import { useEffect, useReducer }        from 'react';
-import { AuthRequestInterface } from '../../services/ml_api/request/request.interface.auth';
-import { ROUTES } from '../../endpoints/ml_api/ep.ml.api';
+import { AuthRequestInterface }         from '../../services/ml_api/request/request.interface.auth';
+import { ROUTES }                       from '../../endpoints/ml_api/ep.ml.api';
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',

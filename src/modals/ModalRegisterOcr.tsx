@@ -13,8 +13,10 @@ import { ModalAlert }                       from "./modalAlert";
 import { Alert, FlatList, GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View }     from 'react-native';
 import { ModalListSelect }                  from "./modalListSelect";
 import { ModalItemList }                    from "../components/modalItemList";
-import { useApiGetModulos }                 from "../controllers/hooks/customHookGetModulos";
 import { useState }                         from "react";
+import { ModuloRequestInterface} from '../services/ml_api/request/request.interface.modulo';
+import { useApiGetData } from '../controllers/reducers/reducer.fetchData';
+import { ROUTES } from "../endpoints/ml_api/ep.ml.api";
 
 export function ModalRegisterOcr({handlerClick,navigation}:{
     handlerClick:(event:GestureResponderEvent)=>void,
@@ -27,7 +29,12 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
     const [ modalModulosState, setModalModulosState ] = useState(false);
     const [ modalTypeOpState, setModalTypeOpState ] =   useState(false);
     const { state, setDataOperation } =                 useSetOperation();
-    const modulos =                                     useApiGetModulos();
+
+    const fetch = new ModuloRequestInterface({
+        url: ROUTES.api_ml_production_modulo_get_all
+    });
+
+    const modulos = useApiGetData(fetch);
 
     return<>
         {

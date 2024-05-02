@@ -1,5 +1,4 @@
 import { useOperationHandler }                              from '../app/operations/operations';
-// import { useApiGetAuthOperations }                          from '../controllers/hooks/customHookGetAuthOperations';
 import { useMainContext }                                   from '../contexts/mainContext';
 import { AsideItem }                                        from './asideItem';
 import { LoadingComponent }                                 from './loadingComponent';
@@ -32,13 +31,13 @@ export function Aside({ navigation, handlerClick, setActions }: {
     const fetch = new SesionOperationsRequestInterface({
         url: ROUTES.api_ml_sesion_mobile_get_operations+contextStorage?.currentUser?.rolId.toString(),
     })
+
     const { OPERATIONS_ITEMS } = useOperationHandler({
         navigation,
         setStateActions: setActions
     });
-    
-    const { state} = useApiGetData(fetch);    
 
+    const { state} = useApiGetData(fetch);    
 
     return <TouchableWithoutFeedback onPress={handlerClick}>
         <View style={StyleAside.courtain}>

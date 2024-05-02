@@ -11,9 +11,9 @@ import { useApiGetModulosAll }                              from '../controllers
 import { LoadingComponent }                                 from '../components/loadingComponent';
 import { EmptyComponent }                                   from '../components/emptyComponent';
 import { useState }                                         from 'react'
-import { Aside } from '../components/aside';
-import { ModalSegundas } from '../modals/modalSegundas';
-import { InformationModuloComponent } from '../components/informationModuloComponent';
+import { Aside }                                            from '../components/aside';
+import { ModalSegundas }                                    from '../modals/modalSegundas';
+import { InformationModuloComponent }                       from '../components/informationModuloComponent';
 
 const {height,width}=Dimensions.get('screen');
 

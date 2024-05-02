@@ -1,16 +1,13 @@
-import { InformationDetOpComponent }    from "../components/informationDetOpComponente"
-import { ModalContainerList }           from "../components/modalContainerList"
 import { Modal }                        from "../components/modal"
 import { LoadingComponent }             from "../components/loadingComponent"
-import { useApiGetDetailsOp }           from "../controllers/hooks/customHookGetDetailsOp"
 import { EmptyComponent }               from "../components/emptyComponent"
 import { GestureResponderEvent, View, Dimensions, StyleSheet, FlatList}  from "react-native"
-import { useEffect }                    from "react"
-import { FieldInfo } from "../components/fieldInfo"
-import { InfoIcon } from "../public/icons/infoIcon"
-import { useApiGetModulosAll } from "../controllers/hooks/customHookGetModulosGetAllFilter"
-import { MainModuloComponent } from "../components/mainModuloComponent"
-import { InformationModuloComponent } from "../components/informationModuloComponent"
+import { FieldInfo }                    from "../components/fieldInfo"
+import { InfoIcon }                     from "../public/icons/infoIcon"
+import { InformationModuloComponent }   from "../components/informationModuloComponent"
+import { ModuloRequestInterface}        from '../services/ml_api/request/request.interface.modulo';
+import { useApiGetData }                from '../controllers/reducers/reducer.fetchData';
+import { ROUTES }                       from "../endpoints/ml_api/ep.ml.api"
 
 //  Doc 
 //  Este componente tiene la finalidad de renderizar la lista de módulos
@@ -23,8 +20,13 @@ export function ModalModulosList({handlerClick,navigation}:{
     handlerClick:(event : GestureResponderEvent) => void,
     navigation : any
 }){
-    const { state } = useApiGetModulosAll();
+    
+    const fetch = new ModuloRequestInterface({
+        url: ROUTES.api_ml_production_modulo_get_all
+    });
 
+    const { state } = useApiGetData(fetch);
+    
     return <>
             {
             <Modal handlerClick={handlerClick} >
