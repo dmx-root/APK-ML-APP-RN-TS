@@ -1,19 +1,20 @@
-import {View,StyleSheet, Dimensions, Text, FlatList, TouchableOpacity}        from 'react-native';
+import {View,StyleSheet, Dimensions, FlatList, TouchableOpacity}        from 'react-native';
 import { MenuIcon }                                         from '../public/icons/menuIcon';
 import { SearchIcon }                                       from '../public/icons/searchIcon';
 import { ItemResize }                                       from '../components/ItemResize';
 import { FilterIcon }                                       from '../public/icons/filterIcon';
 import { ItemNavigation }                                   from '../components/itemNavigation';
-import { MainModuloComponent }                              from '../components/mainModuloComponent';
 import { useMainContext }                                   from '../contexts/mainContext';
 import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
-import { useApiGetModulosAll }                              from '../controllers/hooks/customHookGetModulosGetAllFilter'
 import { LoadingComponent }                                 from '../components/loadingComponent';
 import { EmptyComponent }                                   from '../components/emptyComponent';
 import { useState }                                         from 'react'
 import { Aside }                                            from '../components/aside';
 import { ModalSegundas }                                    from '../modals/modalSegundas';
 import { InformationModuloComponent }                       from '../components/informationModuloComponent';
+import { MAIN_MODULO }                                      from '../controllers/helpers/hanlderQueryFilteredObject';
+import { ModuloRequestInterface }                           from '../services/ml_api/request/request.interface.modulo';
+import { useApiGetDataFilter }                              from '../controllers/reducers/reducer.fetchDataFilter';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -22,12 +23,15 @@ export function HomeRevise({navigation}:any){
     const [ asideState,setAsideState ] =                    useState<boolean>(false);
     const [ newRegister,setNewRegister ] =                  useState<boolean>(false);
     const [ modalSegundas,setModalSegundas ] =              useState<boolean>(false);
-
-    // const { state } = useApiGetModulos();
-    const {state, setItemSelector, itemSelector} = useApiGetModulosAll();
-
-    // console.log(state)
+    
     const contextStorage = useMainContext();
+    
+    const { state, setItemSelector, itemSelector } = useApiGetDataFilter({
+        queryChain: MAIN_MODULO,
+        ApiConnection: new ModuloRequestInterface({
+            url:''
+        })
+    });
 
     return<>
      <View style={{height,width}}>
@@ -61,15 +65,6 @@ export function HomeRevise({navigation}:any){
                                 <FilterIcon color='#AAA' size={30} width={2}/>
                             </View>
                         </View>
-                        {/* <View style={StyleMainWindow.fieldContainer}>
-                            <View style={{width:'20%',height:'100%'}}></View>
-                            <View style={{justifyContent:'center',width:'14%',height:'100%'}}><Text style={StyleMainWindow.textField}>MÓDULO</Text></View>
-                            <View style={{justifyContent:'center',width:'9%',height:'100%'}}><Text style={StyleMainWindow.textField}>OCR</Text></View>
-                            <View style={{justifyContent:'center',width:'11%',height:'100%'}}><Text style={StyleMainWindow.textField}>TALLA</Text></View>
-                            <View style={{justifyContent:'center',width:'16%',height:'100%'}}><Text style={StyleMainWindow.textField}>COLOR</Text></View>
-                            <View style={{justifyContent:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>OP</Text></View>
-                            <View style={{justifyContent:'center',width:'15%',height:'100%'}}><Text style={StyleMainWindow.textField}>REFERENCIA</Text></View>
-                        </View>  */}
                     </View>
                     <View style={StyleMainWindow.root1}>
                         <View style={StyleMainWindow.frame1}>
@@ -79,7 +74,7 @@ export function HomeRevise({navigation}:any){
                             state.error?
                             <EmptyComponent label='Hubo un error en la carga de datos'/>:
                             state.data=== null?
-                            <EmptyComponent label='El usuario no cuenta con registros aún'/>:
+                            <EmptyComponent label='No se encontraron elementos'/>:
                             <FlatList 
                             renderItem={(item)=>
                             <InformationModuloComponent 

@@ -1,4 +1,3 @@
-import { useApiGetOpFilter }                                from '../controllers/hooks/customHookGetAllOpFilter';
 import { LoadingComponent }                                 from '../components/loadingComponent';
 import { MainOpComponent }                                  from '../components/mainOpComponent';
 import { ItemNavigation }                                   from '../components/itemNavigation';
@@ -13,7 +12,10 @@ import { useMainContext }                                   from '../contexts/ma
 import { ModalSegundas }                                    from '../modals/modalSegundas';
 import { Aside }                                            from '../components/aside';
 import { View,StyleSheet, Dimensions, Text, FlatList, TouchableOpacity }      from 'react-native';
-import { useState }                                         from 'react'
+import { useState }                                         from 'react';
+import { useApiGetDataFilter }                              from '../controllers/reducers/reducer.fetchDataFilter';
+import { MAIN_OP }                                          from '../controllers/helpers/hanlderQueryFilteredObject';
+import { OpRequestInterface }                               from '../services/ml_api/request/request.interface.op';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -25,12 +27,16 @@ export function HomeOp({navigation}:any){
     const [ modalSegundas,setModalSegundas ] =              useState<boolean>(false);
 
     // const { state } = contextStorage?.account?.home?.[1].mainFetch(contextStorage.currentUser?.documentoid)
-    const { state, setItemSelector, itemSelector }      = useApiGetOpFilter();
 
     const [ detailOpListState, setDetailOpListState ]   = useState <boolean>(false);
-    const [ opId,  setopId]                             = useState <string | null>(null);
+    const [ opId, setopId ]                             = useState <string | null>(null);
 
-
+    const { state, setItemSelector, itemSelector } = useApiGetDataFilter({
+        queryChain: MAIN_OP,
+        ApiConnection: new OpRequestInterface({
+            url:''
+        })
+    });
 
     return<>
      <View style={{height,width}}>

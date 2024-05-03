@@ -40,3 +40,32 @@ export const MAIN_OCR: QueryObjectInterface[] = [
 
 ]
 
+export const MAIN_OP: QueryObjectInterface[] = [
+    {
+        url:ROUTES.api_ml_production_op_get_all,
+    },
+    {
+        url:ROUTES.api_ml_production_op_get_by_type,
+        params:{type:'MOB'}
+    },
+    {
+        url:ROUTES.api_ml_production_op_get_by_type,
+        params:{type:'MOP'}
+    },
+    {
+        url:ROUTES.api_ml_production_op_get_by_state,
+        params:{state:1}
+    }
+]
+
+export const MAIN_MODULO: QueryObjectInterface[] = [
+    {
+        url:ROUTES.api_ml_production_modulo_get_all
+    },
+    {
+        url:ROUTES.api_ml_production_modulo_get_by_state+'1'
+    },
+    {
+        url:ROUTES.api_ml_production_modulo_get_by_state+'0'
+    }
+]

@@ -1,4 +1,4 @@
-import {View,StyleSheet, Dimensions, Text, FlatList, TouchableOpacity}        from 'react-native';
+import {View,StyleSheet, Dimensions, Text, FlatList, TouchableOpacity}from 'react-native';
 import { MenuIcon }                                         from '../public/icons/menuIcon';
 import { SearchIcon }                                       from '../public/icons/searchIcon';
 import { ItemResize }                                       from '../components/ItemResize';
@@ -7,26 +7,31 @@ import { ItemNavigation }                                   from '../components/
 import { MainModuloComponent }                              from '../components/mainModuloComponent';
 import { useMainContext }                                   from '../contexts/mainContext';
 import { ModalRegisterOcr }                                 from '../modals/ModalRegisterOcr';
-import { useApiGetModulosAll }                              from '../controllers/hooks/customHookGetModulosGetAllFilter'
 import { LoadingComponent }                                 from '../components/loadingComponent';
 import { EmptyComponent }                                   from '../components/emptyComponent';
 import { useState }                                         from 'react'
-import { Aside } from '../components/aside';
-import { ModalSegundas } from '../modals/modalSegundas';
+import { Aside }                                            from '../components/aside';
+import { ModalSegundas }                                    from '../modals/modalSegundas';
+import { useApiGetDataFilter }                              from '../controllers/reducers/reducer.fetchDataFilter';
+import { MAIN_MODULO }                                      from '../controllers/helpers/hanlderQueryFilteredObject';
+import { ModuloRequestInterface }                           from '../services/ml_api/request/request.interface.modulo';
 
 const {height,width}=Dimensions.get('screen');
 
 export function HomeModulos({navigation}:any){
 
-    const [ asideState,setAsideState ] =                    useState<boolean>(false);
-    const [ newRegister,setNewRegister ] =                  useState<boolean>(false);
-    const [ modalSegundas,setModalSegundas ] =              useState<boolean>(false);
+    const [ asideState,setAsideState ] =       useState<boolean>(false);
+    const [ newRegister,setNewRegister ] =     useState<boolean>(false);
+    const [ modalSegundas,setModalSegundas ] = useState<boolean>(false);
 
-    // const { state } = useApiGetModulos();
-    const {state, setItemSelector, itemSelector} = useApiGetModulosAll();
-
-    // console.log(state)
-    const contextStorage = useMainContext();
+    const contextStorage =  useMainContext();
+    
+    const { state, setItemSelector, itemSelector } = useApiGetDataFilter({
+        queryChain: MAIN_MODULO,
+        ApiConnection: new ModuloRequestInterface({
+            url:''
+        })
+    });
 
     return<>
      <View style={{height,width}}>
@@ -78,7 +83,7 @@ export function HomeModulos({navigation}:any){
                             state.error?
                             <EmptyComponent label='Hubo un error en la carga de datos'/>:
                             state.data=== null?
-                            <EmptyComponent label='El usuario no cuenta con registros aún'/>:
+                            <EmptyComponent label='No se encontraron elementos'/>:
                             <FlatList 
                             renderItem={(item)=>
                             <MainModuloComponent 

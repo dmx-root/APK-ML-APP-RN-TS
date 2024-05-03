@@ -1,9 +1,7 @@
-import { ApiConnectionInterface }   from '../../interfaces/services/ml_api/apiConnection';
-import { statusApi }                from '../../interfaces/services/ml_api/apiResponse';
-import { useEffect, useReducer, useState }    from 'react';
-import { OcrRequestInterface } from '../../services/ml_api/request/request.interface.ocr'
+import { ApiConnectionInterface } from '../../interfaces/services/ml_api/apiConnection';
+import { statusApi } from '../../interfaces/services/ml_api/apiResponse';
+import { useEffect, useReducer, useState } from 'react';
 import { useMainContext } from '../../contexts/mainContext';
-import { ConectionRequestInterface } from '../../services/ml_api/conection/request.connection'
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -40,7 +38,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
 
-const handlerQueryOCr: (queryObjectList: QueryObjectInterface[],ApiConnection: ApiConnectionInterface) => ApiConnectionInterface[] = (queryObjectList: QueryObjectInterface[],ApiConnection: ApiConnectionInterface) => {
+const handlerQueryOCr: (queryObjectList: QueryObjectInterface[], ApiConnection: ApiConnectionInterface) => ApiConnectionInterface[] = (queryObjectList: QueryObjectInterface[], ApiConnection: ApiConnectionInterface) => {
     const fetchInstance = queryObjectList.map(element => {
         const newObj = Object.create(ApiConnection);
         newObj._headers = element.headers;
@@ -51,20 +49,20 @@ const handlerQueryOCr: (queryObjectList: QueryObjectInterface[],ApiConnection: A
     return fetchInstance;
 }
 
-export const useApiGetDataFilter: ({queryChain, ApiConnection}:{queryChain:QueryObjectInterface[],ApiConnection: ApiConnectionInterface }) => {
+export const useApiGetDataFilter: ({ queryChain, ApiConnection }: { queryChain: QueryObjectInterface[], ApiConnection: ApiConnectionInterface }) => {
     state: ApiState;
-    itemSelector: number, 
+    itemSelector: number,
     setItemSelector: React.Dispatch<React.SetStateAction<number>>
-} = ({queryChain, ApiConnection}:{queryChain:QueryObjectInterface[], ApiConnection: ApiConnectionInterface }) => {
+} = ({ queryChain, ApiConnection }: { queryChain: QueryObjectInterface[], ApiConnection: ApiConnectionInterface }) => {
 
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
         loading: false,
         error: null,
     });
-    
+
     const contextStorage = useMainContext();
-    const [ itemSelector, setItemSelector ] = useState<number>(0);
+    const [itemSelector, setItemSelector] = useState<number>(0);
 
 
     async function fetchData(apiConnection: ApiConnectionInterface): Promise<void> {
@@ -86,13 +84,14 @@ export const useApiGetDataFilter: ({queryChain, ApiConnection}:{queryChain:Query
     };
 
     useEffect(() => {
-        const fetchInstance = handlerQueryOCr(queryChain,ApiConnection);
-        itemSelector <= (fetchInstance.length-1)?
-        fetchData(fetchInstance[itemSelector]):
-        console.log('Parámetro fuera')
 
-        console.log(fetchInstance)
+        const fetchInstance = handlerQueryOCr(queryChain, ApiConnection);
+
+        itemSelector <= (fetchInstance.length - 1) ?
+            fetchData(fetchInstance[itemSelector]) :
+            dispatch({ type: actionTypes.FETCH_FAILURE, payload: 'Error' })
+
     }, [itemSelector]);
 
-    return { state,itemSelector, setItemSelector  };
+    return { state, itemSelector, setItemSelector };
 };
