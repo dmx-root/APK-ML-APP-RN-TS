@@ -31,7 +31,16 @@ export class ConectionRequestInterface{
             headers: this.headers,
             withCredentials:true
         }
-    return await axios(data);
-   
+        return await axios(data);
+    }
+
+    set _url (url: string){
+        this.url = url;
+    }
+    set _params(params: ParamsInterface){
+        this.params = params
+    }
+    set _headers(headers : ParamsInterface){
+        this.headers =headers
     }
 }

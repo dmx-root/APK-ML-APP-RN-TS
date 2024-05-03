@@ -14,7 +14,7 @@ interface ParamsInterface {
 interface PropertiesInterface {
     url: string;
     params?: ParamsInterface;
-    headers?: AxiosHeaders
+    headers?: ParamsInterface
 }
 
 interface ApiResponse {
@@ -31,7 +31,6 @@ interface ControllerResponseInterface {
 }
 
 export class OcrRequestInterface extends ConectionRequestInterface implements ApiConnectionInterface {
-
     constructor(properties: PropertiesInterface) {
         super(properties)
     }
@@ -94,4 +93,13 @@ export class OcrRequestInterface extends ConectionRequestInterface implements Ap
             return apiResponse;
         }
     }
+    set _params(params : ParamsInterface){
+        super._params = params;
+    }
+    set _headers(headers: ParamsInterface){
+        super._headers = headers 
+    }
+    set _url(url: string){
+        super._url = url
+    }   
 }

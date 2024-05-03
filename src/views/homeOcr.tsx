@@ -1,6 +1,5 @@
 import { useLocalStorageGetData }                                       from '../controllers/hooks/customHookGetDataLocalStorage';
 import { handlerRemoveSavedObjectLocalStorage }                         from '../controllers/helpers/handlerObjectLocalStorage';
-import { useApiGetOcrAll }                                              from '../controllers/hooks/customHookGetAllOcrFilter';
 import { OcrProcessesInterface }                                        from '../interfaces/services/ml_api/ocrInterfaces';
 import { MainOcrSegundasComponent }                                     from '../components/mainOcrSegundasComponent';
 import { MainOcrAnomalyComponent }                                      from '../components/mainOcrAnomalyComponent';
@@ -21,8 +20,9 @@ import { Aside }                                                        from '..
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList, TextInput}   from 'react-native';
 import { useState }                                                     from 'react';
 import { useFilterData } from '../controllers/hooks/customHookFilter';
-import { ModalModulosList } from '../modals/modalModulosList';
-import { ModalOcrInformationRevise } from '../modals/modalOcrInfoRevise';
+import {useApiGetDataFilter } from '../controllers/reducers/reducer.fetchDataFilter';
+import { MAIN_OCR } from '../controllers/helpers/hanlderQueryFilteredObject';
+import { OcrRequestInterface } from '../services/ml_api/request/request.interface.ocr';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -40,15 +40,12 @@ export function HomeOcr({navigation} : any){
     
     const currentOp =   useLocalStorageGetData('currentOp');
 
-    const { state, itemSelector, setItemSelector } = useApiGetOcrAll();
-    const { setValue, value, elements} = useFilterData({
-        data: state,
-        ref: 'referencia'
+    const { state, itemSelector, setItemSelector } = useApiGetDataFilter({
+        queryChain:MAIN_OCR,
+        ApiConnection: new OcrRequestInterface({
+            url:''
+        })
     });
-
-    // console.log(elements)
-    // console.log(data.state.data)
-
     // const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
 
     return<>
@@ -62,8 +59,8 @@ export function HomeOcr({navigation} : any){
                             <MenuIcon color='#999' size={40} width={2}/>
                         </TouchableOpacity>
                         {/* <View style={StyleMainWindow.bar}> */}
-                            <TextInput value={value}  style={StyleMainWindow.bar} onChangeText={(txt)=>{
-                                setValue(txt)
+                            <TextInput value={''}  style={StyleMainWindow.bar} onChangeText={(txt)=>{
+                                // setValue(txt)
                             }}/>
                         {/* </View> */}
                         <View style={StyleMainWindow.searchIcon}>
