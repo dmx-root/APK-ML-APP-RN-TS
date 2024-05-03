@@ -70,7 +70,7 @@ export const useApiGetDataFilter: ({ queryChain, ApiConnection }: { queryChain: 
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const response = await apiConnection.productionData();
+            const response = await apiConnection.executeQuery();
 
             response?.statusCodeApi === 1 ?
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }) :

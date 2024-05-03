@@ -35,7 +35,7 @@ export class DetailOPRequestInterface extends ConectionRequestInterface implemen
         super(properties);
     }
 
-    async productionData(): Promise<ControllerResponseInterface> {
+    async executeQuery(): Promise<ControllerResponseInterface> {
         // Este metódo permite obtener la información relacionada al proceso
         try {
             const response: ApiResponse = (await this.getData()).data;

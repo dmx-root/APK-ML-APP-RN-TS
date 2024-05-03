@@ -11,7 +11,7 @@ interface obj{
 }
 
 export interface ApiConnectionInterface{
-    productionData (): Promise <ControllerResponseInterface>;
+    executeQuery(): Promise <ControllerResponseInterface>;
     set _headers(headers:obj)
     set _params(params:obj)
     set _url(url:string)

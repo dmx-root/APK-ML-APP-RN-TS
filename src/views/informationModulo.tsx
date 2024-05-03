@@ -30,12 +30,13 @@ export function InformationModulo({route,navigation}:any){
 
     const moduloData : ModuloProcessInterface = route.params;
 
+
     const {state, itemSelector, setItemSelector} =  useApiGetModuloElementsAll(moduloData.moduloId.toString())
 
     const [modalInfoState, setModalInfoState ] =    useState<boolean>(false);
     const [ocrProcessData, setOcrProcessData ] =    useState<OcrProcessesInterface|null>(null);
 
-    console.log(state.loading, state.data?.length)
+    // console.log(state.loading, state.data?.length)
     return<>
     <View style={{height,width}}>
         <View style={StyleMainWindow.backRoots}></View>

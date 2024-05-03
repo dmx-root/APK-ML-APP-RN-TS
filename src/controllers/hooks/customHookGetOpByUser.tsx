@@ -1,6 +1,6 @@
 import { api_ml_production_op_get_by_user }     from '../../endpoints/ml_api/restApiMujerLatina';
 import { statusApi}                             from '../../interfaces/services/ml_api/apiResponse'
-import { OpObjectRequest }                      from '../../services/ml_api/request/opObjectRequest';
+// import { OpObjectRequest }                      from '../../services/ml_api/request/opObjectRequest';
 import { OpInterface }                          from '../../interfaces/services/ml_api/opInterfaces';
 import { useEffect, useReducer }                from 'react';
 
@@ -45,17 +45,17 @@ export const useApiGetOpByUser = (documentId:string): { state: ApiState } => {
 
     async function fetchData():Promise<void>{
         try {
-            const apiQuery = new OpObjectRequest()
+            // const apiQuery = new OpObjectRequest()
 
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await apiQuery.OpProductionGetByUser(api_ml_production_op_get_by_user,documentId);
+            // const data=await apiQuery.OpProductionGetByUser(api_ml_production_op_get_by_user,documentId);
 
-            data?.statusCodeApi===1?
-            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
-            data?.statusCodeApi===0?
-            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: 0 }):
-            dispatch({ type: actionTypes.FETCH_FAILURE});
+            // data?.statusCodeApi===1?
+            // dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data.data }):
+            // data?.statusCodeApi===0?
+            // dispatch({ type: actionTypes.FETCH_SUCCESS, payload: 0 }):
+            // dispatch({ type: actionTypes.FETCH_FAILURE});
             
         } catch (error) {
             dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error'});

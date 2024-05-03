@@ -1,5 +1,8 @@
 import { useLocalStorageGetData }                                       from '../controllers/hooks/customHookGetDataLocalStorage';
+import { MAIN_OCR }                                                     from '../controllers/helpers/hanlderQueryFilteredObject';
 import { handlerRemoveSavedObjectLocalStorage }                         from '../controllers/helpers/handlerObjectLocalStorage';
+import { OcrRequestInterface }                                          from '../services/ml_api/request/request.interface.ocr';
+import {useApiGetDataFilter }                                           from '../controllers/reducers/reducer.fetchDataFilter';
 import { OcrProcessesInterface }                                        from '../interfaces/services/ml_api/ocrInterfaces';
 import { MainOcrSegundasComponent }                                     from '../components/mainOcrSegundasComponent';
 import { MainOcrAnomalyComponent }                                      from '../components/mainOcrAnomalyComponent';
@@ -20,9 +23,6 @@ import { Aside }                                                        from '..
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList, TextInput}   from 'react-native';
 import { useState }                                                     from 'react';
 import { useFilterData } from '../controllers/hooks/customHookFilter';
-import {useApiGetDataFilter } from '../controllers/reducers/reducer.fetchDataFilter';
-import { MAIN_OCR } from '../controllers/helpers/hanlderQueryFilteredObject';
-import { OcrRequestInterface } from '../services/ml_api/request/request.interface.ocr';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -30,13 +30,13 @@ export function HomeOcr({navigation} : any){
 
     const contextStorage = useMainContext();
 
-    const [ asideState,setAsideState ] =                    useState<boolean>(false);
-    const [ newRegister,setNewRegister ] =                  useState<boolean>(false);
-    const [ newCurrentRegister,setNewCurrentRegister ] =    useState<boolean>(true);
-    const [ modalInfoState,setModalInfoState ] =            useState<boolean>(false);
-    const [ modalSegundas,setModalSegundas ] =              useState<boolean>(false);
+    const [ asideState,setAsideState ] =                 useState<boolean>(false);
+    const [ newRegister,setNewRegister ] =               useState<boolean>(false);
+    const [ newCurrentRegister,setNewCurrentRegister ] = useState<boolean>(true);
+    const [ modalInfoState,setModalInfoState ] =         useState<boolean>(false);
+    const [ modalSegundas,setModalSegundas ] =           useState<boolean>(false);
 
-    const [ ocrProcessData, setOcrProcessData ] =           useState<OcrProcessesInterface|null>(null);
+    const [ ocrProcessData, setOcrProcessData ] =        useState<OcrProcessesInterface|null>(null);
     
     const currentOp =   useLocalStorageGetData('currentOp');
 

@@ -36,7 +36,7 @@ export class ModuloRequestInterface extends ConectionRequestInterface implements
     // este controlador permite modelar los datos que son recibidos de la APi
     // Esto con la finalidad de normalizar la información que será consumida en toda la aplicación
     // De manera que si el nombre de algún campo cambia, solo se tendrá que hacer el cambio en esta interface
-    async productionData () : Promise<ControllerResponseInterface>{
+    async executeQuery () : Promise<ControllerResponseInterface>{
         // Este metódo permite obtener la información relacionada al proceso
         try {
             const response : ApiResponse = (await this.getData()).data;
