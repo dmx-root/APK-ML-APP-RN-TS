@@ -146,19 +146,19 @@ export function HomeOcr({navigation} : any){
                 {
                 
                 contextStorage?.account?.home?.filter(icon=>icon.id===1)[0].actionObject(()=>{
-                    // setNewRegister(true);
-                    // setNewCurrentRegister(true);
+                    setNewRegister(true);
+                    setNewCurrentRegister(true);
                     // setModalSegundas(true)
-                    load.loadData({
-                        "op":"MOP4468",
-                        "color":"1303",
-                        "talla":"S",
-                        "inicio":"04:25:52",
-                        "finalizacion":"05:19:52",
-                        "modulo":5,
-                        "unidades":7,
-                        "anormalidad": null
-                    })
+                    // load.loadData({
+                    //     "op":"MOP4468",
+                    //     "color":"1303",
+                    //     "talla":"S",
+                    //     "inicio":"04:25:52",
+                    //     "finalizacion":"05:19:52",
+                    //     "modulo":5,
+                    //     "unidades":7,
+                    //     "anormalidad": null
+                    // })
                 })||<></>}
             </View>
             <View style={StyleMainWindow.root2}>

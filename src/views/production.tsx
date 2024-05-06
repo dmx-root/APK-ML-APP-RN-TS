@@ -29,6 +29,7 @@ export function Production({route,navigation}:any){
     const operation : OperationInterface = route.params;
     
     const contextStorage =  useMainContext();                   //información almacenada en el contexto de la información
+    
     const opDetails =       useLocalStorageGetData('currentOp');//información almacenada en el local storage 
     const loadData =        useLoadDataOperation();             //reducer que nos permite cargar la información una vez se haya terminado la operación 
     const removeData =      useRemoveDataOperation();           //reducer que nos permirte remover la información del local storage

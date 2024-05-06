@@ -28,15 +28,19 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
     const [ alertState, setAlertState ] =               useState<boolean>(false);
     const [ modalModulosState, setModalModulosState ] = useState(false);
     const [ modalTypeOpState, setModalTypeOpState ] =   useState(false);
+
     const { state, setDataOperation } =                 useSetOperation();
 
-    const fetch = new ModuloRequestInterface({
-        url: ROUTES.api_ml_production_modulo_get_all
-    });
-
-    const modulos = useApiGetData(fetch);
+    const modulos = useApiGetData(
+        new ModuloRequestInterface({
+            url: ROUTES.api_ml_production_modulo_get_all
+        })
+    );
 
     return<>
+        {
+         //ejecuacion de helper para manejar eventos auxiliares   
+        }
         {
         state.loading?
         
@@ -137,7 +141,6 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
         </ModalListSelect>:
         <></>
         }
-
     </>
 }
 
