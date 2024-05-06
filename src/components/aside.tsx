@@ -28,16 +28,16 @@ export function Aside({ navigation, handlerClick, setActions }: {
 
     const contextStorage = useMainContext();
 
-    const fetch = new SesionOperationsRequestInterface({
-        url: ROUTES.api_ml_sesion_mobile_get_operations+contextStorage?.currentUser?.rolId.toString(),
-    })
-
     const { OPERATIONS_ITEMS } = useOperationHandler({
         navigation,
         setStateActions: setActions
     });
 
-    const { state} = useApiGetData(fetch);    
+    const { state } = useApiGetData(
+        new SesionOperationsRequestInterface({
+            url: ROUTES.api_ml_sesion_mobile_get_operations+contextStorage?.currentUser?.rolId.toString(),
+        })
+    );  
 
     return <TouchableWithoutFeedback onPress={handlerClick}>
         <View style={StyleAside.courtain}>
@@ -62,7 +62,7 @@ export function Aside({ navigation, handlerClick, setActions }: {
                                         key={item.item.operacionId}>
                                         {OPERATIONS_ITEMS[item.item.operacionId].icon}
                                     </AsideItem>}
-                                    data={contextStorage?.operations} />
+                                    data={state.data} />
                         }
                     </View>
                 </View>

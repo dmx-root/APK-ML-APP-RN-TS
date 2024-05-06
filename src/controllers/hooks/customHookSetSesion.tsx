@@ -80,29 +80,7 @@ export const useHandlerSesion = (): { state: sesionState; setDataAuth: (document
                         statusMessageApi: response.statusMessage
                     }});
                 }
-                
-                // const account = handlerGetSesion(data.data.userProfileId);
-                // if(account.id!==0){ 
-                //     contextStorage?.setAccount(account);
-                //     contextStorage?.setCurrentUser({
-                //         nombre:data.data.userName,
-                //         documentoid:data.data.userDocumentId,
-                //         tipoDocumento:data.data.userDocumentType,
-                //         rolId:data.data.userProfileId,
-                //         rolNombre:data.data.userDocumentId,
-                //         descripcion:data.data.userDescription,
-                //         creacionFecha:data.data.userCreteDate 
-                //     });
-                //     if(passwordSaveSate){
-                //         await handlerSaveValueLocalStorage("token",data.toke);
-                //     }
-                // }
-                // else{
-                //     dispatch({ type: actionTypes.FETCH_FAILURE, payload:{
-                //         statusCodeApi: -1,
-                //         statusMessageApi: "Error al intentar establecer la sesión"
-                //     }});
-                // }
+            
             }
             else{
                 // dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});

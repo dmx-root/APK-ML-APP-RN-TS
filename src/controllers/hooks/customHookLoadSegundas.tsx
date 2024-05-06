@@ -1,7 +1,7 @@
 import { api_ml_production_ocr_segundas_post } from '../../endpoints/ml_api/restApiMujerLatina';
 import {  OpDetail }                        from '../../interfaces/services/ml_api/detailOpInteface';
 import { OperationInterface } from '../../interfaces/view/production';
-import { InterfaceOcrDispatch } from '../../services/ml_api/dispatch/dispatch.ocrObject';
+import { InterfaceOcrDispatch } from '../../services/ml_api/dispatch/dispatch.interface.object';
 import { handlerSaveObjectLocalStorage }    from '../helpers/handlerObjectLocalStorage';
 import { useReducer }                       from 'react';
 

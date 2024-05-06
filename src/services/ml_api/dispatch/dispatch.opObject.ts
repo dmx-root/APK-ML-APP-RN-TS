@@ -1,4 +1,4 @@
-import { ConectionInterfaceDispatch } from '../conection/dispatch.connectio'
+import { ConectionInterfaceDispatch } from '../conection/dispatch.connection'
 import { handlerAxiosError }          from '../../../utilities/handlerAxiosError';
 import { DetailProcessResponseInterface }           from '../../../interfaces/services/ml_api/detailOpInteface';
 

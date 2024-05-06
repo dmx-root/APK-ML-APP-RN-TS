@@ -20,12 +20,12 @@ export function ModalModulosList({handlerClick,navigation}:{
     handlerClick:(event : GestureResponderEvent) => void,
     navigation : any
 }){
-    
-    const fetch = new ModuloRequestInterface({
-        url: ROUTES.api_ml_production_modulo_get_all
-    });
 
-    const { state } = useApiGetData(fetch);
+    const { state } = useApiGetData(
+        new ModuloRequestInterface({
+            url: ROUTES.api_ml_production_modulo_get_all
+        })
+    );
     
     return <>
             {

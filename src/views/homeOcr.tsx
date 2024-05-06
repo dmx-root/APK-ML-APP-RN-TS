@@ -23,6 +23,9 @@ import { Aside }                                                        from '..
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList, TextInput}   from 'react-native';
 import { useState }                                                     from 'react';
 import { useFilterData } from '../controllers/hooks/customHookFilter';
+import { useLoadData } from '../controllers/reducers/reducer.dispatchData';
+import { ObjectDispatchInterface } from '../services/ml_api/dispatch/dispatch.interface.object'
+import { ROUTES } from '../endpoints/ml_api/ep.ml.api';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -46,6 +49,16 @@ export function HomeOcr({navigation} : any){
             url:''
         })
     });
+
+    const load = useLoadData(
+        new ObjectDispatchInterface({
+            url:ROUTES.api_ml_production_ocr_post,
+            method:'post'
+        })
+    );
+
+    console.log(load.state)
+
     // const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
 
     return<>
@@ -133,9 +146,19 @@ export function HomeOcr({navigation} : any){
                 {
                 
                 contextStorage?.account?.home?.filter(icon=>icon.id===1)[0].actionObject(()=>{
-                    setNewRegister(true);
-                    setNewCurrentRegister(true);
+                    // setNewRegister(true);
+                    // setNewCurrentRegister(true);
                     // setModalSegundas(true)
+                    load.loadData({
+                        "op":"MOP4468",
+                        "color":"1303",
+                        "talla":"S",
+                        "inicio":"04:25:52",
+                        "finalizacion":"05:19:52",
+                        "modulo":5,
+                        "unidades":7,
+                        "anormalidad": null
+                    })
                 })||<></>}
             </View>
             <View style={StyleMainWindow.root2}>
