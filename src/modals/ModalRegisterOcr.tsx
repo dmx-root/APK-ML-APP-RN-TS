@@ -124,8 +124,7 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                             if(response)
                             // Guardamos los datos fundamentales para el proceso de manera local    
                             await saveProcessData(filterData(response.data),operationData.moduloId) 
-                            // navigation.navigate('Production',operationData);
-                            // console.log(filterData(response.data))
+                            navigation.navigate('Production',operationData);
                         });
                     }
                     else {

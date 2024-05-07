@@ -1,8 +1,9 @@
-import { useLocalStorageGetData }                                       from '../controllers/hooks/customHookGetDataLocalStorage';
 import { OpDetail }                                                     from '../interfaces/services/ml_api/detailOpInteface';
-import { useRemoveDataOperation }                                       from '../controllers/hooks/customHookRemoveOperation';
 import { useLoadDataOperation }                                         from '../controllers/hooks/customHookLoadOperation';
 import { ModalProductionRegister }                                      from '../modals/modalProductionRegister';
+import { LocalStorageGetObject }                                        from '../services/local_storage/request/request.interface.object'
+import { LocalStorageRemoveItem }                                       from '../services/local_storage/dispatch/dispatch.interface.removeData'
+import { useLocalStorageGetData }                                       from '../controllers/reducers/reducer.getLocalData';
 import { OperationInterface }                                           from '../interfaces/view/production';
 import { InfoLineButton2 }                                              from '../components/InfoLineButton2';
 import { InfoLineButton }                                               from '../components/InfoLineButton';
@@ -22,17 +23,18 @@ import { ModalLoading }                                                 from '..
 import { View,StyleSheet, Dimensions, TouchableOpacity, Text, Alert }   from 'react-native';
 import { useState }                                                     from 'react';
 
+
 const {height,width}=Dimensions.get('screen');
-
 export function Production({route,navigation}:any){
-
+    
     const operation : OperationInterface = route.params;
     
-    const contextStorage =  useMainContext();                   //información almacenada en el contexto de la información
-    
-    const opDetails =       useLocalStorageGetData('currentOp');//información almacenada en el local storage 
+    const opDetails = useLocalStorageGetData(
+        new LocalStorageGetObject('currentOp')
+    );
+
     const loadData =        useLoadDataOperation();             //reducer que nos permite cargar la información una vez se haya terminado la operación 
-    const removeData =      useRemoveDataOperation();           //reducer que nos permirte remover la información del local storage
+    const contextStorage =  useMainContext();                   //información almacenada en el contexto de la información
     
     const [ operationData, setOperationData ] = useState<OperationInterface>(operation);
     const [ detailOp, setDetailop ] =           useState<OpDetail | null>(null);
@@ -42,7 +44,6 @@ export function Production({route,navigation}:any){
     const [ modalValidateCancel,setModalValidateCancel] =  useState<boolean>(false);
     const [ modalEditProduction,setModalEditProduction] =  useState<boolean>(false);
 
-    console.log(opDetails.state.data[0].op, 'informacion de local storage')
     return<>
             <View style={productionStyle.productionContainer}>
                 <View style={productionStyle.body}>
@@ -117,7 +118,7 @@ export function Production({route,navigation}:any){
                     </TouchableOpacity>
                 </View>
             </View>
-            {
+            {/* {
                 modalRegisterState?
                 <ModalProductionRegister 
                 opDetails={opDetails.state.data}
@@ -127,32 +128,30 @@ export function Production({route,navigation}:any){
                 handlerClick={()=>{setModalRegisterState(false)}}
                 />:
                 <></>
-            }
+            } */}
             {
                 opDetails.state.loading||loadData.state.loading?
                 <ModalLoading 
                 label='Cargando información del proceso...' 
-                handlerClick={()=>{
-
-                }}/>:
+                handlerClick={()=>{}}/>:
                 <></>
             }
             {
-                modalValidateLoad?
-                <ModalAlertEvents
-                label='La información será enviada'
-                content='¿Está seguro de enviar la información?'
-                textButtonCancel='Cancelar'
-                textButtonOk='Enviar'
-                handlerOk={()=>{
-                    loadData.loadDataOperation(operationData,opDetails.state.data,navigation);
-                    setModalValidateLoad(!modalValidateLoad)
-                }}
-                handlerCancel={()=>{
-                    setModalValidateLoad(!modalValidateLoad)
-                }}
-                />:
-                <></>
+                // modalValidateLoad?
+                // <ModalAlertEvents
+                // label='La información será enviada'
+                // content='¿Está seguro de enviar la información?'
+                // textButtonCancel='Cancelar'
+                // textButtonOk='Enviar'
+                // handlerOk={()=>{
+                //     loadData.loadDataOperation(operationData,opDetails.state.data,navigation);
+                //     setModalValidateLoad(!modalValidateLoad)
+                // }}
+                // handlerCancel={()=>{
+                //     setModalValidateLoad(!modalValidateLoad)
+                // }}
+                // />:
+                // <></>
             }
             {
                 modalValidateCancel?
@@ -162,7 +161,8 @@ export function Production({route,navigation}:any){
                 textButtonCancel='Cerrar'
                 textButtonOk='Cancelar operación'
                 handlerOk={()=>{
-                    removeData.removeDataOperation(navigation);
+                    // removeData.removeDataOperation(navigation);
+                    removeData(navigation);
                     setModalValidateCancel(!modalValidateCancel)
                 }}
                 handlerCancel={()=>{
@@ -174,6 +174,18 @@ export function Production({route,navigation}:any){
     </>
     
 }
+
+const removeData : (navigation?: any) => void = async (navigation?: any) =>{
+    const moduloRemove = new LocalStorageRemoveItem('currentOp');
+    const opRemove = new LocalStorageRemoveItem('currentModulo');
+    try {
+        await moduloRemove.execute();
+        await opRemove.execute();
+        navigation.navigate('HomeOcr')
+    } catch (error) {
+        console.log(error)
+    }
+} 
 
 const productionStyle=StyleSheet.create({
     productionContainer:{

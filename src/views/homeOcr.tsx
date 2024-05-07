@@ -1,4 +1,3 @@
-import { useLocalStorageGetData }                                       from '../controllers/hooks/customHookGetDataLocalStorage';
 import { MAIN_OCR }                                                     from '../controllers/helpers/hanlderQueryFilteredObject';
 import { handlerRemoveSavedObjectLocalStorage }                         from '../controllers/helpers/handlerObjectLocalStorage';
 import { OcrRequestInterface }                                          from '../services/ml_api/request/request.interface.ocr';
@@ -20,12 +19,14 @@ import { ModalSegundas }                                                from '..
 import { useMainContext }                                               from '../contexts/mainContext';
 import { ModalOcrInfo }                                                 from '../modals/modalOcrInfo';
 import { Aside }                                                        from '../components/aside';
+import { useFilterData }                                                from '../controllers/hooks/customHookFilter';
+import { useLoadData }                                                  from '../controllers/reducers/reducer.dispatchData';
+import { ObjectDispatchInterface }                                      from '../services/ml_api/dispatch/dispatch.interface.object'
+import { ROUTES }                                                       from '../endpoints/ml_api/ep.ml.api';
+import { LocalStorageGetObject }                                        from '../services/local_storage/request/request.interface.object';
+import { useLocalStorageGetData }                                       from '../controllers/reducers/reducer.getLocalData'
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList, TextInput}   from 'react-native';
 import { useState }                                                     from 'react';
-import { useFilterData } from '../controllers/hooks/customHookFilter';
-import { useLoadData } from '../controllers/reducers/reducer.dispatchData';
-import { ObjectDispatchInterface } from '../services/ml_api/dispatch/dispatch.interface.object'
-import { ROUTES } from '../endpoints/ml_api/ep.ml.api';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -41,7 +42,9 @@ export function HomeOcr({navigation} : any){
 
     const [ ocrProcessData, setOcrProcessData ] =        useState<OcrProcessesInterface|null>(null);
     
-    const currentOp =   useLocalStorageGetData('currentOp');
+    const currentOp = useLocalStorageGetData(
+        new LocalStorageGetObject('currentOp')
+    )
 
     const { state, itemSelector, setItemSelector } = useApiGetDataFilter({
         queryChain:MAIN_OCR,
@@ -56,8 +59,6 @@ export function HomeOcr({navigation} : any){
             method:'post'
         })
     );
-
-    // console.log(load.state)
 
     // const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
 

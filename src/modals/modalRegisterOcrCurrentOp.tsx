@@ -1,7 +1,8 @@
-import { useLocalStorageGetData }                           from "../controllers/hooks/customHookGetDataLocalStorage";
 import { handlerRemoveSavedObjectLocalStorage }             from "../controllers/helpers/handlerObjectLocalStorage";
 import { handlerRemoveValueLocalStorage }                   from "../controllers/helpers/handlerValueLocalStorage";
-import { useRemoveDataOperation }                           from "../controllers/hooks/customHookRemoveOperation";
+import {LocalStorageGetObject}                              from '../services/local_storage/request/request.interface.object'
+import {LocalStorageGetItem}                                from '../services/local_storage/request/request.interface.item'
+import {useLocalStorageGetData }                            from '../controllers/reducers/reducer.getLocalData';
 import { ButtonFullWidth }                                  from "../components/buttonFullWidth";
 import { OperationInterface, newOperation }                 from "../interfaces/view/production";
 import { ModalContainer }                                   from "../components/modalContainer";
@@ -20,8 +21,14 @@ export function ModalRegisterOcrCurrentOp({handlerClose, handlerNext, handlerBac
 }){
 
     const constexStorage = useMainContext();
-    const op = useLocalStorageGetData('currentOp');
-    const modulo = useLocalStorageGetData('currentModulo');
+
+    const op = useLocalStorageGetData(
+        new LocalStorageGetObject('currentOp')
+    );
+
+    const modulo = useLocalStorageGetData(
+        new LocalStorageGetItem('currentModulo')
+    );
 
     return <Modal handlerClick={handlerClose}>
                 <ModalContainer color='#C7CCEC'>
@@ -47,6 +54,7 @@ export function ModalRegisterOcrCurrentOp({handlerClose, handlerNext, handlerBac
                         handlerNext(e);
 
                         // en caso de que se quiera continuar con la misma información se carga la información necesaria a la vista
+                        if(op.state.data && modulo.state.data){
                         const operationData: OperationInterface={
                             ...newOperation,
                             inicioOperacion:    new Date().toLocaleTimeString(),
@@ -58,6 +66,7 @@ export function ModalRegisterOcrCurrentOp({handlerClose, handlerNext, handlerBac
                             registradoPor:      constexStorage?.currentUser?.documentoid||''
                         }
                         navigation.navigate('Production',operationData);
+                        }
                     }}/>
 
                     <ButtonFullWidth 

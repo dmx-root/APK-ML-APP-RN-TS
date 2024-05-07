@@ -1,7 +1,5 @@
-import { statusApi}                 from '../../interfaces/services/ml_api/apiResponse'
+import { statusApi }                from '../../interfaces/services/ml_api/apiResponse';
 import { useEffect, useReducer }    from 'react';
-import { handlerGetSavedObjectLocalStorage } from '../helpers/handlerObjectLocalStorage';
-import { items } from '../../interfaces/storage/items';
 
 const actionTypes = {
     FETCH_INIT: 'FETCH_INIT',
@@ -20,6 +18,17 @@ interface ApiAction {
     payload?: any;
 }
 
+interface ControllerResponseInterface {
+    code: number,
+    message: string,
+    data?: any
+    information?: string
+}
+
+interface LocalStorageInterface {
+    execute(): Promise<ControllerResponseInterface>
+}
+
 const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     switch (action.type) {
         case actionTypes.FETCH_INIT:
@@ -32,35 +41,36 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
             return state;
     }
 };
-  
-export const useLocalStorageGetData = (item:items): { state: ApiState } => {
-  
+
+export const useLocalStorageGetData: (localConnection: LocalStorageInterface) => {
+    state: ApiState;
+} = (localConnection: LocalStorageInterface) => {
+
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
         loading: false,
         error: null,
     });
 
-    async function fetchData():Promise<void>{
+    async function fetchData(): Promise<void> {
         try {
+
             dispatch({ type: actionTypes.FETCH_INIT });
 
-            const data=await handlerGetSavedObjectLocalStorage(item);
+            const response = await localConnection.execute();
 
-            if(data)dispatch({ type: actionTypes.FETCH_SUCCESS, payload: data})
-            
-            else dispatch({ type: actionTypes.FETCH_FAILURE, payload:null});
-            
+            response.code === 1 ?
+                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }) :
+                dispatch({ type: actionTypes.FETCH_FAILURE });
+
         } catch (error) {
-
-            dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error'});
-
+            dispatch({ type: actionTypes.FETCH_FAILURE, payload: 'Error' })
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchData();
-    },[]);
-  
+    }, []);
+
     return { state };
 };
