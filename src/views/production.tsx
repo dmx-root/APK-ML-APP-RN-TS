@@ -42,6 +42,7 @@ export function Production({route,navigation}:any){
     const [ modalValidateCancel,setModalValidateCancel] =  useState<boolean>(false);
     const [ modalEditProduction,setModalEditProduction] =  useState<boolean>(false);
 
+    console.log(opDetails.state.data[0].op, 'informacion de local storage')
     return<>
             <View style={productionStyle.productionContainer}>
                 <View style={productionStyle.body}>

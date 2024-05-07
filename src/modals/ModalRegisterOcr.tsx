@@ -10,26 +10,38 @@ import { Input }                            from "../components/input";
 import { Modal }                            from "../components/modal";
 import { ModalLoading }                     from "./modalLoading";
 import { ModalAlert }                       from "./modalAlert";
-import { Alert, FlatList, GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View }     from 'react-native';
 import { ModalListSelect }                  from "./modalListSelect";
 import { ModalItemList }                    from "../components/modalItemList";
 import { useState }                         from "react";
-import { ModuloRequestInterface} from '../services/ml_api/request/request.interface.modulo';
-import { useApiGetData } from '../controllers/reducers/reducer.fetchData';
-import { ROUTES } from "../endpoints/ml_api/ep.ml.api";
+import { ModuloRequestInterface}            from '../services/ml_api/request/request.interface.modulo';
+import { useApiGetData }                    from '../controllers/reducers/reducer.fetchData';
+import { ROUTES }                           from "../endpoints/ml_api/ep.ml.api";
+import { ObjectDispatchInterface }          from '../services/ml_api/dispatch/dispatch.interface.object'
+import { useLoadData }                      from "../controllers/reducers/reducer.dispatchData";
+import { LocalStorageSaveObject }           from '../services/local_storage/dispatch/dispatch.interface.saveObject'
+import { LocalStorageSaveItem }             from '../services/local_storage/dispatch/dispatch.interface.saveItem';
+import { Alert, FlatList, GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+const saveProcessData : (data : any, modulo: number) =>Promise<void> = async (data : any, modulo: number) => { 
+    const saveItem =new LocalStorageSaveItem('currentModulo',modulo.toString());
+    const saveData = new LocalStorageSaveObject('currentOp',data);
+    try {
+        await saveItem.execute();
+        await saveData.execute();
+    } catch (error) {
+        console.log(error)
+    }
+} 
 
 export function ModalRegisterOcr({handlerClick,navigation}:{
     handlerClick:(event:GestureResponderEvent)=>void,
     navigation:any,
 }){
-
     const contextStorage =                              useMainContext();
     const [ dataForm, setDataForm ] =                   useState<form|null>(null);
     const [ alertState, setAlertState ] =               useState<boolean>(false);
     const [ modalModulosState, setModalModulosState ] = useState(false);
     const [ modalTypeOpState, setModalTypeOpState ] =   useState(false);
-
-    const { state, setDataOperation } =                 useSetOperation();
 
     const modulos = useApiGetData(
         new ModuloRequestInterface({
@@ -37,13 +49,16 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
         })
     );
 
+    const { state, loadData } = useLoadData(
+        new ObjectDispatchInterface({
+            method:'post',
+            url:ROUTES.api_ml_production_op_open,
+        })
+    );
+
     return<>
         {
-         //ejecuacion de helper para manejar eventos auxiliares   
-        }
-        {
         state.loading?
-        
         <ModalLoading 
         label="Cargando registros" 
         handlerClick={()=>{}}/>:
@@ -111,13 +126,20 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                             registradoPor:      contextStorage?.currentUser?.documentoid||''
                         }
 
-                        setDataOperation(operationData.op,contextStorage?.currentUser?.documentoid||'',operationData,navigation,);
+                        loadData({
+                            op:operationData.op,
+                            usuario:contextStorage?.currentUser?.documentoid
+                        },
+                        async (response)=>{
+                            //Esta funcion se ejecuta si y solo si la consulta fue exitosa
+                            if(response)
+                            await saveProcessData(response.data,operationData.moduloId) // Guardamos los datos fundamentales para el proceso de manera local
+                            navigation.navigate('Production',operationData);
+                        });
                     }
                     else {
-                      
                         setAlertState(true);
                         Alert.alert('Campos vacios','Asegúrese de llenar todos los campos');
-                        
                     }
                 }}/>
 
@@ -141,6 +163,7 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
         </ModalListSelect>:
         <></>
         }
+
     </>
 }
 

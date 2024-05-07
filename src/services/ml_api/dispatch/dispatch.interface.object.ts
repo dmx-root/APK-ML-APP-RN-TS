@@ -23,7 +23,8 @@ interface ApiResponse {
 interface ControllerResponseInterface {
     statusCodeApi : number,
     statusMessageApi : string,
-    statusCode? : number
+    statusCode? : number,
+    data? : ObjectInterface
 }
 
 interface ApiConnectionInterface {
@@ -45,7 +46,8 @@ export class ObjectDispatchInterface extends ConectionInterfaceDispatch implemen
             const ocrProcessInterface: ControllerResponseInterface = {
                 statusCodeApi: response.apiCode,
                 statusMessageApi: response.apiMessage,
-                statusCode: status
+                statusCode: status,
+                data: response.data
             }
             return ocrProcessInterface;
 

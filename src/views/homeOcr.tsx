@@ -57,7 +57,7 @@ export function HomeOcr({navigation} : any){
         })
     );
 
-    console.log(load.state)
+    // console.log(load.state)
 
     // const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
 

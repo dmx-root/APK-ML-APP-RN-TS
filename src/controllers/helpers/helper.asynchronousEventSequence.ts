@@ -9,17 +9,18 @@ interface LocalStorageDispatchInterface {
     execute(): Promise<ControllerResponseInterface>
 }
 
-const asynchronousEventSequence : ( events : LocalStorageDispatchInterface[], callback : () => void) => void = ( events : LocalStorageDispatchInterface[], callback : () => void) =>{
-    async function load(){
+export const asynchronousEventSequence: (events: LocalStorageDispatchInterface[], callback: () => void) => void = (events: LocalStorageDispatchInterface[], callback: () => void) => {
+    async function load() {
         try {
             for (const funcion of events) {
                 await funcion.execute();
+                console.log('ejecucion exitosa')
             }
         } catch (error) {
-            // Si una función falla, lanzar una excepción para detener la ejecución
             throw new Error(`Error al ejecutar las funciones: ${error}`);
         }
     }
     load();
     callback();
+    console.log(events[0])
 }

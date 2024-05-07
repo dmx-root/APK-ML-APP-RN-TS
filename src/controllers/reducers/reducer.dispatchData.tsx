@@ -7,7 +7,7 @@ const actionTypes = {
 };
 
 interface ApiState {
-    data: any []| null;
+    data: any | null;
     loading: boolean;
     error: string | null;
 }
@@ -44,7 +44,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
     }
 };
   
-export const useLoadData : (ApiConnection : ApiConnectionInterface ) => { state: ApiState; loadData: (data?:ObjectInterface) => void } = (ApiConnection : ApiConnectionInterface)=>{
+export const useLoadData : (ApiConnection : ApiConnectionInterface ) => { state: ApiState; loadData: (data?:ObjectInterface, callback?:(response?:ObjectInterface)=>Promise<void>) => void } = (ApiConnection : ApiConnectionInterface)=>{
   
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
@@ -52,14 +52,18 @@ export const useLoadData : (ApiConnection : ApiConnectionInterface ) => { state:
         error: null,
     });
 
-    async function loadData(data?:ObjectInterface){
+    async function loadData(data?:ObjectInterface, callback?:(newResponse?:ObjectInterface)=>Promise<void>){
         try {
             dispatch({ type: actionTypes.FETCH_INIT });
             const response = await ApiConnection.executeQuery(data);
-
-            response.statusCodeApi===1?
-            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response}):
-            dispatch({ type: actionTypes.FETCH_FAILURE, payload: response});
+            if(response.statusCodeApi===1){
+                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response})
+                if(callback)
+                await callback(response);
+            }
+            else{
+                dispatch({ type: actionTypes.FETCH_FAILURE, payload: response});
+            }
         } catch (error) {
             console.log(error)
             dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error de proceso'});

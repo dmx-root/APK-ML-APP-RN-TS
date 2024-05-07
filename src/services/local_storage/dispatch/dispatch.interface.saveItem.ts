@@ -11,13 +11,13 @@ interface LocalStorageDispatchInterface {
     execute(data: object): Promise<ControllerResponseInterface>
 }
 
-export class LocalStorageSaveObject implements LocalStorageDispatchInterface {
+export class LocalStorageSaveItem implements LocalStorageDispatchInterface {
     
     private item;
     private data;
     
-    constructor(item : string, data: string){
-        this.item = item;
+    constructor(item : string | number, data: string){
+        this.item = item.toString();
         this.data = data;
     }
 

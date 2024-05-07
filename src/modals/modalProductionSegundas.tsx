@@ -27,11 +27,11 @@ export function ModalProductionSegundas({
     handlerNext:  (event:GestureResponderEvent)=>void,
     formData : form | null
 }){
-    const fetch = new DetailOPRequestInterface({
-        url: ROUTES.api_ml_production_op_details_get+(formData?.opType || '') + (formData?.op || '')
-    });
-
-    const { state } = useApiGetData(fetch);
+    const { state } = useApiGetData(
+        new DetailOPRequestInterface({
+            url: ROUTES.api_ml_production_op_details_get+(formData?.opType || '') + (formData?.op || '')
+        })
+    );
 
     const device =              useDeviceReader();
     const contextStorage =      useMainContext();
