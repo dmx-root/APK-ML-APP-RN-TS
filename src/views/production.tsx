@@ -42,7 +42,7 @@ export function Production({route,navigation}:any){
         })
     )
 
-    const contextStorage =  useMainContext();                   //información almacenada en el contexto de la información
+    const contextStorage =  useMainContext(); 
     
     const [ operationData, setOperationData ] = useState<OperationInterface>(operation);
     const [ detailOp, setDetailop ] =           useState<OpDetail | null>(null);

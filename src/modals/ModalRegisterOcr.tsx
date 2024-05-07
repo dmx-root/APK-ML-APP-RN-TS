@@ -76,7 +76,9 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                         <View style={inputStyle.labelContainer}>
                             <Text style={[inputStyle.content,{color:'#44329C'}]}>TIPO DE OP</Text>
                         </View>
-                        <TouchableOpacity style={inputStyle.inputContainer} onPress={()=>{setModalTypeOpState(true)}}>
+                        <TouchableOpacity 
+                        style={inputStyle.inputContainer}
+                        onPress={()=>{setModalTypeOpState(true)}}>
                             <Text style={inputStyle.input}>{dataForm?.['opType']?dataForm?.['opType']:''}</Text>
                         </TouchableOpacity>
                     </View>

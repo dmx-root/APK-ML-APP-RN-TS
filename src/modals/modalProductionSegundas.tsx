@@ -10,13 +10,14 @@ import { useMainContext }                                   from '../contexts/ma
 import { form }                                             from '../interfaces/view/login';
 import { ButtonFullWidth }                                  from '../components/buttonFullWidth';
 import { useDeviceReader }                                  from '../controllers/reducers/reducerDeviceReader';
-import { useLoadDataSegundasOperation }                     from '../controllers/hooks/customHookLoadSegundas';
 import { ModalLoading }                                     from './modalLoading';
 import { useEffect, useState }                              from 'react';
 import { GestureResponderEvent, StyleSheet, View, Text, TextInput,}    from 'react-native';
 import { DetailOPRequestInterface }                         from '../services/ml_api/request/request.interface.detailOp';
 import { useApiGetData }                                    from '../controllers/reducers/reducer.fetchData';
 import { ROUTES }                                           from '../endpoints/ml_api/ep.ml.api';
+import { useLoadData } from '../controllers/reducers/reducer.dispatchData';
+import { ObjectDispatchInterface } from '../services/ml_api/dispatch/dispatch.interface.object';
 
 export function ModalProductionSegundas({
     handlerClick, 
@@ -33,9 +34,15 @@ export function ModalProductionSegundas({
         })
     );
 
+    const loadData = useLoadData(
+        new ObjectDispatchInterface({
+            method:'post',
+            url: ROUTES.api_ml_production_ocr_segundas_post
+        })
+    )
+
     const device =              useDeviceReader();
     const contextStorage =      useMainContext();
-    const loadData =            useLoadDataSegundasOperation();
     
     const [ value, setValue] =  useState<string> ('');
 
@@ -46,13 +53,11 @@ export function ModalProductionSegundas({
         }
     },[value])
 
+    console.log(device.state.data)
+
     return <>
             {loadData.state.loading?
-            <ModalLoading label='Cargando información...' handlerClick={()=>{}}/>:
-            loadData.state.data?
-            {
-                
-            }:           
+            <ModalLoading label='Cargando información...' handlerClick={()=>{}}/>:           
             <Modal handlerClick={handlerClick}>
                 <ModalContainer color='#C7CCEC'>
                     <InfoLineDouble 
@@ -123,13 +128,20 @@ export function ModalProductionSegundas({
                     handlerClick={(e)=>{
                         handlerNext(e);
                         if(device.state.data)
-                            loadData.loadDataOperation(device.state.data)
+                            loadData.loadData({
+                                "elements":device.state.data
+                            },
+                            async (res) =>{
+                                console.log(res)
+                                handlerClick(e);
+                            })
                     }} 
                     label='Enviar...'/>
 
                 </ModalContainer>
             </Modal>
             }
+            
     
     </>
     

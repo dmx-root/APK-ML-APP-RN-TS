@@ -14,10 +14,9 @@ import { ModalOcrInfo }                                     from '../modals/moda
 import { InformationOcrEventsComponent }                    from '../components/informationOcrEventsComponent';
 import { InformationOcrCheckComponent }                     from '../components/informationOcrCheckComponent';
 import { useState }                                         from 'react';
-import { useApiGetModuloElementsAll }                       from '../controllers/hooks/customHookGetAllModuloFilter';
-import { MainEmployeerComponent }                           from '../components/mainEmployeerComponent';
-import { EmployeerProcessInterface } from '../interfaces/services/ml_api/moduloInterfaces'
-import { InformationOcrSegundaComponent } from '../components/informationOcrSegundaComponent'
+import { useApiGetData }                                    from '../controllers/reducers/reducer.fetchData';
+import { OcrRequestInterface }                              from '../services/ml_api/request/request.interface.ocr';
+import { ROUTES }                                           from '../endpoints/ml_api/ep.ml.api';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -30,13 +29,15 @@ export function InformationModulo({route,navigation}:any){
 
     const moduloData : ModuloProcessInterface = route.params;
 
-
-    const {state, itemSelector, setItemSelector} =  useApiGetModuloElementsAll(moduloData.moduloId.toString())
+    const {state} = useApiGetData(
+        new OcrRequestInterface({
+            url:ROUTES.api_ml_production_ocr_get_by_modulo+moduloData.moduloId.toString()
+        })
+    )
 
     const [modalInfoState, setModalInfoState ] =    useState<boolean>(false);
     const [ocrProcessData, setOcrProcessData ] =    useState<OcrProcessesInterface|null>(null);
-
-    // console.log(state.loading, state.data?.length)
+    
     return<>
     <View style={{height,width}}>
         <View style={StyleMainWindow.backRoots}></View>
@@ -56,14 +57,17 @@ export function InformationModulo({route,navigation}:any){
                 </View>
                 <View style={StyleMainWindow.fieldItemsSelect}>
                     <View style={StyleMainWindow.labels}>
-                        {filterItems.map(element=>
-                        <ItemResize
-                            key={element.id} 
-                            state={itemSelector === element.id} 
-                            handlerClick={()=>{
-                                setItemSelector(element.id)
-                            }} 
-                            label={element.label}/>)}
+                        {
+                        // filterItems.map(element=>
+                        // <ItemResize
+                        //     key={element.id} 
+                        //     state={itemSelector === element.id} 
+                        //     handlerClick={()=>{
+                        //         setItemSelector(element.id)
+                        //     }} 
+                        //     label={element.label}/>)
+                            
+                        }
                     </View>
                     <View style={StyleMainWindow.labelsIcon}>
                         <FilterIcon color='#AAA' size={30} width={2}/>
@@ -83,7 +87,7 @@ export function InformationModulo({route,navigation}:any){
                     <EmptyComponent label='EL módulo no cuenta con registros aún...'/>:
                     <>
                         {
-                        itemSelector===1 ?
+                        // itemSelector===1 ?
                         <FlatList 
                         renderItem={(item)=>
                             item.item.revisadoFecha?
@@ -110,12 +114,13 @@ export function InformationModulo({route,navigation}:any){
                                 setOcrProcessData(item.item);
                             }}/>
                         }
-                        data={state.data}/>:
-                        <FlatList 
-                        renderItem={(item)=>
-                            <MainEmployeerComponent data={item.item}/>
-                        }
                         data={state.data}/>
+                        // :
+                        // <FlatList 
+                        // renderItem={(item)=>
+                        //     <MainEmployeerComponent data={item.item}/>
+                        // }
+                        // data={state.data}/>
                         }
                     </>
                     }
