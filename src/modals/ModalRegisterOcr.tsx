@@ -123,8 +123,8 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                         },
                         async (response)=>{
                             //Esta funcion se ejecuta solo si la consulta fue exitosa
-                            if(response)
                             // Guardamos los datos fundamentales para el proceso de manera local    
+                            if(response)
                             await saveProcessData(filterData(response.data),operationData.moduloId) 
                             navigation.navigate('Production',operationData);
                         });

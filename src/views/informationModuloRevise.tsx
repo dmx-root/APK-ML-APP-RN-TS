@@ -16,6 +16,7 @@ import { useApiGetData }                                    from '../controllers
 import { OcrRequestInterface }                              from '../services/ml_api/request/request.interface.ocr'
 import { ROUTES }                                           from '../endpoints/ml_api/ep.ml.api';
 import { useState }                                         from 'react';
+import { ModalOcrInformationRevise } from '../modals/modalOcrInfoRevise';
 
 const {height,width}=Dimensions.get('screen');
 
@@ -128,7 +129,7 @@ export function InformationModuloRevise({route,navigation}:any){
     </View>
     {
         modalInfoState?
-        <ModalOcrInfo 
+        <ModalOcrInformationRevise 
         data={ocrProcessData} 
         handlerClick={()=>{
             setModalInfoState(false);

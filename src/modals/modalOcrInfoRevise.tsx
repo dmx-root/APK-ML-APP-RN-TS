@@ -13,6 +13,11 @@ import { ModalListSelect }  from "./modalListSelect";
 import { ModalItemList }    from "../components/modalItemList";
 import { useState }         from "react";
 import { ModalAlertEvents } from "./modalAlertEvents";
+import { ObjectDispatchInterface } from '../services/ml_api/dispatch/dispatch.interface.object';
+import { useLoadData } from '../controllers/reducers/reducer.dispatchData';
+import { ROUTES } from "../endpoints/ml_api/ep.ml.api";
+import { useMainContext } from "../contexts/mainContext";
+import { ModalLoading } from "./modalLoading";
 
 // Doc 
 // ESte componente tiene la finalidad de exponer la información de los registros 
@@ -22,11 +27,24 @@ export function ModalOcrInformationRevise({ data, handlerClick }: {
     data: OcrProcessesInterface | null,
     handlerClick: (event: GestureResponderEvent) => void
 }) {
+
+    const { state, loadData } = useLoadData(
+        new ObjectDispatchInterface({
+            method:'put',
+            url:ROUTES.api_ml_production_ocr_revise,
+        })
+    )
+
+    const contextStorage = useMainContext();
+
     const [modalEventState, setModalEventState] = useState<boolean>(false);
     const [modalItemsState, setModalItemsState] = useState<boolean>(false);
     const [modalAlertState, setModalAlertState] = useState<boolean>(false);
-
+    // console.log(state)
     return <>
+        
+        
+            
         <Modal handlerClick={handlerClick}>
             <ModalContainer color='#C7CCEC'>
                 <InfoLine title='TIPO DE REGISTRO' content={data?.categoriaEtiqueta || 'No def'} />
@@ -83,6 +101,7 @@ export function ModalOcrInformationRevise({ data, handlerClick }: {
 
             </ModalContainer>
         </Modal>
+        
         {
             modalEventState ?
                 <Modal handlerClick={() => { setModalEventState(false) }}>
@@ -102,19 +121,30 @@ export function ModalOcrInformationRevise({ data, handlerClick }: {
                 <></>
         }
         {
-            modalAlertState ?
+            modalAlertState && !state.loading?
                 <ModalAlertEvents
                     label='La acción será ejecutada'
                     content='¿Está seguro de establecer la revisión del elemento?'
                     textButtonCancel='Cancelar'
                     textButtonOk='Revisar'
-                    handlerOk={() => {
-
+                    handlerOk={(e) => {
+                        loadData({
+                            "ocrId": data?.ocrId,
+                            "operarioId": contextStorage?.currentUser?.documentoid
+                        },
+                        async () =>{
+                            handlerClick(e);
+                            setModalAlertState(false);
+                            console.log('elemento ha sido revisado')
+                        }
+                        )
                     }}
                     handlerCancel={() => {
                         setModalAlertState(false)
                     }}
                 /> :
+            state.loading?
+            <ModalLoading label="Cargando solicitud..." handlerClick={()=>{}}/>:
                 <></>
         }
     </>

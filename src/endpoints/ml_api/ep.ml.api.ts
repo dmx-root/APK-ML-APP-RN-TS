@@ -25,4 +25,5 @@ export const ROUTES = {
     api_ml_production_ocr_post :               `${uri}/api/ml/production/ocr/element/`,
     api_ml_production_ocr_segundas_post :      `${uri}/api/ml/production/ocr/segundas/`,
     api_ml_production_op_open :                `${uri}/api/ml/production/op/element/`,
+    api_ml_production_ocr_revise :             `${uri}/api/ml/production/ocr/element/`
 }

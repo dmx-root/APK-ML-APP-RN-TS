@@ -13,7 +13,6 @@ interface InfoInterface{
 
 export function InformationHeaderViewComponentRevise({data,info}:{data: ModuloProcessInterface,info:InfoInterface}){
     
-    console.log(info)
     return  <View style={headComponentStyle.container}>
                 <View style={headComponentStyle.iconContainer}>
                     <Image  style={headComponentStyle.img} source={require('../public/img/revise-img.png')}/>
