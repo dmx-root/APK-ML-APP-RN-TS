@@ -1,4 +1,3 @@
-import { useSetOperation }                  from "../controllers/hooks/customHookSetOperation";
 import { ButtonFullWidth }                  from "../components/buttonFullWidth";
 import { newOperation, OperationInterface } from "../interfaces/view/production";
 import { ModalContainer }                   from "../components/modalContainer";
@@ -21,17 +20,7 @@ import { useLoadData }                      from "../controllers/reducers/reduce
 import { LocalStorageSaveObject }           from '../services/local_storage/dispatch/dispatch.interface.saveObject'
 import { LocalStorageSaveItem }             from '../services/local_storage/dispatch/dispatch.interface.saveItem';
 import { Alert, FlatList, GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-const saveProcessData : (data : any, modulo: number) =>Promise<void> = async (data : any, modulo: number) => { 
-    const saveItem =new LocalStorageSaveItem('currentModulo',modulo.toString());
-    const saveData = new LocalStorageSaveObject('currentOp',data);
-    try {
-        await saveItem.execute();
-        await saveData.execute();
-    } catch (error) {
-        console.log(error)
-    }
-} 
+import { OpDetail } from '../interfaces/services/ml_api/detailOpInteface';
 
 export function ModalRegisterOcr({handlerClick,navigation}:{
     handlerClick:(event:GestureResponderEvent)=>void,
@@ -131,10 +120,12 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
                             usuario:contextStorage?.currentUser?.documentoid
                         },
                         async (response)=>{
-                            //Esta funcion se ejecuta si y solo si la consulta fue exitosa
+                            //Esta funcion se ejecuta solo si la consulta fue exitosa
                             if(response)
-                            await saveProcessData(response.data,operationData.moduloId) // Guardamos los datos fundamentales para el proceso de manera local
-                            navigation.navigate('Production',operationData);
+                            // Guardamos los datos fundamentales para el proceso de manera local    
+                            await saveProcessData(filterData(response.data),operationData.moduloId) 
+                            // navigation.navigate('Production',operationData);
+                            // console.log(filterData(response.data))
                         });
                     }
                     else {
@@ -166,7 +157,39 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
 
     </>
 }
+const saveProcessData : (data : any, modulo: number) =>Promise<void> = async (data : any, modulo: number) => { 
+    const saveItem =new LocalStorageSaveItem('currentModulo',modulo.toString());
+    const saveData = new LocalStorageSaveObject('currentOp',data);
+    try {
+        await saveItem.execute();
+        await saveData.execute();
+    } catch (error) {
+        console.log(error)
+    }
+} 
 
+const filterData : (data:any[]) => OpDetail[] = (data:any[])=>{
+    const dataClear: OpDetail[] = data.map((element: any) => {
+        return {
+            op:                             element.op_id,
+            referencia:                     element.referencia,
+            ocrCantidad:                    element.ocr_cantidad,
+            colorEtiqueta:                  element.clr_etiqueta,
+            colorCodigo:                    element.clr_id,
+            talla:                          element.tll_etiqueta,
+            tallaId:                        element.tll_id,
+            ean:                            element.ean,
+            opLotePlaneado:                 element.cantidad_planeada,
+            opLoteCompletado:               element.cantidad_ejecutada,
+            opLoteRestante:                 element.cantidad_restante,
+            opFechaAperturaProceso:         element.especificaciones_op_fecha_apertura_proceso,
+            opFechaCierreProceso:           element.especificaciones_op_fecha_cierre_proceso,
+            opFechaAperturaProcesoPlaneado: element.especificaciones_op_fecha_planeada_apertura_proceso,
+            opFechaCierreProcesoPlaneado:   element.especificaciones_op_fecha_planeada_cierre_proceso,
+        }
+    });
+    return dataClear;
+}
 
 const inputStyle=StyleSheet.create({
     container:{
