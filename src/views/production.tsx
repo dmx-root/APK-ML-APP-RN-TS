@@ -1,5 +1,4 @@
 import { OpDetail }                                                     from '../interfaces/services/ml_api/detailOpInteface';
-import { useLoadDataOperation }                                         from '../controllers/hooks/customHookLoadOperation';
 import { ModalProductionRegister }                                      from '../modals/modalProductionRegister';
 import { LocalStorageGetObject }                                        from '../services/local_storage/request/request.interface.object'
 import { LocalStorageRemoveItem }                                       from '../services/local_storage/dispatch/dispatch.interface.removeData'
@@ -22,7 +21,10 @@ import { OpIcon }                                                       from '..
 import { ModalLoading }                                                 from '../modals/modalLoading';
 import { View,StyleSheet, Dimensions, TouchableOpacity, Text, Alert }   from 'react-native';
 import { useState }                                                     from 'react';
-
+import { ObjectDispatchInterface }                                      from '../services/ml_api/dispatch/dispatch.interface.object'
+import { useLoadData }                                                  from '../controllers/reducers/reducer.dispatchData';
+import { ROUTES }                                                       from '../endpoints/ml_api/ep.ml.api';
+import { LocalStorageSaveObject }                                       from '../services/local_storage/dispatch/dispatch.interface.saveObject'
 
 const {height,width}=Dimensions.get('screen');
 export function Production({route,navigation}:any){
@@ -33,7 +35,13 @@ export function Production({route,navigation}:any){
         new LocalStorageGetObject('currentOp')
     );
 
-    const loadData =        useLoadDataOperation();             //reducer que nos permite cargar la información una vez se haya terminado la operación 
+    const loadData = useLoadData(
+        new ObjectDispatchInterface({
+            method:'post',
+            url: ROUTES.api_ml_production_ocr_post
+        })
+    )
+
     const contextStorage =  useMainContext();                   //información almacenada en el contexto de la información
     
     const [ operationData, setOperationData ] = useState<OperationInterface>(operation);
@@ -118,7 +126,7 @@ export function Production({route,navigation}:any){
                     </TouchableOpacity>
                 </View>
             </View>
-            {/* {
+            {
                 modalRegisterState?
                 <ModalProductionRegister 
                 opDetails={opDetails.state.data}
@@ -128,7 +136,7 @@ export function Production({route,navigation}:any){
                 handlerClick={()=>{setModalRegisterState(false)}}
                 />:
                 <></>
-            } */}
+            }
             {
                 opDetails.state.loading||loadData.state.loading?
                 <ModalLoading 
@@ -137,21 +145,26 @@ export function Production({route,navigation}:any){
                 <></>
             }
             {
-                // modalValidateLoad?
-                // <ModalAlertEvents
-                // label='La información será enviada'
-                // content='¿Está seguro de enviar la información?'
-                // textButtonCancel='Cancelar'
-                // textButtonOk='Enviar'
-                // handlerOk={()=>{
-                //     loadData.loadDataOperation(operationData,opDetails.state.data,navigation);
-                //     setModalValidateLoad(!modalValidateLoad)
-                // }}
-                // handlerCancel={()=>{
-                //     setModalValidateLoad(!modalValidateLoad)
-                // }}
-                // />:
-                // <></>
+                modalValidateLoad?
+                <ModalAlertEvents
+                label='La información será enviada'
+                content='¿Está seguro de enviar la información?'
+                textButtonCancel='Cancelar'
+                textButtonOk='Enviar'
+                handlerOk={()=>{
+                    loadData.loadData(
+                    overrideOperationData(operationData), 
+                    async ()=>{
+                        updateLocalStorageData(opDetails.state.data,operationData);
+                        navigation.navigate('HomeOcr')
+                    });
+                    setModalValidateLoad(!modalValidateLoad)
+                }}
+                handlerCancel={()=>{
+                    setModalValidateLoad(!modalValidateLoad)
+                }}
+                />:
+                <></>
             }
             {
                 modalValidateCancel?
@@ -162,7 +175,7 @@ export function Production({route,navigation}:any){
                 textButtonOk='Cancelar operación'
                 handlerOk={()=>{
                     // removeData.removeDataOperation(navigation);
-                    removeData(navigation);
+                    removeLocalStorageData(navigation);
                     setModalValidateCancel(!modalValidateCancel)
                 }}
                 handlerCancel={()=>{
@@ -175,7 +188,7 @@ export function Production({route,navigation}:any){
     
 }
 
-const removeData : (navigation?: any) => void = async (navigation?: any) =>{
+const removeLocalStorageData : (navigation?: any) => void = async (navigation?: any) =>{
     const moduloRemove = new LocalStorageRemoveItem('currentOp');
     const opRemove = new LocalStorageRemoveItem('currentModulo');
     try {
@@ -186,6 +199,41 @@ const removeData : (navigation?: any) => void = async (navigation?: any) =>{
         console.log(error)
     }
 } 
+
+const updateLocalStorageData : (detailsOp: OpDetail[], operation : OperationInterface) => Promise<void> =async (detailsOp: OpDetail[], operation : OperationInterface) =>{
+    const modifyValue = detailsOp.map(element=>{
+        if (element.ean===operation.ean){
+            const newCant= element.opLoteCompletado+operation.cantidad;
+            return {
+                ...element,
+                opLoteCompletado:newCant
+            }
+        }
+        return element;
+    });
+    const opSave = new LocalStorageSaveObject('currentOp', modifyValue);
+    try {
+        await opSave.execute();
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+const overrideOperationData : (operation : OperationInterface) =>any = (operation : OperationInterface) =>{
+    const newData ={
+        finalizacion:       new Date().toLocaleTimeString().slice(0,8).trim(),
+        inicio:             operation.inicioOperacion.toLocaleString().slice(0,8).trim(),
+        operarioId:         operation.registradoPor,
+        modulo:             operation.moduloId,
+        unidades:           operation.cantidad,
+        color:              operation.colorId,
+        talla:              operation.tallaId,
+        op:                 operation.op, 
+        anormalidad:        operation.eventualidadId 
+    }
+    return newData;
+}
 
 const productionStyle=StyleSheet.create({
     productionContainer:{

@@ -20,7 +20,7 @@ import { useLoadData }                      from "../controllers/reducers/reduce
 import { LocalStorageSaveObject }           from '../services/local_storage/dispatch/dispatch.interface.saveObject'
 import { LocalStorageSaveItem }             from '../services/local_storage/dispatch/dispatch.interface.saveItem';
 import { Alert, FlatList, GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { OpDetail } from '../interfaces/services/ml_api/detailOpInteface';
+import { OpDetail }                         from '../interfaces/services/ml_api/detailOpInteface';
 
 export function ModalRegisterOcr({handlerClick,navigation}:{
     handlerClick:(event:GestureResponderEvent)=>void,
