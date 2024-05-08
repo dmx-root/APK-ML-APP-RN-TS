@@ -31,3 +31,10 @@ export const newOperation: OperationInterface={
     categoria:0,
     fechaRegistro:''
 }
+
+export interface EventInterface {
+    ocrId:number,
+    cantidadModificada:number,
+    descripcion: string,
+    operarioId:string
+}

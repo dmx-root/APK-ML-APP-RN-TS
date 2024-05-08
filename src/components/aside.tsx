@@ -8,6 +8,7 @@ import { ImageBackground, GestureResponderEvent, FlatList } from 'react-native'
 import { StyleSheet, Dimensions }                           from 'react-native'
 import { SesionOperationsRequestInterface }                 from '../services/ml_api/request/request.interface.sesion';
 import { useApiGetData } from '../controllers/reducers/reducer.fetchData';
+import { useApiGetConcurrentData } from '../controllers/reducers/reducer.fetchConcurrentData'
 import { ROUTES } from '../endpoints/ml_api/ep.ml.api';
 // Doc
 // Aside es un tipo de modal que permite desplegar todas las operaciones del aplicativo (Para cada sesión)
@@ -32,12 +33,14 @@ export function Aside({ navigation, handlerClick, setActions }: {
         navigation,
         setStateActions: setActions
     });
-
-    const { state } = useApiGetData(
-        new SesionOperationsRequestInterface({
+    
+    const { state} = useApiGetConcurrentData({
+        apiConnection: new SesionOperationsRequestInterface({
             url: ROUTES.api_ml_sesion_mobile_get_operations+contextStorage?.currentUser?.rolId.toString(),
-        })
-    );  
+        }),
+        stateData:contextStorage?.concurrentOperations||[],
+        setState: contextStorage?.setConcurrentOperations!
+    })
 
     return <TouchableWithoutFeedback onPress={handlerClick}>
         <View style={StyleAside.courtain}>

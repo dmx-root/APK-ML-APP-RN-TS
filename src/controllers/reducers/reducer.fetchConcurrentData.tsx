@@ -31,17 +31,20 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
             return state;
     }
 };
-
-export const useApiGetData: (apiConnection: ApiConnectionInterface) => {
+        
+export const useApiGetConcurrentData: ({}:{apiConnection: ApiConnectionInterface, setState:React.Dispatch<any>,stateData: any[]}) => {
     state: ApiState;
-} = (apiConnection: ApiConnectionInterface) => {
+} = ({apiConnection,setState,stateData}:{
+    apiConnection: ApiConnectionInterface, 
+    setState: React.Dispatch<any>,
+    stateData: any[]
+}) => {
 
     const [state, dispatch] = useReducer(dataReducer, {
         data: null,
         loading: false,
         error: null,
     });
-
 
     async function fetchData(): Promise<void> {
         try {
@@ -50,11 +53,16 @@ export const useApiGetData: (apiConnection: ApiConnectionInterface) => {
 
             const response = await apiConnection.executeQuery();
 
-            response?.statusCodeApi === 1 ?
-                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }) :
-                response?.statusCodeApi === 0 ?
-                    dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null }) :
-                    dispatch({ type: actionTypes.FETCH_FAILURE });
+            if(response?.statusCodeApi === 1 ){
+                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }) 
+                setState(response.data);
+            }
+            else if (response?.statusCodeApi === 0){ 
+                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null })
+            } 
+            else{
+                dispatch({ type: actionTypes.FETCH_FAILURE })   
+            }
 
         } catch (error) {
             dispatch({ type: actionTypes.FETCH_FAILURE, payload: 'Error' })
@@ -62,7 +70,9 @@ export const useApiGetData: (apiConnection: ApiConnectionInterface) => {
     };
 
     useEffect(() => {
-        fetchData();
+        stateData.length===0?
+        fetchData():
+        dispatch({ type: actionTypes.FETCH_SUCCESS, payload: stateData }) 
     }, []);
 
     return { state };

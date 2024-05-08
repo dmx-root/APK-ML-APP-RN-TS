@@ -5,13 +5,14 @@ import { InfoIcon }                         from "../public/icons/infoIcon";
 import { FieldInfo }                        from "../components/fieldInfo";
 import { Input }                            from "../components/input";
 import { Modal }                            from "../components/modal";
+import { useState }                         from "react";
+import { ModalListSelect }                  from "./modalListSelect";
+import { ModalItemList }                    from "../components/modalItemList";
+import { ModuloRequestInterface }           from '../services/ml_api/request/request.interface.modulo';
+import { ROUTES }                           from "../endpoints/ml_api/ep.ml.api";
+import { useApiGetConcurrentData }          from "../controllers/reducers/reducer.fetchConcurrentData";
+import { useMainContext }                   from "../contexts/mainContext";
 import { FlatList, GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View }            from 'react-native';
-import { useState } from "react";
-import { ModalListSelect } from "./modalListSelect";
-import { ModalItemList } from "../components/modalItemList";
-import { ModuloRequestInterface } from '../services/ml_api/request/request.interface.modulo';
-import { useApiGetData } from '../controllers/reducers/reducer.fetchData';
-import { ROUTES } from "../endpoints/ml_api/ep.ml.api";
 
 export function ModalRegisterOcrSegundas({handlerClick, handlerNext, setDataForm, dataForm }:{
     handlerClick: (event:GestureResponderEvent)=>void,
@@ -20,12 +21,15 @@ export function ModalRegisterOcrSegundas({handlerClick, handlerNext, setDataForm
     dataForm: form | null
 }){
 
-    const {state} = useApiGetData(
-        new ModuloRequestInterface({
+    const contextStorage = useMainContext();
+    const {state} = useApiGetConcurrentData({
+        apiConnection: new ModuloRequestInterface({
             url: ROUTES.api_ml_production_modulo_get_all
-        })
-    )
-
+        }),
+        stateData: contextStorage?.concurrentModulos||[],
+        setState: contextStorage?.setConcurrentModulos!
+    })
+ 
     const [ modalModulosState, setModalModulosState ] = useState(false);
     const [ modalTypeOpState, setModalTypeOpState ] =   useState(false);
     
@@ -44,26 +48,6 @@ export function ModalRegisterOcrSegundas({handlerClick, handlerNext, setDataForm
                 placeholder="X-X-X-X" 
                 value={dataForm?.['op']?dataForm?.['op']:''}/>
 
-                {/* <Input 
-                color='#44329C' 
-                label='TIPO OP' 
-                handlerInput={(text)=>{
-                    setDataForm({...dataForm,opType:text.toUpperCase()})
-                }} 
-                textType='default' 
-                placeholder="MOP/MOB" 
-                value={dataForm?.['opType']?dataForm?.['opType']:''}/>
-
-                <Input 
-                color='#44329C' 
-                label='MODULO' 
-                handlerInput={(text)=>{
-                    setDataForm({...dataForm,modulo:text})
-                }} 
-                textType="numeric" 
-                placeholder="##" 
-                value={dataForm?.['modulo']?dataForm?.['modulo']:''}/> */}
-                
                 <View style={inputStyle.container}>
                     <View style={inputStyle.frame}>
                         <View style={inputStyle.labelContainer}>

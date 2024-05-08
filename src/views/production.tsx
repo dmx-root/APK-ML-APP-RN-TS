@@ -3,7 +3,7 @@ import { ModalProductionRegister }                                      from '..
 import { LocalStorageGetObject }                                        from '../services/local_storage/request/request.interface.object'
 import { LocalStorageRemoveItem }                                       from '../services/local_storage/dispatch/dispatch.interface.removeData'
 import { useLocalStorageGetData }                                       from '../controllers/reducers/reducer.getLocalData';
-import { OperationInterface }                                           from '../interfaces/view/production';
+import { OperationInterface, EventInterface }                           from '../interfaces/view/production';
 import { InfoLineButton2 }                                              from '../components/InfoLineButton2';
 import { InfoLineButton }                                               from '../components/InfoLineButton';
 import { InfoLineDouble }                                               from '../components/infoLineDouble';
@@ -19,22 +19,31 @@ import { FieldInfo }                                                    from '..
 import { InfoLine }                                                     from '../components/infoLine';
 import { OpIcon }                                                       from '../public/icons/opIcon';
 import { ModalLoading }                                                 from '../modals/modalLoading';
-import { View,StyleSheet, Dimensions, TouchableOpacity, Text, Alert, FlatList }   from 'react-native';
-import { useState }                                                     from 'react';
 import { ObjectDispatchInterface }                                      from '../services/ml_api/dispatch/dispatch.interface.object'
 import { useLoadData }                                                  from '../controllers/reducers/reducer.dispatchData';
 import { ROUTES }                                                       from '../endpoints/ml_api/ep.ml.api';
 import { LocalStorageSaveObject }                                       from '../services/local_storage/dispatch/dispatch.interface.saveObject'
-import { ModalListSelect } from '../modals/modalListSelect';
-import { ModalItemList } from '../components/modalItemList';
-import { SesionAnomalyRequestInterface } from '../services/ml_api/request/request.interface.sesion';
-import { useApiGetData } from '../controllers/reducers/reducer.fetchData';
+import { ModalListSelect }                                              from '../modals/modalListSelect';
+import { ModalItemList }                                                from '../components/modalItemList';
+import { SesionAnomalyRequestInterface }                                from '../services/ml_api/request/request.interface.sesion';
+import { useState }                                                     from 'react';
+import { View,StyleSheet, Dimensions, TouchableOpacity, Text, Alert, FlatList }   from 'react-native';
+import { useApiGetConcurrentData } from '../controllers/reducers/reducer.fetchConcurrentData'
 
 const {height,width}=Dimensions.get('screen');
 export function Production({route,navigation}:any){
     
     const operation : OperationInterface = route.params;
+    const contextStorage =  useMainContext(); 
     
+    const anomalyFetch = useApiGetConcurrentData({
+        apiConnection:new SesionAnomalyRequestInterface({
+            url: ROUTES.api_ml_sesion_mobile_get_anomaly
+        }),
+        stateData: contextStorage?.concurrentAnomalys||[],
+        setState: contextStorage?.setConcurrentAnomalys!
+    });
+
     const opDetails = useLocalStorageGetData(
         new LocalStorageGetObject('currentOp')
     );
@@ -46,23 +55,22 @@ export function Production({route,navigation}:any){
         })
     )
 
-    const anomalyFetch = useApiGetData(
-        new SesionAnomalyRequestInterface({
-            url: ROUTES.api_ml_sesion_mobile_get_anomaly
+    const loadEvents = useLoadData(
+        new ObjectDispatchInterface({
+            method:'post',
+            url: ROUTES.api_ml_production_ocr_post_events
         })
     )
-
-    const contextStorage =  useMainContext(); 
-    
+ 
     const [ operationData, setOperationData ] = useState<OperationInterface>(operation);
     const [ detailOp, setDetailop ] =           useState<OpDetail | null>(null);
+    const [ eventList, setEventList ] =         useState<EventInterface[]>([])
 
     const [ modalRegisterState,setModalRegisterState ] =   useState<boolean>(false);
     const [ modalValidateLoad,setModalValidateLoad] =      useState<boolean>(false);
     const [ modalValidateCancel,setModalValidateCancel] =  useState<boolean>(false);
     const [ modalEditProduction,setModalEditProduction] =  useState<boolean>(false);
     const [ modalItemsState, setModalItemsState ] =        useState<boolean>(false);
-
 
     return<>
             <View style={productionStyle.productionContainer}>
@@ -103,7 +111,13 @@ export function Production({route,navigation}:any){
                                 <InfoLineButton colorBtn='#44329C' fontBtn='#FFF' labelBtn='Editar...' title='Cantidad Registrada' content={operationData?.cantidad.toString()||'No asignado aún'}  
                                 handlerClick={()=>{
                                     if(operationData?.cantidad){
-                                        console.log(operationData?.cantidad)
+                                        const newEvent :EventInterface ={
+                                            ocrId:0,
+                                            descripcion:'El operario editó la información del registro',
+                                            cantidadModificada: operationData.cantidad,
+                                            operarioId: contextStorage?.currentUser?.documentoid||''
+                                        }
+                                        setEventList([...eventList,newEvent]);
                                     }else{
                                         Alert.alert('!Acción no permitida!','No se puede editar el campo si aún no se ha generado registros')
                                     }
@@ -166,9 +180,20 @@ export function Production({route,navigation}:any){
                 handlerOk={()=>{
                     loadData.loadData(
                     overrideOperationData(operationData), 
-                    async ()=>{
-                        updateLocalStorageData(opDetails.state.data,operationData);
-                        navigation.navigate('HomeOcr')
+                    async (response)=>{
+                        if(eventList.length!==0 && response){
+                            loadEvents.loadData(
+                                {"elements":overrideEventList(eventList,response.data[0].ocr_id)},
+                                async (response2)=>{
+                                    console.log(response2)
+                                    navigation.navigate('HomeOcr')
+                                }
+                            )
+                        }
+                        else{
+                            navigation.navigate('HomeOcr')
+                        }
+                        // updateLocalStorageData(opDetails.state.data,operationData);
                     });
                     setModalValidateLoad(!modalValidateLoad)
                 }}
@@ -261,6 +286,17 @@ const overrideOperationData : (operation : OperationInterface) =>any = (operatio
         anormalidad:        operation.eventualidadId 
     }
     return newData;
+}
+
+const overrideEventList : (list : EventInterface[], ocrId: number) => EventInterface[] = (list:EventInterface[],ocrId: number)=>{
+    const overrideEvents : EventInterface[] = list.map(element=>{
+        const newObj: EventInterface = {
+            ...element,
+            ocrId
+        }
+        return newObj;
+    })
+    return overrideEvents;
 }
 
 const productionStyle=StyleSheet.create({

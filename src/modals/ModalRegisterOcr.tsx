@@ -21,6 +21,7 @@ import { LocalStorageSaveObject }           from '../services/local_storage/disp
 import { LocalStorageSaveItem }             from '../services/local_storage/dispatch/dispatch.interface.saveItem';
 import { Alert, FlatList, GestureResponderEvent, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { OpDetail }                         from '../interfaces/services/ml_api/detailOpInteface';
+import { useApiGetConcurrentData } from '../controllers/reducers/reducer.fetchConcurrentData';
 
 export function ModalRegisterOcr({handlerClick,navigation}:{
     handlerClick:(event:GestureResponderEvent)=>void,
@@ -32,11 +33,13 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
     const [ modalModulosState, setModalModulosState ] = useState(false);
     const [ modalTypeOpState, setModalTypeOpState ] =   useState(false);
 
-    const modulos = useApiGetData(
-        new ModuloRequestInterface({
+    const modulos = useApiGetConcurrentData({
+        apiConnection: new ModuloRequestInterface({
             url: ROUTES.api_ml_production_modulo_get_all
-        })
-    );
+        }),
+        stateData: contextStorage?.concurrentModulos||[],
+        setState: contextStorage?.setConcurrentModulos!
+    })
 
     const { state, loadData } = useLoadData(
         new ObjectDispatchInterface({
