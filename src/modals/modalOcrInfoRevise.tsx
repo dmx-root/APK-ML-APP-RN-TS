@@ -14,10 +14,10 @@ import { ModalItemList }    from "../components/modalItemList";
 import { useState }         from "react";
 import { ModalAlertEvents } from "./modalAlertEvents";
 import { ObjectDispatchInterface } from '../services/ml_api/dispatch/dispatch.interface.object';
-import { useLoadData } from '../controllers/reducers/reducer.dispatchData';
-import { ROUTES } from "../endpoints/ml_api/ep.ml.api";
-import { useMainContext } from "../contexts/mainContext";
-import { ModalLoading } from "./modalLoading";
+import { useLoadData }      from '../controllers/reducers/reducer.dispatchData';
+import { ROUTES }           from "../endpoints/ml_api/ep.ml.api";
+import { useMainContext }   from "../contexts/mainContext";
+import { ModalLoading }     from "./modalLoading";
 
 // Doc 
 // ESte componente tiene la finalidad de exponer la información de los registros 
@@ -143,9 +143,9 @@ export function ModalOcrInformationRevise({ data, handlerClick }: {
                         setModalAlertState(false)
                     }}
                 /> :
-            state.loading?
-            <ModalLoading label="Cargando solicitud..." handlerClick={()=>{}}/>:
-                <></>
+                state.loading?
+                    <ModalLoading label="Cargando solicitud..." handlerClick={()=>{}}/>:
+                    <></>
         }
     </>
 

@@ -19,12 +19,16 @@ import { FieldInfo }                                                    from '..
 import { InfoLine }                                                     from '../components/infoLine';
 import { OpIcon }                                                       from '../public/icons/opIcon';
 import { ModalLoading }                                                 from '../modals/modalLoading';
-import { View,StyleSheet, Dimensions, TouchableOpacity, Text, Alert }   from 'react-native';
+import { View,StyleSheet, Dimensions, TouchableOpacity, Text, Alert, FlatList }   from 'react-native';
 import { useState }                                                     from 'react';
 import { ObjectDispatchInterface }                                      from '../services/ml_api/dispatch/dispatch.interface.object'
 import { useLoadData }                                                  from '../controllers/reducers/reducer.dispatchData';
 import { ROUTES }                                                       from '../endpoints/ml_api/ep.ml.api';
 import { LocalStorageSaveObject }                                       from '../services/local_storage/dispatch/dispatch.interface.saveObject'
+import { ModalListSelect } from '../modals/modalListSelect';
+import { ModalItemList } from '../components/modalItemList';
+import { SesionAnomalyRequestInterface } from '../services/ml_api/request/request.interface.sesion';
+import { useApiGetData } from '../controllers/reducers/reducer.fetchData';
 
 const {height,width}=Dimensions.get('screen');
 export function Production({route,navigation}:any){
@@ -42,6 +46,12 @@ export function Production({route,navigation}:any){
         })
     )
 
+    const anomalyFetch = useApiGetData(
+        new SesionAnomalyRequestInterface({
+            url: ROUTES.api_ml_sesion_mobile_get_anomaly
+        })
+    )
+
     const contextStorage =  useMainContext(); 
     
     const [ operationData, setOperationData ] = useState<OperationInterface>(operation);
@@ -51,6 +61,8 @@ export function Production({route,navigation}:any){
     const [ modalValidateLoad,setModalValidateLoad] =      useState<boolean>(false);
     const [ modalValidateCancel,setModalValidateCancel] =  useState<boolean>(false);
     const [ modalEditProduction,setModalEditProduction] =  useState<boolean>(false);
+    const [ modalItemsState, setModalItemsState ] =        useState<boolean>(false);
+
 
     return<>
             <View style={productionStyle.productionContainer}>
@@ -103,7 +115,7 @@ export function Production({route,navigation}:any){
                                 }}/>
                                 <InfoLineButton2 colorBtn='#44329C' fontBtn='#FFF' labelBtn='Editar...' title='Agregar parada Inmediata' 
                                 handlerClick={()=>{
-
+                                    setModalItemsState(true);
                                 }}/>
                             </ViewContainer>
                         </>
@@ -182,6 +194,22 @@ export function Production({route,navigation}:any){
                     setModalValidateCancel(!modalValidateCancel)
                 }}
                 />:
+                <></>
+            }
+            {
+                modalItemsState ?
+                <ModalListSelect handlerClose={() => { setModalItemsState(false) }}>
+                    
+                    <FlatList renderItem={(item)=>
+                        <ModalItemList 
+                        handlerClick={()=>{
+                            setModalItemsState(false)
+                            setOperationData({...operationData,eventualidadId:item.item.codigoAnormalidad})
+                        }} 
+                        label={item.item.etiqueta} 
+                        position='center'/>
+                    } data={anomalyFetch.state.data}/>
+                </ModalListSelect> :
                 <></>
             }
     </>
