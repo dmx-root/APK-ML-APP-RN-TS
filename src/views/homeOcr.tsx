@@ -1,7 +1,4 @@
-import { MAIN_OCR }                                                     from '../controllers/helpers/hanlderQueryFilteredObject';
 import { handlerRemoveSavedObjectLocalStorage }                         from '../controllers/helpers/handlerObjectLocalStorage';
-import { OcrRequestInterface }                                          from '../services/ml_api/request/request.interface.ocr';
-import {useApiGetDataFilter }                                           from '../controllers/reducers/reducer.fetchDataFilter';
 import { OcrProcessesInterface }                                        from '../interfaces/services/ml_api/ocrInterfaces';
 import { MainOcrSegundasComponent }                                     from '../components/mainOcrSegundasComponent';
 import { MainOcrAnomalyComponent }                                      from '../components/mainOcrAnomalyComponent';
@@ -19,10 +16,6 @@ import { ModalSegundas }                                                from '..
 import { useMainContext }                                               from '../contexts/mainContext';
 import { ModalOcrInfo }                                                 from '../modals/modalOcrInfo';
 import { Aside }                                                        from '../components/aside';
-import { useFilterData }                                                from '../controllers/hooks/customHookFilter';
-import { useLoadData }                                                  from '../controllers/reducers/reducer.dispatchData';
-import { ObjectDispatchInterface }                                      from '../services/ml_api/dispatch/dispatch.interface.object'
-import { ROUTES }                                                       from '../endpoints/ml_api/ep.ml.api';
 import { LocalStorageGetObject }                                        from '../services/local_storage/request/request.interface.object';
 import { useLocalStorageGetData }                                       from '../controllers/reducers/reducer.getLocalData'
 import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList, TextInput}   from 'react-native';
@@ -45,7 +38,7 @@ export function HomeOcr({navigation} : any){
     const currentOp = useLocalStorageGetData(new LocalStorageGetObject('currentOp'))
 
     const { state, itemSelector, setItemSelector } = contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
-    // console.log(state)
+    // console.log(currentOp)
     return<>
     <View style={{height,width}}>
         <View style={StyleMainWindow.backRoots}></View>

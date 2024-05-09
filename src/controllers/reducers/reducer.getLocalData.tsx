@@ -58,7 +58,7 @@ export const useLocalStorageGetData: (localConnection: LocalStorageInterface) =>
             dispatch({ type: actionTypes.FETCH_INIT });
 
             const response = await localConnection.execute();
-
+            // console.log(response)
             response.code === 1 ?
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }) :
                 dispatch({ type: actionTypes.FETCH_FAILURE });
