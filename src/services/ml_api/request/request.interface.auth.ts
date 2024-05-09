@@ -79,7 +79,7 @@ export class AuthRequestInterface extends ConectionRequestInterface implements A
             const err = handlerAxiosError(error);
 
             const apiResponse: ControllerResponseInterface = {
-                statusCodeApi: -1,
+                statusCodeApi: err.statusCodeApi,
                 statusMessageApi: err.statusMessageApi,
                 statusCode: err.statusCode
             }
@@ -123,8 +123,14 @@ export class AuthRequestInterface extends ConectionRequestInterface implements A
             return authInterface;
             
         } catch (error) {
-            const response = handlerAxiosError(error);
-            return response;
+            const err = handlerAxiosError(error);
+
+            const apiResponse: ControllerResponseInterface = {
+                statusCodeApi: err.statusCodeApi,
+                statusMessageApi: err.statusMessageApi,
+                statusCode: err.statusCode
+            }
+            return apiResponse;
         }
 
     }

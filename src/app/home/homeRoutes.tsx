@@ -7,7 +7,6 @@ import { ModuloRequestInterface }    from '../../services/ml_api/request/request
 import { ROUTES }                    from '../../endpoints/ml_api/ep.ml.api';
 import { useApiGetData }             from '../../controllers/reducers/reducer.fetchData';
 import { OcrRequestInterface }       from '../../services/ml_api/request/request.interface.ocr';
-import { useApiGetOpByUser }         from '../../controllers/hooks/customHookGetOpByUser';
 import { EmployeerIcon }             from '../../public/icons/employeerIcon';
 import { Item }                      from '../../interfaces/app/homeRoutes';
 import { ModuloIcon }                from '../../public/icons/moduloIcon';
@@ -45,11 +44,11 @@ export const ADMIN_HOME_ROUTES: Item[] = [
         },
 
         mainFetch: (documentId?: string) => {
-            const ListParametersFetch = useMainOcrParametersFetch();
-            return useApiGetDataFilter({
-                queryChain:ListParametersFetch,
-                ApiConnection: new OcrRequestInterface({})
-            });
+            return useApiGetData(
+                new OcrRequestInterface({
+                    url:ROUTES.api_ml_production_ocr_get_all
+                })
+            );
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -265,7 +264,7 @@ export const PLANTA_HOME_ROUTES: Item[] = [
                 ApiConnection: new OpRequestInterface({})
             });
         },
-        filterList: FILTER_ITEMS_OCR_HOME
+        filterList: FILTER_ITEMS_OP_HOME
     },
     {
         id: 3,
@@ -282,7 +281,7 @@ export const PLANTA_HOME_ROUTES: Item[] = [
                 ApiConnection: new ModuloRequestInterface({})
             });
         },
-        filterList: FILTER_ITEMS_OCR_HOME
+        filterList: FILTER_ITEMS_MODULOS_HOME
     }
 ];
 
@@ -319,7 +318,7 @@ export const FACTURACION_HOME_ROUTES: Item[] = [
             
             return useApiGetData(fetch);
         },
-        filterList: FILTER_ITEMS_OCR_HOME
+        filterList: FILTER_ITEMS_OP_HOME
     },
     {
         id: 3,
@@ -373,7 +372,7 @@ export const GUEST_HOME_ROUTES: Item[] = [
             
             return useApiGetData(fetch);
         },
-        filterList: FILTER_ITEMS_OCR_HOME
+        filterList: FILTER_ITEMS_OP_HOME
     },
     {
         id: 3,
@@ -390,6 +389,6 @@ export const GUEST_HOME_ROUTES: Item[] = [
 
             return useApiGetData(fetch);
         },
-        filterList: FILTER_ITEMS_OCR_HOME
+        filterList: FILTER_ITEMS_MODULOS_HOME
     }
 ]; 

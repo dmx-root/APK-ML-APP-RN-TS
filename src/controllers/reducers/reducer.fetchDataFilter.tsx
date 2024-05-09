@@ -13,6 +13,7 @@ interface ApiState {
     data: any[] | null;
     loading: boolean;
     error: statusApi | null;
+    message: string;
 }
 
 interface ApiAction {
@@ -30,7 +31,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
         case actionTypes.FETCH_INIT:
             return { ...state, loading: true, error: null };
         case actionTypes.FETCH_SUCCESS:
-            return { ...state, loading: false, data: action.payload };
+            return { ...state, loading: false, data: action.payload,};
         case actionTypes.FETCH_FAILURE:
             return { ...state, loading: false, error: action.payload };
         default:
@@ -41,7 +42,6 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
 const handlerQueryOCr: (queryObjectList: QueryObjectInterface[], ApiConnection: ApiConnectionInterface) => ApiConnectionInterface[] = (queryObjectList: QueryObjectInterface[], ApiConnection: ApiConnectionInterface) => {
     const fetchInstance = queryObjectList.map(element => {
         const newObj = Object.create(ApiConnection);
-        // console.log(ApiConnection._params)
         newObj._headers = element.headers;
         newObj._params = element.params;
         newObj._url = element.url;
@@ -60,6 +60,7 @@ export const useApiGetDataFilter: ({ queryChain, ApiConnection }: { queryChain: 
         data: null,
         loading: false,
         error: null,
+        message:''
     });
 
     const [itemSelector, setItemSelector] = useState<number>(0);
@@ -69,12 +70,11 @@ export const useApiGetDataFilter: ({ queryChain, ApiConnection }: { queryChain: 
 
             dispatch({ type: actionTypes.FETCH_INIT });
             const response = await apiConnection.executeQuery();
-
             response?.statusCodeApi === 1 ?
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }) :
                     response?.statusCodeApi === 0 ?
                         dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null }) :
-                            dispatch({ type: actionTypes.FETCH_FAILURE });
+                            dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error de consulta' });
 
         } catch (error) {
             dispatch({ type: actionTypes.FETCH_FAILURE, payload: 'Error' })

@@ -103,8 +103,13 @@ export class SesionOperationsRequestInterface extends ConectionRequestInterface 
                 return ocrProcessInterface;
            
         } catch (error) {
-            const response = handlerAxiosError(error);
-            return response;
+            const err = handlerAxiosError(error);
+            const response : ControllerResponseInterface = {
+                statusCodeApi : err.statusCodeApi,
+                statusMessageApi: err.statusMessageApi,
+                statusCode : err.statusCode
+            }
+            return response
         }
     }
 }

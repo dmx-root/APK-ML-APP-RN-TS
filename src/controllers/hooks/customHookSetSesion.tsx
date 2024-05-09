@@ -50,8 +50,6 @@ export const useHandlerSesion = (): { state: sesionState; setDataAuth: (document
 
             const data = await handlerGetAuth(documentId, password);
 
-            console.log(data)
-
             if(data.statusCodeApi===1){
 
                 const response=setSesion(data.data[0]);

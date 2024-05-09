@@ -26,17 +26,17 @@ export function HomeOp({navigation}:any){
     const [ newRegister,setNewRegister ] =                  useState<boolean>(false);
     const [ modalSegundas,setModalSegundas ] =              useState<boolean>(false);
 
-    // const { state } = contextStorage?.account?.home?.[1].mainFetch(contextStorage.currentUser?.documentoid)
+    const { state, setItemSelector, itemSelector } = contextStorage?.account?.home?.[1].mainFetch(contextStorage.currentUser?.documentoid)
 
     const [ detailOpListState, setDetailOpListState ]   = useState <boolean>(false);
     const [ opId, setopId ]                             = useState <string | null>(null);
 
-    const { state, setItemSelector, itemSelector } = useApiGetDataFilter({
-        queryChain: MAIN_OP,
-        ApiConnection: new OpRequestInterface({
-            url:''
-        })
-    });
+    // const { state, setItemSelector, itemSelector } = useApiGetDataFilter({
+    //     queryChain: MAIN_OP,
+    //     ApiConnection: new OpRequestInterface({
+    //         url:''
+    //     })
+    // });
 
     return<>
      <View style={{height,width}}>

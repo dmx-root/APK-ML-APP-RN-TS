@@ -44,17 +44,8 @@ export function HomeOcr({navigation} : any){
     
     const currentOp = useLocalStorageGetData(new LocalStorageGetObject('currentOp'))
 
-    // const { state, itemSelector, setItemSelector } = useApiGetDataFilter({
-    //     queryChain:MAIN_OCR,
-    //     ApiConnection: new OcrRequestInterface({
-    //         url:''
-    //     })
-    // });
-
-
-    
     const { state, itemSelector, setItemSelector } = contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
-
+    // console.log(state)
     return<>
     <View style={{height,width}}>
         <View style={StyleMainWindow.backRoots}></View>

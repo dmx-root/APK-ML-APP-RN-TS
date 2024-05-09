@@ -73,8 +73,7 @@ export const MAIN_MODULO: QueryObjectInterface[] = [
 export const useMainOcrParametersFetch : (user?:string) =>QueryObjectInterface[] = (user?:string)=>{
     const MAIN_OCR: QueryObjectInterface[] = [
         {
-            url: ROUTES.api_ml_production_ocr_get_all,
-            params: {user}
+            url: ROUTES.get_ml_production_ocr_get_by_user+(user||''),
         },
         {
             url: ROUTES.api_ml_production_ocr_get_by_revise,
@@ -113,8 +112,7 @@ export const useMainOcrParametersFetch : (user?:string) =>QueryObjectInterface[]
 export const useMainOpParametersFetch : (user?:string) =>QueryObjectInterface[] = (user?:string)=>{
     const MAIN_OP: QueryObjectInterface[] = [
         {
-            url:ROUTES.api_ml_production_op_get_all,
-            params:{user}
+            url:ROUTES.api_ml_production_op_get_by_user+(user||''),
         },
         {
             url:ROUTES.api_ml_production_op_get_by_type,

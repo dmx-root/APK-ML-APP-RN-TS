@@ -86,7 +86,7 @@ export class OcrRequestInterface extends ConectionRequestInterface implements Ap
             const err = handlerAxiosError(error);
 
             const apiResponse: ControllerResponseInterface = {
-                statusCodeApi: -1,
+                statusCodeApi: err.statusCodeApi,
                 statusMessageApi: err.statusMessageApi,
                 statusCode: err.statusCode
             }

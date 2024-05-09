@@ -17,7 +17,7 @@ export const ROUTES = {
     api_ml_production_ocr_get_by_category :    `${uri}/api/ml/production/ocr/list-filter-by-category`,
     api_ml_production_ocr_get_by_anomaly :     `${uri}/api/ml/production/ocr/list-filter-by-event/`,
     api_ml_production_op_get_by_type :         `${uri}/api/ml/production/op/list-filter-by-type`,
-    api_ml_production_op_get_by_user :         `${uri}/api/ml/production/op/list-filter-by-user`,
+    api_ml_production_op_get_by_user :         `${uri}/api/ml/production/op/list-filter-by-user/`,
     api_ml_production_op_get_by_state :        `${uri}/api/ml/production/op/list-filter-by-state`,
     api_ml_production_modulo_get_by_state :    `${uri}/api/ml/production/modulo/list-filter-by-state/`,
     api_ml_production_employees_list :         `${uri}/api/ml/production/modulo/list-all-employees`,
