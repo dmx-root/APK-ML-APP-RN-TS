@@ -1,23 +1,27 @@
 import { FILTER_ITEMS_EMPLOYEERS_HOME, 
         FILTER_ITEMS_MODULOS_HOME, 
         FILTER_ITEMS_OCR_HOME, 
-        FILTER_ITEMS_OP_HOME }                      from './homeFilter';
-import { EditICon }                                 from '../../public/icons/editIcon';
-import { ModuloRequestInterface }                   from '../../services/ml_api/request/request.interface.modulo';
-import { ROUTES }                                   from '../../endpoints/ml_api/ep.ml.api';
-import { useApiGetData }                            from '../../controllers/reducers/reducer.fetchData';
-import { OcrRequestInterface }                      from '../../services/ml_api/request/request.interface.ocr';
-import { useApiGetOpByUser }                        from '../../controllers/hooks/customHookGetOpByUser';
-import { EmployeerIcon }                            from '../../public/icons/employeerIcon';
-import { Item }                                     from '../../interfaces/app/homeRoutes';
-import { ModuloIcon }                               from '../../public/icons/moduloIcon';
-import { ButtonHome }                               from '../../components/buttonHome';
-import { PlusIcon }                                 from '../../public/icons/plusIcon';
-import { OcrIcon }                                  from '../../public/icons/ocrIcon';
-import { OpIcon }                                   from '../../public/icons/opIcon';
-import { GestureResponderEvent }                    from 'react-native';
-import React                                        from 'react';
-import { OpRequestInterface } from '../../services/ml_api/request/request.interface.op';
+        FILTER_ITEMS_OP_HOME }       from './homeFilter';
+import { EditICon }                  from '../../public/icons/editIcon';
+import { ModuloRequestInterface }    from '../../services/ml_api/request/request.interface.modulo';
+import { ROUTES }                    from '../../endpoints/ml_api/ep.ml.api';
+import { useApiGetData }             from '../../controllers/reducers/reducer.fetchData';
+import { OcrRequestInterface }       from '../../services/ml_api/request/request.interface.ocr';
+import { useApiGetOpByUser }         from '../../controllers/hooks/customHookGetOpByUser';
+import { EmployeerIcon }             from '../../public/icons/employeerIcon';
+import { Item }                      from '../../interfaces/app/homeRoutes';
+import { ModuloIcon }                from '../../public/icons/moduloIcon';
+import { ButtonHome }                from '../../components/buttonHome';
+import { PlusIcon }                  from '../../public/icons/plusIcon';
+import { OcrIcon }                   from '../../public/icons/ocrIcon';
+import { OpIcon }                    from '../../public/icons/opIcon';
+import { OpRequestInterface }        from '../../services/ml_api/request/request.interface.op';
+import { useApiGetDataFilter }       from '../../controllers/reducers/reducer.fetchDataFilter';
+import { useMainOcrParametersFetch } from '../../controllers/helpers/hanlderQueryFilteredObject';
+import { useMainOpParametersFetch } from '../../controllers/helpers/hanlderQueryFilteredObject';
+import { useMainModuloParametersFetch } from '../../controllers/helpers/hanlderQueryFilteredObject';
+import { GestureResponderEvent }     from 'react-native';
+import React                         from 'react';
 
 // Doc
 //
@@ -41,13 +45,12 @@ export const ADMIN_HOME_ROUTES: Item[] = [
         },
 
         mainFetch: (documentId?: string) => {
-            const fetch = new OcrRequestInterface({
-                url:ROUTES.api_ml_production_ocr_get_all
-            })
-
-            return useApiGetData(fetch);
+            const ListParametersFetch = useMainOcrParametersFetch();
+            return useApiGetDataFilter({
+                queryChain:ListParametersFetch,
+                ApiConnection: new OcrRequestInterface({})
+            });
         },
-
         filterList: FILTER_ITEMS_OCR_HOME
     },
     {
@@ -236,11 +239,11 @@ export const PLANTA_HOME_ROUTES: Item[] = [
             </ButtonHome>
         },
         mainFetch: (documentId?: string) => {
-            const fetch = new OcrRequestInterface({
-                url:ROUTES.api_ml_production_ocr_get_all+documentId,
-            })
-
-            return useApiGetData(fetch);
+            const ListParametersFetch = useMainOcrParametersFetch(documentId);
+            return useApiGetDataFilter({
+                queryChain:ListParametersFetch,
+                ApiConnection: new OcrRequestInterface({})
+            });
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -256,8 +259,11 @@ export const PLANTA_HOME_ROUTES: Item[] = [
         }
         ,
         mainFetch: (documentId?: string) => {
-            return useApiGetOpByUser(documentId || '');
-
+            const ListParametersFetch = useMainOpParametersFetch(documentId);
+            return useApiGetDataFilter({
+                queryChain:ListParametersFetch,
+                ApiConnection: new OpRequestInterface({})
+            });
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -270,11 +276,11 @@ export const PLANTA_HOME_ROUTES: Item[] = [
             return <></>
         },
         mainFetch: (documentId?: string) => {
-            const fetch = new ModuloRequestInterface({
-                url: ROUTES.api_ml_production_modulo_get_all
+            const ListParametersFetch = useMainModuloParametersFetch(documentId);
+            return useApiGetDataFilter({
+                queryChain:ListParametersFetch,
+                ApiConnection: new ModuloRequestInterface({})
             });
-
-            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     }

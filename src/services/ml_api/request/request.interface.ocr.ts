@@ -12,7 +12,7 @@ interface ParamsInterface {
 }
 
 interface PropertiesInterface {
-    url: string;
+    url?: string;
     params?: ParamsInterface;
     headers?: ParamsInterface
 }

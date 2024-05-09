@@ -42,25 +42,18 @@ export function HomeOcr({navigation} : any){
 
     const [ ocrProcessData, setOcrProcessData ] =        useState<OcrProcessesInterface|null>(null);
     
-    const currentOp = useLocalStorageGetData(
-        new LocalStorageGetObject('currentOp')
-    )
+    const currentOp = useLocalStorageGetData(new LocalStorageGetObject('currentOp'))
 
-    const { state, itemSelector, setItemSelector } = useApiGetDataFilter({
-        queryChain:MAIN_OCR,
-        ApiConnection: new OcrRequestInterface({
-            url:''
-        })
-    });
+    // const { state, itemSelector, setItemSelector } = useApiGetDataFilter({
+    //     queryChain:MAIN_OCR,
+    //     ApiConnection: new OcrRequestInterface({
+    //         url:''
+    //     })
+    // });
 
-    const load = useLoadData(
-        new ObjectDispatchInterface({
-            url:ROUTES.api_ml_production_ocr_post,
-            method:'post'
-        })
-    );
 
-    // const {state} =contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
+    
+    const { state, itemSelector, setItemSelector } = contextStorage?.account?.home?.[0].mainFetch(contextStorage.currentUser?.documentoid);
 
     return<>
     <View style={{height,width}}>

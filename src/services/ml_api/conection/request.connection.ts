@@ -5,7 +5,7 @@ interface ParamsInterface{
 }
 
 interface PropertiesInterface{
-    url : string; 
+    url? : string; 
     params? : ParamsInterface; 
     headers?: ParamsInterface
 }
@@ -23,6 +23,7 @@ export class ConectionRequestInterface{
     }
 
     async getData(){
+        // console.log(this.params)
 
         const data:AxiosRequestConfig={
             method:"get",

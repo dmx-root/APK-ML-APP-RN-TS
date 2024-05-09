@@ -13,7 +13,6 @@ import { ModalListSelect }                  from "./modalListSelect";
 import { ModalItemList }                    from "../components/modalItemList";
 import { useState }                         from "react";
 import { ModuloRequestInterface}            from '../services/ml_api/request/request.interface.modulo';
-import { useApiGetData }                    from '../controllers/reducers/reducer.fetchData';
 import { ROUTES }                           from "../endpoints/ml_api/ep.ml.api";
 import { ObjectDispatchInterface }          from '../services/ml_api/dispatch/dispatch.interface.object'
 import { useLoadData }                      from "../controllers/reducers/reducer.dispatchData";
@@ -34,9 +33,7 @@ export function ModalRegisterOcr({handlerClick,navigation}:{
     const [ modalTypeOpState, setModalTypeOpState ] =   useState(false);
 
     const modulos = useApiGetConcurrentData({
-        apiConnection: new ModuloRequestInterface({
-            url: ROUTES.api_ml_production_modulo_get_all
-        }),
+        apiConnection: new ModuloRequestInterface({url: ROUTES.api_ml_production_modulo_get_all}),
         stateData: contextStorage?.concurrentModulos||[],
         setState: contextStorage?.setConcurrentModulos!
     })

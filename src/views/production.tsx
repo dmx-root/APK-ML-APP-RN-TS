@@ -37,9 +37,7 @@ export function Production({route,navigation}:any){
     const contextStorage =  useMainContext(); 
     
     const anomalyFetch = useApiGetConcurrentData({
-        apiConnection:new SesionAnomalyRequestInterface({
-            url: ROUTES.api_ml_sesion_mobile_get_anomaly
-        }),
+        apiConnection:new SesionAnomalyRequestInterface({url: ROUTES.api_ml_sesion_mobile_get_anomaly}),
         stateData: contextStorage?.concurrentAnomalys||[],
         setState: contextStorage?.setConcurrentAnomalys!
     });

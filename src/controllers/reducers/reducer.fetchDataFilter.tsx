@@ -41,6 +41,7 @@ const dataReducer = (state: ApiState, action: ApiAction): ApiState => {
 const handlerQueryOCr: (queryObjectList: QueryObjectInterface[], ApiConnection: ApiConnectionInterface) => ApiConnectionInterface[] = (queryObjectList: QueryObjectInterface[], ApiConnection: ApiConnectionInterface) => {
     const fetchInstance = queryObjectList.map(element => {
         const newObj = Object.create(ApiConnection);
+        // console.log(ApiConnection._params)
         newObj._headers = element.headers;
         newObj._params = element.params;
         newObj._url = element.url;
@@ -61,22 +62,19 @@ export const useApiGetDataFilter: ({ queryChain, ApiConnection }: { queryChain: 
         error: null,
     });
 
-    const contextStorage = useMainContext();
     const [itemSelector, setItemSelector] = useState<number>(0);
-
 
     async function fetchData(apiConnection: ApiConnectionInterface): Promise<void> {
         try {
 
             dispatch({ type: actionTypes.FETCH_INIT });
-
             const response = await apiConnection.executeQuery();
 
             response?.statusCodeApi === 1 ?
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response.data }) :
-                response?.statusCodeApi === 0 ?
-                    dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null }) :
-                    dispatch({ type: actionTypes.FETCH_FAILURE });
+                    response?.statusCodeApi === 0 ?
+                        dispatch({ type: actionTypes.FETCH_SUCCESS, payload: null }) :
+                            dispatch({ type: actionTypes.FETCH_FAILURE });
 
         } catch (error) {
             dispatch({ type: actionTypes.FETCH_FAILURE, payload: 'Error' })
@@ -89,7 +87,7 @@ export const useApiGetDataFilter: ({ queryChain, ApiConnection }: { queryChain: 
 
         itemSelector <= (fetchInstance.length - 1) ?
             fetchData(fetchInstance[itemSelector]) :
-            dispatch({ type: actionTypes.FETCH_FAILURE, payload: 'Error' })
+                dispatch({ type: actionTypes.FETCH_FAILURE, payload: 'Error' })
 
     }, [itemSelector]);
 
