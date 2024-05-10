@@ -59,18 +59,15 @@ export const useApiGetAuth = (): { state: ApiState } => {
                 const expInSeconds = data.data[0].userDateTokenExp;
                 const timeRemaining = expInSeconds - nowInSeconds;
                 
-                // console.log(data)
                 if(timeRemaining < 172800){
                     dispatch({ type: actionTypes.FETCH_SUCCESS, payload: {...data, sesionState: true} });
                 }else{
                     dispatch({ type: actionTypes.FETCH_SUCCESS, payload: {...data, sesionState: false} });
                 }
-
             }
             else{
                 dispatch({ type: actionTypes.FETCH_FAILURE, payload:data});
             }     
-            
         } catch (error) {
             dispatch({ type: actionTypes.FETCH_FAILURE, payload:'Error'});
         }
@@ -80,7 +77,6 @@ export const useApiGetAuth = (): { state: ApiState } => {
         try {
             dispatch({ type: actionTypes.FETCH_INIT });
             const response = await handlerGetValueLocalStorage('token');
-            // console.log(response)
             if(typeof(response)==='string'){
                 await fetchDataAuth(response);
             }

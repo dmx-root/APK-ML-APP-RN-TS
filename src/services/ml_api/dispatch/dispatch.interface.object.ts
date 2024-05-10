@@ -1,5 +1,6 @@
 import { ConectionInterfaceDispatch } from '../conection/dispatch.connection';
 import { handlerAxiosError }          from '../../../utilities/handlerAxiosError';
+import { Method } from 'axios'
 
 interface ObjectInterface{
     [key : string] : any
@@ -8,23 +9,24 @@ interface ObjectInterface{
 
 interface PropertiesInterface{
     url : string; 
-    method: 'post' | 'put' | 'patch' | 'delete'
+    method: Method
     params? : ObjectInterface; 
     headers? : ObjectInterface;
 }
 
 
 interface ApiResponse {
-    apiCode : -1 | 0 | 1,
-    apiMessage : string,
-    data? : any
+    apiCode : -1 | 0 | 1;
+    apiMessage : string;
+    data? : any;
 }
 
 interface ControllerResponseInterface {
-    statusCodeApi : number,
-    statusMessageApi : string,
-    statusCode? : number,
-    data? : ObjectInterface
+    statusCodeApi : number;
+    statusMessageApi : string;
+    statusCode? : number;
+    data? : ObjectInterface;
+    headers? : any;
 }
 
 interface ApiConnectionInterface {
@@ -41,13 +43,16 @@ export class ObjectDispatchInterface extends ConectionInterfaceDispatch implemen
         try {
             const fetch= await this.dispatchData(data);
             const response : ApiResponse = fetch.data;
-            const status : number = fetch.status 
+            const status : number = fetch.status; 
+            const headers : any = fetch.headers;
+            // console.log(headers)
             
             const ocrProcessInterface: ControllerResponseInterface = {
                 statusCodeApi: response.apiCode,
                 statusMessageApi: response.apiMessage,
                 statusCode: status,
-                data: response.data
+                data: response.data,
+                headers: headers
             }
             return ocrProcessInterface;
 

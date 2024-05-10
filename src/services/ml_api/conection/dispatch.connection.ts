@@ -7,7 +7,7 @@ interface ObjectInterface{
 
 interface PropertiesInterface{
     url : string; 
-    method: 'post' | 'put' | 'patch' | 'delete'
+    method: Method
     params? : ObjectInterface; 
     headers? : ObjectInterface;
 }

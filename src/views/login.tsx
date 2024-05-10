@@ -1,9 +1,8 @@
 import { handlerRemoveValueLocalStorage }               from '../controllers/helpers/handlerValueLocalStorage';
 import { inicialStateAuth }                             from '../interfaces/services/ml_api/authInterfaces';
-import { useHandlerSesion }                             from '../controllers/hooks/customHookSetSesion';
 import { AuthCheckRemenberPassword }                    from '../components/authCheckRemenberPassword';
 import { useSetSesion }                                 from '../controllers/helpers/handlerSetSesion';
-import { useApiGetAuth }                                from '../controllers/hooks/customHookGetAuth';
+import { useApiGetAuth }                                from '../controllers/hooks/customHook.getAuth';
 import { AuthStoredLogin }                              from '../components/authStoredLogin';
 import { UserIcon }                                     from '../public/icons/userIcon';
 import { LockIcon }                                     from '../public/icons/lockIcon';
@@ -14,8 +13,15 @@ import { ModalLoading }                                 from '../modals/modalLoa
 import { ModalInput }                                   from '../modals/modalInput';
 import { ModalAlert }                                   from '../modals/modalAlert';
 import { View, StyleSheet, Dimensions, Text, Alert }    from 'react-native';
-import { ImageBackground,Image }                              from 'react-native';
-import { useEffect, useState }                          from 'react';
+import { ImageBackground,Image }                        from 'react-native';
+import { useState }                                     from 'react';
+import { ObjectDispatchInterface }                      from '../services/ml_api/dispatch/dispatch.interface.object';
+import { useLoadData }                                  from '../controllers/reducers/reducer.dispatchData'
+import { ROUTES }                                       from '../endpoints/ml_api/ep.ml.api';
+import { useLocalStorageGetData }                       from '../controllers/reducers/reducer.getLocalData';
+import { LocalStorageSaveItem }                         from '../services/local_storage/dispatch/dispatch.interface.saveItem'
+import { LocalStorageGetItem }                          from '../services/local_storage/request/request.interface.item'
+import { authInterface } from '../interfaces/services/ml_api/authInterfaces'
 
 const {height,width}=Dimensions.get('screen');
 
@@ -23,7 +29,6 @@ const currentColorDefault='#44329C';
 
 export function Login(){
 
-    const { state, setDataAuth } =  useHandlerSesion();
     const currentSesionValidator =  useApiGetAuth();
     const { setSesion } =           useSetSesion();
     
@@ -33,6 +38,17 @@ export function Login(){
     const [ formState, setFormState ] =      useState<boolean>(false);
     const [ passworsSave, setPasswordSave] = useState<boolean>(false);
     const [ modal, setModal ] =              useState<modal>(newModal);
+
+    const { state, loadData } = useLoadData(
+        new ObjectDispatchInterface({
+            method:'get',
+            url:ROUTES.api_ml_local_auth_get,
+            headers:{
+                "documento-id": dataForm?.['Document'],
+                "clave":        dataForm?.['Password']
+            }
+        })
+    );
 
     return<>
             <View style={loginStyle.backGround}>
@@ -110,9 +126,19 @@ export function Login(){
                                 label='Acceder' 
                                 handlerClick={()=>{
                                     dataForm?.['Password']&&dataForm?.['Document']?
-                                    setDataAuth(dataForm?.['Document'], dataForm?.['Password'], passworsSave): 
-                                    Alert.alert('Campos vacios','Asegúrese de llenar todos los campos') 
-                                    setAlert(true);
+                                        loadData({ /*No data*/ },
+                                        async (response) =>{
+                                                if(response && passworsSave){
+                                                    await (new LocalStorageSaveItem("token",response.headers["authorization-token"])).execute();
+                                                    setSesion(overrideResponseData(response.data[0]))
+                                                }
+                                                if(response){
+                                                    setSesion(overrideResponseData(response.data[0]))
+                                                }
+                                            }
+                                        ):
+                                        Alert.alert('Campos vacios','Asegúrese de llenar todos los campos') 
+                                        setAlert(true);
                                 }}/>
                         </View>
                     </>
@@ -152,7 +178,7 @@ export function Login(){
         state.error&&alert?
         <ModalAlert 
         label='Datos Erroneos' 
-        content={state.error.statusMessageApi} 
+        content={'state.error.statusMessageApi'} 
         handlerClick={()=>{setAlert(false)}}/>:
         <></>
     }
@@ -172,14 +198,19 @@ export function Login(){
     </>
 }
 
-// useEffect(()=>{
-//     if(!load){
-//         Font.loadAsync({
-//             'Roboto-Thin':require('../../assets/Roboto-Thin.ttf')
-//         })
-//     }
-// });
-
+const overrideResponseData : (data: any) => authInterface = (data: any) =>{
+    const newData : authInterface = {                  
+        userName:           data.nombre,
+        userDocumentId:     data.documento_id,
+        userProfileId:      data.perfil_id,
+        userProfileLAbel:   data.perfil_etiqueta,
+        userDescription:    data.descripcion,
+        userDocumentType:   data.tipo_documento_id,
+        userCreteDate:      data.user_create_dete || 'No asignado',
+        userState: true
+    }
+    return newData;
+}
 
 const loginStyle=StyleSheet.create({
 

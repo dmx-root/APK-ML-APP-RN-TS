@@ -22,9 +22,11 @@ interface ObjectInterface{
 }
 
 interface ControllerResponseInterface {
-    statusCodeApi : number,
-    statusMessageApi : string,
-    statusCode? : number
+    statusCodeApi : number;
+    statusMessageApi : string;
+    statusCode? : number;
+    data? : ObjectInterface;
+    headers? : any;
 }
 
 interface ApiConnectionInterface {
@@ -58,8 +60,9 @@ export const useLoadData : (ApiConnection : ApiConnectionInterface ) => { state:
             const response = await ApiConnection.executeQuery(data);
             if(response.statusCodeApi===1){
                 dispatch({ type: actionTypes.FETCH_SUCCESS, payload: response})
+                // console.log(response)
                 if(callback)
-                await callback(response);
+                await callback({...response, headers:response.headers});
             }
             else{
                 dispatch({ type: actionTypes.FETCH_FAILURE, payload: response});

@@ -18,7 +18,7 @@ import { ModalOcrInfo }                                                 from '..
 import { Aside }                                                        from '../components/aside';
 import { LocalStorageGetObject }                                        from '../services/local_storage/request/request.interface.object';
 import { useLocalStorageGetData }                                       from '../controllers/reducers/reducer.getLocalData'
-import { View,StyleSheet, Dimensions, TouchableOpacity,Text,FlatList, TextInput}   from 'react-native';
+import { View,StyleSheet, Dimensions, TouchableOpacity, Text, FlatList, TextInput}   from 'react-native';
 import { useState }                                                     from 'react';
 
 const {height,width}=Dimensions.get('screen');
