@@ -1,9 +1,14 @@
+import { LocalStorageSaveItem }                         from '../services/local_storage/dispatch/dispatch.interface.saveItem'
+import { ObjectDispatchInterface }                      from '../services/ml_api/dispatch/dispatch.interface.object';
+import { useApiGetAuth }                                from '../controllers/reducers/reducer.getCurrentSesion';
 import { handlerRemoveValueLocalStorage }               from '../controllers/helpers/handlerValueLocalStorage';
 import { inicialStateAuth }                             from '../interfaces/services/ml_api/authInterfaces';
+import { useLoadData }                                  from '../controllers/reducers/reducer.dispatchData';
+import { authInterface }                                from '../interfaces/services/ml_api/authInterfaces';
 import { AuthCheckRemenberPassword }                    from '../components/authCheckRemenberPassword';
 import { useSetSesion }                                 from '../controllers/helpers/handlerSetSesion';
-import { useApiGetAuth }                                from '../controllers/hooks/customHook.getAuth';
 import { AuthStoredLogin }                              from '../components/authStoredLogin';
+import { ROUTES }                                       from '../endpoints/ml_api/ep.ml.api';
 import { UserIcon }                                     from '../public/icons/userIcon';
 import { LockIcon }                                     from '../public/icons/lockIcon';
 import { AuthButton }                                   from '../components/authButton';
@@ -15,13 +20,6 @@ import { ModalAlert }                                   from '../modals/modalAle
 import { View, StyleSheet, Dimensions, Text, Alert }    from 'react-native';
 import { ImageBackground,Image }                        from 'react-native';
 import { useState }                                     from 'react';
-import { ObjectDispatchInterface }                      from '../services/ml_api/dispatch/dispatch.interface.object';
-import { useLoadData }                                  from '../controllers/reducers/reducer.dispatchData'
-import { ROUTES }                                       from '../endpoints/ml_api/ep.ml.api';
-import { useLocalStorageGetData }                       from '../controllers/reducers/reducer.getLocalData';
-import { LocalStorageSaveItem }                         from '../services/local_storage/dispatch/dispatch.interface.saveItem'
-import { LocalStorageGetItem }                          from '../services/local_storage/request/request.interface.item'
-import { authInterface } from '../interfaces/services/ml_api/authInterfaces'
 
 const {height,width}=Dimensions.get('screen');
 

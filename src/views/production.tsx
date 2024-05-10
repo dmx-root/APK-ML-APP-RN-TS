@@ -29,6 +29,7 @@ import { SesionAnomalyRequestInterface }                                from '..
 import { useState }                                                     from 'react';
 import { View,StyleSheet, Dimensions, TouchableOpacity, Text, Alert, FlatList }   from 'react-native';
 import { useApiGetConcurrentData } from '../controllers/reducers/reducer.fetchConcurrentData'
+import { ModalProductionEdit } from '../modals/modalProductionEdit';
 
 const {height,width}=Dimensions.get('screen');
 export function Production({route,navigation}:any){
@@ -116,6 +117,7 @@ export function Production({route,navigation}:any){
                                             operarioId: contextStorage?.currentUser?.documentoid||''
                                         }
                                         setEventList([...eventList,newEvent]);
+                                        setModalEditProduction(true);
                                     }else{
                                         Alert.alert('!Acción no permitida!','No se puede editar el campo si aún no se ha generado registros')
                                     }
@@ -158,6 +160,15 @@ export function Production({route,navigation}:any){
                 setOperationData={setOperationData}
                 setDetailOp={setDetailop}
                 handlerClick={()=>{setModalRegisterState(false)}}
+                />:
+                <></>
+            }
+            {
+                modalEditProduction?
+                <ModalProductionEdit
+                operationData={operationData}
+                setOperationData={setOperationData}
+                handlerClick={()=>{setModalEditProduction(false)}}
                 />:
                 <></>
             }

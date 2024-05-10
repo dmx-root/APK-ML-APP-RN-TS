@@ -9,7 +9,7 @@ import { LoadingComponent }                                 from '../components/
 import { useMainContext }                                   from '../contexts/mainContext';
 import { form }                                             from '../interfaces/view/login';
 import { ButtonFullWidth }                                  from '../components/buttonFullWidth';
-import { useDeviceReader }                                  from '../controllers/reducers/reducerDeviceReader';
+import { useDeviceReader }                                  from '../controllers/reducers/reducer.deviceReader';
 import { ModalLoading }                                     from './modalLoading';
 import { useEffect, useState }                              from 'react';
 import { GestureResponderEvent, StyleSheet, View, Text, TextInput,}    from 'react-native';

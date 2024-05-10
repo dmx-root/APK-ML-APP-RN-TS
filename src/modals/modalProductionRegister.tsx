@@ -3,8 +3,8 @@ import { ButtonFullWidth }                                              from '..
 import { OperationInterface, newOperation }                             from '../interfaces/view/production';
 import { ModalContainer }                                               from '../components/modalContainer';
 import { Modal }                                                        from '../components/modal';
-import { StyleSheet,View,Text,GestureResponderEvent, TextInput, Alert }  from 'react-native';
-import { useEffect, useRef, useState }                                          from 'react';
+import { StyleSheet,View,Text,GestureResponderEvent, TextInput, Alert } from 'react-native';
+import { useEffect, useRef, useState }                                  from 'react';
 
 export function ModalProductionRegister({
     handlerClick, 
