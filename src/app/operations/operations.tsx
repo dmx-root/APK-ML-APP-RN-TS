@@ -1,15 +1,16 @@
 import { handlerGetValueLocalStorage, 
     handlerRemoveValueLocalStorage }    from "../../controllers/helpers/handlerValueLocalStorage";
 import { useMainContext }               from "../../contexts/mainContext";
-import { CalendarIcon }                 from "../../public/icons/calendarIcon";
+import { LocalStorageRemoveItem }       from '../../services/local_storage/dispatch/dispatch.interface.removeData';
 import { CreateOcrIcon }                from "../../public/icons/createOcrIcon";
 import { EmployeerIcon }                from "../../public/icons/employeerIcon";
+import { CalendarIcon }                 from "../../public/icons/calendarIcon";
 import { LogoutIcon }                   from "../../public/icons/logoutIcon";
 import { ModuloIcon }                   from "../../public/icons/moduloIcon";
+import { UserIcon }                     from "../../public/icons/userIcon";
+import { EditICon }                     from '../../public/icons/editIcon';
 import { OcrIcon }                      from "../../public/icons/ocrIcon";
 import { OpIcon }                       from "../../public/icons/opIcon";
-import { UserIcon }                     from "../../public/icons/userIcon";
-import { EditICon }                     from '../../public/icons/editIcon'
 import { Alert }                        from "react-native";
 
 //Doc 
@@ -42,18 +43,19 @@ export const useOperationHandler  = ({
             icon:<LogoutIcon color='#FFF' size={35} width={2}/>,
             operation_label: "Cerrar Sesión",
             handlerClick:() => {
-                Alert.alert('Se cerrará la sesión', '¿Está seguro de cerrar la sesión?',
+                Alert.alert('Se cerrará la sesión','¿Está seguro de cerrar la sesión?',
                 [
                     {text: 'OK', onPress:()=>{
-                        handlerGetValueLocalStorage('token').
-                        then(element=>{
-                            if(element)handlerRemoveValueLocalStorage('token').catch(err=>console.log(err));
-                        }).
-                        catch(err=>console.log(err));
-                        // navigation.navigate('Login');
-
+                        (new LocalStorageRemoveItem("token")).
+                        execute().
+                        then(() => {
+                            navigation.navigate('Login');
+                        }).catch(err=>{
+                            console.log(err)
+                            Alert.alert('Error al cerrar la sesión', "hubo un error en la eliminación del token")
+                        })
                     }, style: 'cancel'},
-                    {text: 'CANCEL', onPress: () =>{
+                    {text:'CANCEL', onPress: () => {
                         
                     }, style: 'cancel'},
                 ]);

@@ -20,6 +20,7 @@ import { ModalAlert }                                   from '../modals/modalAle
 import { View, StyleSheet, Dimensions, Text, Alert }    from 'react-native';
 import { ImageBackground,Image }                        from 'react-native';
 import { useState }                                     from 'react';
+import { LocalStorageRemoveItem } from '../services/local_storage/dispatch/dispatch.interface.removeData'
 
 const {height,width}=Dimensions.get('screen');
 
@@ -71,11 +72,16 @@ export function Login(){
                     }} 
                     handlerAcceder={()=>{
                         setSesion(currentSesionValidator.state.data?.data[0] || inicialStateAuth);
-                        
                     }} 
                     handlerChange={()=>{
-                        setFormState(true);
-                        handlerRemoveValueLocalStorage('token');
+                        (new LocalStorageRemoveItem("token")).
+                        execute().
+                        then(()=>{
+                            setFormState(true);
+                        }).
+                        catch(err=>{
+                            console.log(err, 'No se pudo eliminar el token')
+                        })
                     }}/>:
                     <>
                         <View style={loginStyle.titleContainer}>

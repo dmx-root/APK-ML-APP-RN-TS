@@ -21,6 +21,7 @@ import { useMainOpParametersFetch } from '../../controllers/helpers/hanlderQuery
 import { useMainModuloParametersFetch } from '../../controllers/helpers/hanlderQueryFilteredObject';
 import { GestureResponderEvent }     from 'react-native';
 import React                         from 'react';
+import { MAIN_OCR, MAIN_OP }        from '../../controllers/helpers/hanlderQueryFilteredObject'
 
 // Doc
 //
@@ -28,13 +29,9 @@ import React                         from 'react';
 export const ADMIN_HOME_ROUTES: Item[] = [
     {
         id: 1,
-
         item: 'HomeOcr',
-
         NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
-
         icon: <OcrIcon color='#777' size={35} width={2} />,
-
         actionObject: (
             handlerClick: (event: GestureResponderEvent) => void
         ) => {
@@ -43,12 +40,13 @@ export const ADMIN_HOME_ROUTES: Item[] = [
             </ButtonHome>
         },
 
-        mainFetch: (documentId?: string) => {
-            return useApiGetData(
-                new OcrRequestInterface({
+        mainFetch: () => {
+            return useApiGetDataFilter({
+                ApiConnection:new OcrRequestInterface({
                     url:ROUTES.api_ml_production_ocr_get_all
-                })
-            );
+                }),
+                queryChain:MAIN_OCR
+            })
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -65,11 +63,12 @@ export const ADMIN_HOME_ROUTES: Item[] = [
             </ButtonHome>
         },
         mainFetch: () => {
-            const fetch = new OpRequestInterface({
-                url:ROUTES.api_ml_production_op_get_all
-            });
-            
-            return useApiGetData(fetch);
+            return useApiGetDataFilter({
+                ApiConnection:new OpRequestInterface({
+                    url:ROUTES.api_ml_production_op_get_all
+                }),
+                queryChain:MAIN_OP
+            })
         },
         filterList: FILTER_ITEMS_OP_HOME
     },
@@ -83,7 +82,7 @@ export const ADMIN_HOME_ROUTES: Item[] = [
                 <ModuloIcon color="#777" size={35} width={1.5} />
             </ButtonHome>
         },
-        mainFetch: (documentId?: string) => {
+        mainFetch: () => {
             const fetch = new ModuloRequestInterface({
                 url: ROUTES.api_ml_production_modulo_get_all
             });
@@ -102,7 +101,7 @@ export const ADMIN_HOME_ROUTES: Item[] = [
                 <EmployeerIcon color="#777" size={35} width={1.5} />
             </ButtonHome>
         },
-        mainFetch: (documentId?: string) => {
+        mainFetch: () => {
             const fetch = new ModuloRequestInterface({
                 url: ROUTES.api_ml_production_modulo_get_all
             });
@@ -116,10 +115,10 @@ export const ADMIN_HOME_ROUTES: Item[] = [
         item:'HomeRevise',
         NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
         icon: <EditICon color='#777' size={35} width={2} />,
-        actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
+        actionObject: () => {
             return <></>
         },
-        mainFetch: (documentId?: string) => {
+        mainFetch: () => {
             const fetch = new ModuloRequestInterface({
                 url: ROUTES.api_ml_production_modulo_get_all
             });
@@ -141,12 +140,13 @@ export const PROCESSES_HOME_ROUTES: Item[] = [
                 <PlusIcon color="#777" size={70} width={1} />
             </ButtonHome>
         },
-        mainFetch: (documentId?: string) => {
-            const fetch = new OcrRequestInterface({
-                url:ROUTES.api_ml_production_ocr_get_all
+        mainFetch: () => {
+            return useApiGetDataFilter({
+                ApiConnection:new OcrRequestInterface({
+                    url:ROUTES.api_ml_production_ocr_get_all
+                }),
+                queryChain:MAIN_OCR
             })
-
-            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -161,11 +161,12 @@ export const PROCESSES_HOME_ROUTES: Item[] = [
             </ButtonHome>
         },
         mainFetch: () => {
-            const fetch = new OpRequestInterface({
-                url:ROUTES.api_ml_production_op_get_all
+            return useApiGetDataFilter({
+                ApiConnection:new OpRequestInterface({
+                    url:ROUTES.api_ml_production_op_get_all
+                }),
+                queryChain:MAIN_OP
             });
-            
-            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -179,7 +180,7 @@ export const PROCESSES_HOME_ROUTES: Item[] = [
                 <ModuloIcon color="#777" size={35} width={1.5} />
             </ButtonHome>
         },
-        mainFetch: (documentId?: string) => {
+        mainFetch: () => {
             const fetch = new ModuloRequestInterface({
                 url: ROUTES.api_ml_production_modulo_get_all
             });
@@ -198,7 +199,7 @@ export const PROCESSES_HOME_ROUTES: Item[] = [
                 <EmployeerIcon color="#777" size={35} width={1.5} />
             </ButtonHome>
         },
-        mainFetch: (documentId?: string) => {
+        mainFetch: () => {
             const fetch = new ModuloRequestInterface({
                 url: ROUTES.api_ml_production_modulo_get_all
             });
@@ -212,10 +213,10 @@ export const PROCESSES_HOME_ROUTES: Item[] = [
         item:'HomeRevise',
         NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
         icon: <EditICon color='#777' size={35} width={2} />,
-        actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
+        actionObject: () => {
             return <></>
         },
-        mainFetch: (documentId?: string) => {
+        mainFetch: () => {
             const fetch = new ModuloRequestInterface({
                 url: ROUTES.api_ml_production_modulo_get_all
             });
@@ -271,7 +272,7 @@ export const PLANTA_HOME_ROUTES: Item[] = [
         item: 'HomeModulos',
         NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
         icon: <ModuloIcon color='#777' size={35} width={2} />,
-        actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
+        actionObject: () => {
             return <></>
         },
         mainFetch: (documentId?: string) => {
@@ -291,15 +292,16 @@ export const FACTURACION_HOME_ROUTES: Item[] = [
         item: 'HomeOcr',
         NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
         icon: <OcrIcon color='#777' size={35} width={2} />,
-        actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
+        actionObject: () => {
             return <></>
         },
-        mainFetch: (documentId?: string) => {
-            const fetch = new OcrRequestInterface({
-                url:ROUTES.api_ml_production_ocr_get_all
+        mainFetch: () => {
+            return useApiGetDataFilter({
+                ApiConnection:new OcrRequestInterface({
+                    url:ROUTES.api_ml_production_ocr_get_all
+                }),
+                queryChain:MAIN_OCR
             })
-
-            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -308,15 +310,16 @@ export const FACTURACION_HOME_ROUTES: Item[] = [
         item: 'HomeOp',
         NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
         icon: <OpIcon color='#777' size={35} width={2} />,
-        actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
+        actionObject: () => {
             return <></>
         },
         mainFetch: () => {
-            const fetch = new OpRequestInterface({
-                url:ROUTES.api_ml_production_op_get_all
-            });
-            
-            return useApiGetData(fetch);
+            return useApiGetDataFilter({
+                ApiConnection:new OpRequestInterface({
+                    url:ROUTES.api_ml_production_op_get_all
+                }),
+                queryChain:MAIN_OP
+            })
         },
         filterList: FILTER_ITEMS_OP_HOME
     },
@@ -325,15 +328,15 @@ export const FACTURACION_HOME_ROUTES: Item[] = [
         item:'HomeRevise',
         NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
         icon: <EditICon color='#777' size={35} width={2} />,
-        actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
+        actionObject: () => {
             return <></>
         },
-        mainFetch: (documentId?: string) => {
-            const fetch = new ModuloRequestInterface({
-                url: ROUTES.api_ml_production_modulo_get_all
-            });
-
-            return useApiGetData(fetch);
+        mainFetch: () => {
+            return useApiGetData(
+                new ModuloRequestInterface({
+                    url: ROUTES.api_ml_production_modulo_get_all
+                })
+            );
         },
         filterList: FILTER_ITEMS_MODULOS_HOME
     }
@@ -345,15 +348,16 @@ export const GUEST_HOME_ROUTES: Item[] = [
         item: 'HomeOcr',
         NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
         icon: <OcrIcon color='#777' size={35} width={2} />,
-        actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
+        actionObject: () => {
             return <></>
         },
-        mainFetch: (documentId?: string) => {
-            const fetch = new OcrRequestInterface({
-                url:ROUTES.api_ml_production_ocr_get_all
+        mainFetch: () => {
+            return useApiGetDataFilter({
+                ApiConnection:new OcrRequestInterface({
+                    url:ROUTES.api_ml_production_ocr_get_all
+                }),
+                queryChain:MAIN_OCR
             })
-
-            return useApiGetData(fetch);
         },
         filterList: FILTER_ITEMS_OCR_HOME
     },
@@ -362,15 +366,16 @@ export const GUEST_HOME_ROUTES: Item[] = [
         item: 'HomeOp',
         NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
         icon: <OpIcon color='#777' size={35} width={2} />,
-        actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
+        actionObject: () => {
             return <></>
         },
         mainFetch: () => {
-            const fetch = new OpRequestInterface({
-                url:ROUTES.api_ml_production_op_get_all
-            });
-            
-            return useApiGetData(fetch);
+            return useApiGetDataFilter({
+                ApiConnection:new OpRequestInterface({
+                    url:ROUTES.api_ml_production_op_get_all
+                }),
+                queryChain:MAIN_OP
+            })
         },
         filterList: FILTER_ITEMS_OP_HOME
     },
@@ -379,15 +384,15 @@ export const GUEST_HOME_ROUTES: Item[] = [
         item: 'HomeModulos',
         NAVIGATE: (view: string, dispatch: any) => { dispatch.navigate(view) },
         icon: <ModuloIcon color='#777' size={35} width={2} />,
-        actionObject: (handlerClick: (event: GestureResponderEvent) => void) => {
+        actionObject: () => {
             return <></>
         },
-        mainFetch: (documentId?: string) => {
-            const fetch = new ModuloRequestInterface({
-                url: ROUTES.api_ml_production_modulo_get_all
-            });
-
-            return useApiGetData(fetch);
+        mainFetch: () => {
+            return useApiGetData(
+                new ModuloRequestInterface({
+                    url: ROUTES.api_ml_production_modulo_get_all
+                })
+            );
         },
         filterList: FILTER_ITEMS_MODULOS_HOME
     }

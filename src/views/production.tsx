@@ -28,8 +28,8 @@ import { ModalItemList }                                                from '..
 import { SesionAnomalyRequestInterface }                                from '../services/ml_api/request/request.interface.sesion';
 import { useState }                                                     from 'react';
 import { View,StyleSheet, Dimensions, TouchableOpacity, Text, Alert, FlatList }   from 'react-native';
-import { useApiGetConcurrentData } from '../controllers/reducers/reducer.fetchConcurrentData'
-import { ModalProductionEdit } from '../modals/modalProductionEdit';
+import { useApiGetConcurrentData }                                      from '../controllers/reducers/reducer.fetchConcurrentData'
+import { ModalProductionEdit }                                          from '../modals/modalProductionEdit';
 
 const {height,width}=Dimensions.get('screen');
 export function Production({route,navigation}:any){

@@ -4,7 +4,6 @@ import { Modal }                        from "../components/modal"
 import { LoadingComponent }             from "../components/loadingComponent"
 import { EmptyComponent }               from "../components/emptyComponent"
 import { GestureResponderEvent, View, Dimensions, StyleSheet}  from "react-native"
-import { useEffect }                    from "react"
 import { DetailOPRequestInterface } from '../services/ml_api/request/request.interface.detailOp';
 import { useApiGetData } from '../controllers/reducers/reducer.fetchData';
 import { ROUTES } from "../endpoints/ml_api/ep.ml.api"
@@ -22,11 +21,12 @@ export function ModalDetailOpList({opId,handlerClick,navigation}:{
     navigation : any
 }){
 
-    const fetch = new DetailOPRequestInterface({
-        url:ROUTES.api_ml_production_op_details_get+opId
-    })
 
-    const { state } = useApiGetData(fetch);
+    const { state } = useApiGetData(
+        new DetailOPRequestInterface({
+            url:ROUTES.api_ml_production_op_details_get+opId
+        })
+    );
     return <>
         {
         <Modal handlerClick={handlerClick} >
