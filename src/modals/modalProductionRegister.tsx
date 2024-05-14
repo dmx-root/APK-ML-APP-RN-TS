@@ -28,7 +28,7 @@ export function ModalProductionRegister({
         
         if(value.length>12){// validamos la longitud de caracteres ingresados en el código de barras
             setValue('');
-            input.current?.focus();
+            // input.current?.focus();
             // console.log(input.current.value)
             if(operationData&&!operationData.cantidad){// validamos el primer registro 
                 
