@@ -120,8 +120,8 @@ export function ModalProductionSegundas({
                             />
                         </View>
 
-                    </View>
-
+                    </View>                        
+                    <View style={{height:20}}/>
                     <ButtonFullWidth 
                     color='#FFF' 
                     fontColor='#44329C' 
@@ -137,6 +137,12 @@ export function ModalProductionSegundas({
                             })
                     }} 
                     label='Enviar...'/>
+
+                    <ButtonFullWidth 
+                    color='#FFF' 
+                    fontColor='#44329C' 
+                    handlerClick={(e)=>{}} 
+                    label='Cancelar'/>
 
                 </ModalContainer>
             </Modal>

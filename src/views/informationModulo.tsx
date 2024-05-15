@@ -31,7 +31,10 @@ export function InformationModulo({route,navigation}:any){
 
     const {state} = useApiGetData(
         new OcrRequestInterface({
-            url:ROUTES.api_ml_production_ocr_get_by_modulo+moduloData.moduloId.toString()
+            url:ROUTES.api_ml_production_ocr_get_by_modulo,
+            params:{
+                modulo:moduloData.moduloId.toString()
+            }
         })
     )
 
