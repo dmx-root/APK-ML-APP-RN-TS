@@ -1,69 +1,78 @@
-import { OpDetail }                                                     from '../interfaces/services/ml_api/detailOpInteface';
-import { ButtonFullWidth }                                              from '../components/buttonFullWidth';
-import { OperationInterface, newOperation }                             from '../interfaces/view/production';
-import { ModalContainer }                                               from '../components/modalContainer';
-import { Modal }                                                        from '../components/modal';
-import { StyleSheet,View,Text,GestureResponderEvent, TextInput, Alert } from 'react-native';
-import { useEffect, useRef, useState }                                  from 'react';
+import { OpDetail } from '../interfaces/services/ml_api/detailOpInteface';
+import { ButtonFullWidth } from '../components/buttonFullWidth';
+import { OperationInterface, newOperation } from '../interfaces/view/production';
+import { ModalContainer } from '../components/modalContainer';
+import { Modal } from '../components/modal';
+import { StyleSheet, View, Text, GestureResponderEvent, TextInput, Alert } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
 
 export function ModalProductionRegister({
-    handlerClick, 
-    setOperationData, 
+    handlerClick,
+    setOperationData,
     setDetailOp,
-    operationData, 
+    operationData,
     opDetails
-}:{
-    handlerClick:       (event:GestureResponderEvent)=>void,
-    setOperationData:   React.Dispatch<React.SetStateAction<OperationInterface>>,
-    setDetailOp:        React.Dispatch<React.SetStateAction<OpDetail | null>>,
-    operationData:      OperationInterface,
-    opDetails:          Array<OpDetail>
-}){
+}: {
+    handlerClick: (event: GestureResponderEvent) => void,
+    setOperationData: React.Dispatch<React.SetStateAction<OperationInterface>>,
+    setDetailOp: React.Dispatch<React.SetStateAction<OpDetail | null>>,
+    operationData: OperationInterface,
+    opDetails: Array<OpDetail>
+}) {
 
-    const [ value, setValue ] = useState<string>(''); 
+    const [value, setValue] = useState<string>('');
     const input = useRef<any>(null);
 
     useEffect(()=>{
+        input.current.focus();
+        setValue('-')
+    },[])
+
+    useEffect(() => {
         // Test value -> 7705531160577 para MOB3548
         
-        if(value.length>12){// validamos la longitud de caracteres ingresados en el código de barras
-            setValue('');
-            // input.current?.focus();
+        if (value.length > 13) {// validamos la longitud de caracteres ingresados en el código de barras
+            setValue('-');
+            input.current.focus();
+            
+            // const newValue = value.replace('-','')
             // console.log(input.current.value)
-            if(operationData&&!operationData.cantidad){// validamos el primer registro 
+            if (operationData && !operationData.cantidad) {// validamos el primer registro 
+
+                const response = opDetails.find(element => ('-'+element.ean) === value);// se busca la coincidencia entre el elemento leído y el elemento cargado
                 
-                const response = opDetails.find(element=>element.ean===value);// se busca la coincidencia entre el elemento leído y el elemento cargado
-                
-                if(response&&operationData){ // validamos si el ean ingresado pertenece a las listas de OP's proporcionadas
+                if (response && operationData) { // validamos si el ean ingresado pertenece a las listas de OP's proporcionadas
                     setDetailOp(response);
                     setOperationData({ // establecemos la información inicial
                         ...operationData,
-                        colorEtiqueta:  response.colorEtiqueta,
-                        colorId:        response.colorCodigo,
-                        ean:            response.ean,
-                        tallaId:        response.talla,
-                        refererncia:    response.referencia,
-                        cantidad:       1,
+                        colorEtiqueta: response.colorEtiqueta,
+                        colorId: response.colorCodigo,
+                        ean: response.ean,
+                        tallaId: response.talla,
+                        refererncia: response.referencia,
+                        cantidad: 1,
                     });
                 }
-                else{
-                setValue('');
-                Alert.alert('¡Error en la lectura de los datos!', 'La prenda ingresada no pertenece a la OP seleccionada')
+                else {
+                    setValue('-');
+                    Alert.alert('¡Error en la lectura de los datos!', 'La prenda ingresada no pertenece a la OP seleccionada')
+                }
             }
-        }else{
-            if(operationData&&operationData.ean===value){// validamos si la informacion 
-                
-                setOperationData({ // Se da inicio al conteo de prendas 
-                    ...operationData,
-                    cantidad:(operationData.cantidad+1)
+            else {
+                if (operationData && ('-'+operationData.ean) === value) {// validamos si la informacion 
+                    
+                    setOperationData({ // Se da inicio al conteo de prendas 
+                        ...operationData,
+                        cantidad: (operationData.cantidad + 1)
                     });
-                }else{
-                    setValue('');
+                } else {
+                    setValue('-');
+                    console.log(operationData.ean,value)
                     Alert.alert('¡Error en la lectura de los datos!', 'La prenda ingresada no pertenece a la OP seleccionada')
                 }
             }
         }
-    },[value]);
+    }, [value]);
 
     // Keyboard.addListener(
     //     'keyboardDidShow',
@@ -73,97 +82,97 @@ export function ModalProductionRegister({
     // })
 
     return <Modal handlerClick={handlerClick}>
-                <ModalContainer color='#FFF'>
-                    <View style={prodRegister.container}>
-                        <View style={prodRegister.row}>
-                            <View style={prodRegister.column}>
-                                <Text style={prodRegister.title}>COLOR</Text>
-                            </View>
-                            <View style={prodRegister.column}>
-                                <Text style={prodRegister.title}>{operationData?.colorEtiqueta.slice(0,10)||'No asignado'}</Text>
-                            </View>
-                            <View style={prodRegister.column}>
-                                <Text style={prodRegister.title}>EAN</Text>
-                            </View>
-                            <View style={prodRegister.column}>
-                                <Text style={prodRegister.title}>{operationData?.ean||'No asignado'}</Text>
-                            </View>
-                        </View>
-                        <View style={prodRegister.row}>
-                            <View style={prodRegister.column}>
-                                <Text style={prodRegister.title}>TALLA</Text>
-                            </View>
-                            <View style={prodRegister.column}>
-                                <Text style={prodRegister.title}>{operationData?.tallaId||'No asignado'}</Text>
-                            </View>
-                            <View style={prodRegister.column}>
-                                <Text style={prodRegister.title}>UNIDADES</Text>
-                            </View>
-                            <View style={prodRegister.column}>
-                                <Text style={prodRegister.title}>{operationData?.cantidad||0}</Text>
-                            </View>
-                        </View>
-                        <View style={prodRegister.row}>
-                            <View style={[prodRegister.column,{width:'50%'}]}>
-                                <Text style={[prodRegister.title,{alignItems:'center'}]}>REGISTRO EAN</Text>
-                            </View>
-                            <TextInput 
-                            style={[prodRegister.column,{width:'50%'}]}
-                            onChangeText={(text)=>{
-                                setValue(text)
-                                // console.log(text)
-                            }}
-                            
-                            // editable={false}
-                            
-                            ref={input}
-                           
-                            value={value}
-                            />
-                        </View>
+        <ModalContainer color='#FFF'>
+            <View style={prodRegister.container}>
+                <View style={prodRegister.row}>
+                    <View style={prodRegister.column}>
+                        <Text style={prodRegister.title}>COLOR</Text>
                     </View>
-                    <ButtonFullWidth 
-                    handlerClick={(e)=>{
-                        handlerClick(e);
-                    }} 
-                    color='#44329C' 
-                    label='Cerrar' 
-                    fontColor='#C7CCEC'/>
-                </ModalContainer>
-            </Modal>
+                    <View style={prodRegister.column}>
+                        <Text style={prodRegister.title}>{operationData?.colorEtiqueta.slice(0, 10) || 'No asignado'}</Text>
+                    </View>
+                    <View style={prodRegister.column}>
+                        <Text style={prodRegister.title}>EAN</Text>
+                    </View>
+                    <View style={prodRegister.column}>
+                        <Text style={prodRegister.title}>{operationData?.ean || 'No asignado'}</Text>
+                    </View>
+                </View>
+                <View style={prodRegister.row}>
+                    <View style={prodRegister.column}>
+                        <Text style={prodRegister.title}>TALLA</Text>
+                    </View>
+                    <View style={prodRegister.column}>
+                        <Text style={prodRegister.title}>{operationData?.tallaId || 'No asignado'}</Text>
+                    </View>
+                    <View style={prodRegister.column}>
+                        <Text style={prodRegister.title}>UNIDADES</Text>
+                    </View>
+                    <View style={prodRegister.column}>
+                        <Text style={prodRegister.title}>{operationData?.cantidad || 0}</Text>
+                    </View>
+                </View>
+                <View style={prodRegister.row}>
+                    <View style={[prodRegister.column, { width: '50%' }]}>
+                        <Text style={[prodRegister.title, { alignItems: 'center' }]}>REGISTRO EAN</Text>
+                    </View>
+                    <TextInput
+                        style={[prodRegister.column, { width: '50%' }]}
+                        onChangeText={(text) => {
+                            setValue(text)
+                            // console.log(text)
+                        }}
+
+                        editable={true}
+
+                        ref={input}
+
+                        value={value}
+                    />
+                </View>
+            </View>
+            <ButtonFullWidth
+                handlerClick={(e) => {
+                    handlerClick(e);
+                }}
+                color='#44329C'
+                label='Cerrar'
+                fontColor='#C7CCEC' />
+        </ModalContainer>
+    </Modal>
 }
 
-const prodRegister=StyleSheet.create({
-    container:{
-        width:'100%',
-        height:200,
-        marginBottom:20,
+const prodRegister = StyleSheet.create({
+    container: {
+        width: '100%',
+        height: 200,
+        marginBottom: 20,
         // backgroundColor:'aqua'
     },
-    row:{
-        flexDirection:'row',
-        height:55,
-        width:'100%',
+    row: {
+        flexDirection: 'row',
+        height: 55,
+        width: '100%',
         // backgroundColor:'aqua',
-        marginBottom:2
+        marginBottom: 2
 
     },
-    column:{
-        height:'100%',
-        width:'25%',
-        borderColor:'#DDD',
-        borderWidth:1,
-        justifyContent:'center',
+    column: {
+        height: '100%',
+        width: '25%',
+        borderColor: '#DDD',
+        borderWidth: 1,
+        justifyContent: 'center',
         // alignItems:'center',
-        paddingLeft:20,
-        fontSize:18,
-        color:'#555'
+        paddingLeft: 20,
+        fontSize: 18,
+        color: '#555'
 
     },
-    title:{
-        fontSize:15,
-        color:'#777',
-        fontWeight:'700',
+    title: {
+        fontSize: 15,
+        color: '#777',
+        fontWeight: '700',
 
     }
 
